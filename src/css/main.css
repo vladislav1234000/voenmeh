@@ -1,0 +1,194 @@
+:root[scheme="client_dark"] {
+  --activity_indicator_tint: #5d5f61;
+  --accent: #5d5f61;
+  --text_primary: #e1e3e6;
+  --background_page: #212123;
+  --header_alternate_background: #19191a;
+  --tabbar_active_icon: #ffffff;
+  --tabbar_background: #2c2d2e;
+  --tabbar_inactive_icon: #76787a;
+  --tabbar_tablet_active_icon: #71aaeb;
+  --tabbar_tablet_background: #232324;
+  --tabbar_tablet_inactive_icon: #76787a;
+  --tabbar_tablet_text_primary: #e1e3e6;
+  --tabbar_tablet_text_secondary: #76787a;
+  --toolbar_attach_background_from: #76787a;
+  --toolbar_attach_background_to: #5d5f61;
+  --content_placeholder_icon: #aaaeb3;
+  --content_placeholder_text: #aaaeb3;
+  --content_tint_background: #232324;
+  --background_content: #19191a;
+  --background_highlighted: rgba(255, 255, 255, 0.12);
+  --background_keyboard: #2c2d2e;
+  --background_light: #232324;
+  --background_suggestions: #2c2d2e;
+  --content_tint_foreground: #909499;
+  --field_background: #232324;
+  --field_border: rgba(255, 255, 255, 0.12);
+  --modal_card_background: #2c2d2e;
+  --modal_card_border: rgba(255, 255, 255, 0.12);
+  --modal_card_header_close: #ffffff;
+  --header_background: #19191a;
+  --header_background_before_blur: #141414;
+  --header_background_before_blur_alternate: #141414;
+  --header_search_field_background: #454647;
+  --header_search_field_tint: #aaaeb3;
+  --search_bar_background: #2c2d2e;
+  --search_bar_field_background: #454647;
+  --search_bar_field_tint: #aaaeb3;
+  --search_bar_segmented_control_tint: #909499;
+  --separator_common: #313233;
+}
+:root{
+  /*--header_alternate_background: #4b8bf4;*/
+  --header_background: #4b8bf4;
+  --background_page: none;
+}
+body * {
+  font-family: TT Norms;
+}
+.View__header * {
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  border: none !important;
+}
+.PanelHeader-content * {
+  color: #fff !important;
+}
+
+/*@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap&subset=cyrillic');*/
+
+@font-face {
+  font-family: 'TT Norms';
+  src: url('../fonts/TTNorms-Bold.eot');
+  src: local('TT Norms Bold'), local('TTNorms-Bold'),
+    url('../fonts/TTNorms-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/TTNorms-Bold.woff') format('woff'),
+    url('../fonts/TTNorms-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Norms';
+  src: url('../fonts/TTNorms-Thin.eot');
+  src: local('TT Norms Thin'), local('TTNorms-Thin'),
+    url('../fonts/TTNorms-Thin.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/TTNorms-Thin.woff') format('woff'),
+    url('../fonts/TTNorms-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Norms';
+  src: url('../fonts/TTNorms-Regular.eot');
+  src: local('TT Norms Regular'), local('TTNorms-Regular'),
+    url('../fonts/TTNorms-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/TTNorms-Regular.woff') format('woff'),
+    url('../fonts/TTNorms-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Norms';
+  src: url('../fonts/TTNorms-Light.eot');
+  src: local('TT Norms Light'), local('TTNorms-Light'),
+    url('../fonts/TTNorms-Light.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/TTNorms-Light.woff') format('woff'),
+    url('../fonts/TTNorms-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Norms';
+  src: url('../fonts/TTNorms-ExtraLight.eot');
+  src: local('TT Norms ExtraLight'), local('TTNorms-ExtraLight'),
+    url('../fonts/TTNorms-ExtraLight.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/TTNorms-ExtraLight.woff') format('woff'),
+    url('../fonts/TTNorms-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Norms';
+  src: url('../fonts/TTNorms-Medium.eot');
+  src: local('TT Norms Medium'), local('TTNorms-Medium'),
+    url('../fonts/TTNorms-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/TTNorms-Medium.woff') format('woff'),
+    url('../fonts/TTNorms-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+.tabbarDisable {
+  z-index: 0;
+}
+
+.Panel {
+  font-family: 'TT Norms';
+  font-weight: 300;
+  font-variant-ligatures: no-common-ligatures;
+  -webkit-font-variant-ligatures: no-common-ligatures;
+}
+
+.center-text {
+  position: absolute;
+  top: 45%;
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+  font-size: xx-large;
+  color: #fff;
+}
+
+.center {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+Spinner {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.Spinner[scheme="client_dark"]  {
+  background-color: #212123;
+}
+
+input {
+  font-variant-ligatures: no-common-ligatures;
+  -webkit-font-variant-ligatures: no-common-ligatures;
+}
+
+@media (device-height : 568px) and (device-width : 320px) and (-webkit-min-device-pixel-ratio: 2) {
+  .post_date {
+    font-size: 14px !important;
+  }
+
+  .post_author {
+    font-size: 15px !important;
+  }
+
+  .onboarding>.title {
+    font-size: 22px !important;
+  }
+
+  .onboarding>.subtitle {
+    font-size: 14px !important;
+  }
+
+  .onboarding {
+    height: 80vh !important;
+  }
+}

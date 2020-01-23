@@ -1,0 +1,48 @@
+.dateContainer {
+  display: inline-flex;
+}
+
+.dateText {
+  font-size: 19px;
+  font-weight: bold;
+}
+.dateText {
+  color: #9cf;
+}
+
+.selectedDateText/*[scheme="client_light"]*/ {
+  color: #fff;
+}
+
+.dayText {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.dayText/*[scheme="client_light"]*/ {
+  color: #9cf;
+}
+
+.singleContainer {
+  margin: 0px 3px;
+  height: 50px;
+  min-width: 55px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+#scroll {
+  background-color: #4b8bf4;
+}
+
+.lesson_numb[scheme="client_dark"] {
+  color: rgba(255, 255, 255, 0.502);
+}
+.lesson_numb{
+  text-align: center;
+  font-size: 20px;
+}

@@ -1,0 +1,80 @@
+.img-banner {
+  height: 150px;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.post_title {
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.2;
+  padding: 0px 10px 0px 0;
+}
+.post_title[scheme='client_dark'] {
+  color: #fff;
+}
+
+.post {
+  padding: 20px 20px;
+}
+
+.post_tags {
+  display: flex;
+}
+.post_tag[scheme='client_dark'] {
+  background-color: #2c2d2f;
+  border: 1px solid #444547;
+}
+
+.post_tag {
+  font-size: 15px;
+  line-height: 1.2;
+  margin-right: 10px;
+  border-radius: 5px;
+  padding: 2px 4px;
+}
+
+.post_td {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post_date {
+  font-size: 15px;
+}
+
+.post_bot {
+  display: flex;
+  margin-top: 5px;
+  color: #9ca2ad;
+}
+
+.post_author {
+  font-size: 16px;
+  padding-left: 4px;
+}
+
+.Panel__title {
+  font-family: 'TT Commons';
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 32px;
+  padding: 4px 16px 10px;
+  color: #222;
+}
+
+.Panel__subheader {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.Panel__subheader[scheme='client_dark'] {
+  background-color: #fff;
+}
+
+.Cell__main {
+  padding: 10px 8px 10px 0 !important;
+}

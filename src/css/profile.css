@@ -1,0 +1,107 @@
+.profile_notify,
+.profile_feedback,
+.profile_vk,
+.group_data {
+  margin: 0 15px;
+}
+
+.profile_title[scheme="client_dark"]  {
+  font-size: 20px;
+  font-family: "TT Norms";
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  padding: 25px 0;
+}
+
+.profile_item {
+  align-items: center;
+  display: inline-flex;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.profile_links_text {
+  padding-left: 15px;
+}
+
+.profile_notify_title,
+.profile_links_title[scheme="client_dark"] {
+  padding-bottom: 5px;
+  font-size: 18px;
+  font-family: "TT Norms";
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+}
+
+.profile_notify_sub,
+.profile_links_sub {
+  font-size: 14px;
+  font-family: "TT Norms";
+  color: rgb(118, 119, 120);
+}
+
+
+.profile_links_img {
+  height: 38px;
+  width: 8%;
+  background-size: 100%;
+  background-position-y: center;
+  background-position-x: left;
+  background-repeat: no-repeat;
+}
+
+.profile_vk {
+  padding: 30px 0;
+  display: inline-flex;
+}
+
+.name_vk {
+  align-self: center;
+  padding-left: 8vw;
+}
+
+.flname[scheme="client_dark"] {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+}
+.flname[scheme="client_light"] {
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+}
+.status {
+  color: #4286f4;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.fac_dat {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 6px 0;
+}
+
+.data_select {
+  width: 60vw;
+}
+
+.data_name {
+  color: #767778;
+  font-size: 14px;
+  font-weight: 300;
+  text-align: left;
+}
+
+.profile_notify_deadline {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.profile_notify_textblock {
+  max-width: 60vw;
+}
