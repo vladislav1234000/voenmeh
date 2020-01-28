@@ -28,9 +28,19 @@ class FirstScr extends Component {
   }
 
   render() {
-    const faculties = this.props.groupsList.map((fac) => (
-      <option value={JSON.stringify(fac)} key={fac.faculty}>{fac.faculty}</option>
-    ));
+
+    const faculties = (
+      <>
+      <option value='А' >А</option>
+      <option value='Б' >Б</option>
+      <option value='И' >И</option>
+      <option value='К' >К</option>
+      <option value='Н' >Н</option>
+      <option value='О' >О</option>
+      <option value='П' >П</option>
+      <option value='Р' >Р</option>
+      </>
+    );
 
     const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
       <option value={JSON.stringify(group)} key={group.name}>{group.name}</option>

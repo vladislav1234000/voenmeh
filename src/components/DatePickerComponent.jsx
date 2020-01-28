@@ -128,11 +128,11 @@ class DatePickerComponent extends React.Component {
     let k = moment(selectedDay).week() / 2;
 
     return (<div>
-      <HorizontalScroll className={this.props.variable.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
-        <div style={{ display: 'flex', padding: '25px 0px' }}>
+      <div className={this.props.variable.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
+        <div style={{ display: 'flex', padding: '25px 0px'  }}>
           {days || null}
         </div>
-      </HorizontalScroll>
+      </div>
       <div style={{ display: 'flex' }}>
       <div style={{
         marginTop: 10,

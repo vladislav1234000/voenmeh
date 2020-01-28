@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Panel, PanelHeader, Separator, Cell } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Div, Separator, Cell } from '@vkontakte/vkui';
 
 import '../css/schedule.css';
 
@@ -93,7 +93,8 @@ class Schedule extends Component {
       }
       return (
         <div key={id}>
-          <Separator style={{ marginTop: 8 }} wide />
+          {Discipline && <Separator style={{ marginTop: 8 }} wide />}
+          {!Discipline && <Div/>}
           {
             Discipline ?
             <div onClick={() => openModal()}  className="lesson">
@@ -111,13 +112,16 @@ class Schedule extends Component {
               <div className="lesson_content">
                 <div className="lesson_name">{Discipline}</div>
                 {
-                  Lecturer.ShortName && Classroom ? (
+                  /*Lecturer.ShortName &&*/ Classroom ?
                   <div style={{ fontSize: 13 }} className="lesson_teacher">
-                    {Lecturer.FullName ? Lecturer.FullName : Lecturer.ShortName}
-                    {`, аудитория ${Classroom}`}
+                    {/*Lecturer.FullName ? Lecturer.FullName : Lecturer.ShortName*/}
+                    {`Аудитория ${Classroom}`}
                   </div>
-                )
-                : false
+
+                :
+                <div style={{ fontSize: 13 }} className="lesson_teacher">
+                Аудитория: зависит от распределения
+                </div>
               }
               </div>
             </div>

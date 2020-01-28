@@ -46,6 +46,7 @@
     "@vkontakte/icons": "^1.15.1",
     "@vkontakte/vk-connect": "^1.6.8",
     "@vkontakte/vkui": "^2.32.4",
+    "axios": "^0.19.2",
     "cross-env": "^6.0.3",
     "eruda": "^1.10.2",
     "react": "^16.11.0",

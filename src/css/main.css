@@ -38,13 +38,13 @@ body[scheme="space_gray"] * {
   --header_background: #19191a;
   --header_background_before_blur: #141414;
   --header_background_before_blur_alternate: #141414;
-    font-family: TT Norms;
+/*    font-family: TT Norms;*/
 }
 
 body * {
   --header_background: #4680C2;
   --background_page: #fff;
-  font-family: TT Norms;
+  /*font-family: TT Norms;*/
 }
 
 .profileL * {
@@ -60,7 +60,9 @@ body * {
 #groupl * {
   color: #000;
 }
-
+/*div.InfoRow * {
+ font-weight: 500;
+}*/
 .View__header * {
   box-shadow: none !important;
   font-weight: Medium !important;
@@ -69,7 +71,9 @@ body * {
 .PanelHeader-content * {
   color: #fff !important;
 }
-
+.Header__content {
+white-space: normal;
+}
 .PanelHeader-left-in--brand, .PanelHeader-addon--brand, .PanelHeader-right--brand{
   color: #fff;
 }

@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { Panel, Button } from '@vkontakte/vkui';
 
+import connect from '@vkontakte/vk-connect';
+
 import Slider from 'react-slick';
 
 import Icon24BrowserForward from '@vkontakte/icons/dist/24/browser_forward';
@@ -77,7 +79,7 @@ class Onboarding extends Component {
                 <div className="button_next">
                   <Button
                     onClick={() => {
-                      slideIndex === pages.length - 1 ? this.props.variable.changePage('first') : this.next();
+                      slideIndex === pages.length - 1 ? this.props.variable.changePage('first') & connect.send("VKWebAppAddToFavorites", {}): this.next();
                     }}
                     size="l"
                     stretched

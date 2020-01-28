@@ -32,23 +32,23 @@ import NewsFeed from './NewsFeed.jsx';
 import Deadlines from './Deadlines.jsx';
 import Page from './Page.jsx';
 import API from '../helpers/API.js';
+import APII from '../helpers/apii.js';
 
 import Onboarding from './onboardingPanels/Onboarding.jsx';
-import phone0 from './onboardingPanels/phone0.png';
-import phone1 from './onboardingPanels/phone1.png';
-import phone2 from './onboardingPanels/phone2.png';
-import phone3 from './onboardingPanels/phone3.png';
-import phone4 from './onboardingPanels/phone4.png';
-import phone5 from './onboardingPanels/phone5.png';
-import phone6 from './onboardingPanels/phone6.png';
 
-import phone0Dark from './onboardingPanels/phone0Dark.png';
-import phone1Dark from './onboardingPanels/phone1Dark.png';
-import phone2Dark from './onboardingPanels/phone2Dark.png';
-import phone3Dark from './onboardingPanels/phone3Dark.png';
-import phone4Dark from './onboardingPanels/phone4Dark.png';
-import phone5Dark from './onboardingPanels/phone5Dark.png';
-import phone6Dark from './onboardingPanels/phone6Dark.png';
+import dark1 from './onboardingPanels/dark1.png';
+import dark2 from './onboardingPanels/dark2.png';
+//import dark3 from './onboardingPanels/dark3.png';
+import dark4 from './onboardingPanels/dark4.png';
+//import dark5 from './onboardingPanels/dark5.png';
+import dark6 from './onboardingPanels/dark6.png';
+
+import light1 from './onboardingPanels/light1.png';
+import light2 from './onboardingPanels/light2.png';
+//import light3 from './onboardingPanels/light3.png';
+import light4 from './onboardingPanels/light4.png';
+//import light5 from './onboardingPanels/light5.png';
+import light6 from './onboardingPanels/light6.png';
 
 // Sends event to client
 //connect.send('VKWebAppSetViewSettings', { status_bar_style: 'light', action_bar_color: '#19191a' });
@@ -87,11 +87,11 @@ class App extends Component {
       banners: [],
       schedule: {},
       groupsList: [],
-      scheme: true ? 'space_gray' : 'bright_light',
+      scheme: false ? 'space_gray' : 'bright_light',
       modal: null,
       noty: false
     };
-
+    this.api = new APII();
     this.updateDimensions = this.updateDimensions.bind(this);
   }
 
@@ -147,9 +147,11 @@ class App extends Component {
           switch (schemeK) {
             case 'client_light':
               schemeK = 'bright_light'
+              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#4680C2"});
               break;
             case 'client_dark':
               schemeK = 'space_gray'
+              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#19191a"});
               break;
             default:
               schemeK = e.detail.data.scheme
@@ -169,8 +171,12 @@ class App extends Component {
   }
 
   setSchedule(group = localStorage.getItem('group')) {
-    API.request(`getSchedule/${JSON.parse(group).id}`, null, 'GET', 1).then((schedule) => {
+    console.log(group)
+    group = '2286'
+    this.setScheduleNEW('ВЕ256')
+    API.request(`getSchedule/${group}`, null, 'GET', 1).then((schedule) => {
       this.setState({ schedule });
+      console.log(schedule)
     }).catch(console.error);
   }
 
@@ -235,7 +241,13 @@ class App extends Component {
 
     this.setState({ history, activePanel });
   }
+  setScheduleNEW = async (group = localStorage.getItem('group')) => {
 
+    const schedule = await this.api.GetSchedule(group);
+
+    this.setState({ schedule });
+    console.log(this.state)
+  }
   render() {
     const {
       isLoaded, fetchedUser, banners, news, scheme, schedule, activePage, activePanel, history, data, classTab
@@ -243,6 +255,8 @@ class App extends Component {
 
     const id = fetchedUser.id;
     const isAdmin = id===462723039||id===236820864||id===198082755||id===87478742;
+
+
 
     const onCloseModal = () => {
       this.setState({ modal: null })
@@ -267,46 +281,54 @@ class App extends Component {
                 {
                   data.form &&
                   <Cell>
-                    <InfoRow title="Форма занятия">
+                    <InfoRow /*style={{ lineHeight: 1 }}*/ title="Форма занятия">
                       {data.form}
                     </InfoRow>
                   </Cell>
                 }
-                {
-                  data.teacher &&
                   <Cell>
-                    <InfoRow title="Преподаватель">
-                     {data.teacher}
-                    </InfoRow>
+                  {
+                      data.teacher ?
+                      <InfoRow /*style={{ marginBottom: -8 }}*/ title="Преподаватель">
+                       {data.teacher}
+                      </InfoRow>
+                      :
+                      <InfoRow /*style={{ marginBottom: -8 }}*/ title="Преподаватель">
+                       По распределению
+                      </InfoRow>
+                  }
                   </Cell>
-                }
                 {
                   data.time &&
                   <Cell>
-                    <InfoRow title="Начало и конец занятия">
+                    <InfoRow /*style={{ marginBottom: -8 }}*/ title="Начало и конец занятия">
                       {data.time}
                     </InfoRow>
                   </Cell>
                 }
+                <Cell>
                 {
-                  data.aud &&
-                  <Cell>
-                    <InfoRow title="Аудитория">
-                      {data.aud}
+                    data.aud ?
+                    <InfoRow /*style={{ marginBottom: -8 }}*/ title="Аудитория">
+                     {data.aud}
                     </InfoRow>
-                  </Cell>
+                    :
+                    <InfoRow title="Аудитория">
+                     По распределению
+                    </InfoRow>
                 }
+                </Cell>
               </List>
+              <Div/>
             </Group>
-            <Div/>
             </ModalPage>
             </ModalRoot>
           )
         })
     }
-
+    const setScheduleNEW = this.setScheduleNEW;
     const state = this.state;
-    const props = { setParentState: this.setState.bind(this), fetchedUser, openModal, state }
+    const props = { setScheduleNEW, setParentState: this.setState.bind(this), fetchedUser, openModal, state }
     const tabbar = (
       <Tabbar className={classTab}>
         <TabbarItem
@@ -397,9 +419,9 @@ class App extends Component {
         </View>
 
         <View id="admin" activePanel={this.state.adminPagePanel}>
-          <AdminPage id="admin" {...props} variable={this} groupsList={this.state.groupsList} />
-          <AdminSendNoty id="noty" {...props} variable={this} groupsList={this.state.groupsList} />
-          <AdminAddNews id="news" {...props} variable={this} groupsList={this.state.groupsList} />
+          <AdminPage id="admin" {...props} variable={this}  />
+          <AdminSendNoty id="noty" {...props} variable={this} />
+          <AdminAddNews id="news" {...props} variable={this}  />
         </View>
 
         <View id="first" activePanel="first">
@@ -412,13 +434,13 @@ class App extends Component {
             {...props}
             id="onbording"
             pages={[
-              { image: state.scheme === 'bright_light' ? phone0 : phone0Dark , title: 'Встречайте —\nВоенмех Go', subtitle: 'Первый локальный студенческий сервис\n внутри социальной сети.\n Не нужно ничего скачивать и устанавливать —\n это чудесно, не правда ли?' },
-              { image: state.scheme === 'bright_light' ? phone1 : phone1Dark , title: 'Следи за новостями!', subtitle: 'В этом разделе у нас царит гармония и порядок:\nвсе новости отсортированы по хэштегам,\nпоэтому ты не пропустишь ничего важного.' },
-          /*    { image: state.scheme === 'bright_light' ? phone2 : phone2Dark , title: 'Создавай дедлайны!', subtitle: 'Укажи название задачи, комментарий и время.\nКогда сроки начнут гореть —\nсервис пришлет уведомление ВКонтакте.' },*/
-              { image: state.scheme === 'bright_light' ? phone3 : phone3Dark , title: 'Смотри расписание!', subtitle: 'Свайпни календарь и выбери дату,\nчтобы посмотреть расписание на другой день.' },
-              { image: state.scheme === 'bright_light' ? phone4 : phone4Dark , title: 'Самое важное в архиве!', subtitle: 'Здесь размещена полезная информация\nдля каждого студента Военмеха.\nНе отвлекай никого — посмотри в архиве.' },
-              { image: state.scheme === 'bright_light' ? phone5 : phone5Dark , title: 'Настрой сервис под себя!', subtitle: 'В профиле ты сможешь изменить факультет или группу,\n а также включить уведомления, чтобы всегда быть в курсе.' },
-              { image: state.scheme === 'bright_light' ? phone6 : phone6Dark , title: 'Почти готово!', subtitle: 'Осталось дело за малым:\nдобавь сервис в избранное, чтобы не потерять его\n и наслаждаться функционалом сервиса в полной мере.' },
+              { image: state.scheme === 'bright_light' ? light1 : dark1 , title: 'Встречайте —\nВоенмех Go', subtitle: 'Первый локальный студенческий сервис\n внутри социальной сети.\n Не нужно ничего скачивать и устанавливать —\n это чудесно, не правда ли?' },
+              { image: state.scheme === 'bright_light' ? light2 : dark2 , title: 'Следи за новостями!', subtitle: 'В этом разделе у нас царит гармония и порядок:\nвсе новости отсортированы по хэштегам,\nпоэтому ты не пропустишь ничего важного.' },
+          /*    { image: state.scheme === 'bright_light' ? light2 : phone2Dark , title: 'Создавай дедлайны!', subtitle: 'Укажи название задачи, комментарий и время.\nКогда сроки начнут гореть —\nсервис пришлет уведомление ВКонтакте.' },*/
+              { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Смотри расписание!', subtitle: 'Свайпни календарь и выбери дату,\nчтобы посмотреть расписание на другой день.' },
+          //    { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Самое важное в архиве!', subtitle: 'Здесь размещена полезная информация\nдля каждого студента Военмеха.\nНе отвлекай никого — посмотри в архиве.' },
+          //    { image: state.scheme === 'bright_light' ? light5 : dark5 , title: 'Настрой сервис под себя!', subtitle: 'В профиле ты сможешь изменить факультет или группу,\n а также включить уведомления, чтобы всегда быть в курсе.' },
+              { image: state.scheme === 'bright_light' ? light6 : dark6 , title: 'Почти готово!', subtitle: 'Осталось дело за малым:\nдобавь сервис в избранное, чтобы не потерять его\n и наслаждаться функционалом сервиса в полной мере.' },
             ]}
           />
         </View>
