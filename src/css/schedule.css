@@ -1,4 +1,4 @@
-.lessons[scheme="client_light"] {
+.lessons[scheme="space_gray"] {
   color: #fff;
   margin: 0px 0px;
 }
@@ -6,6 +6,11 @@
 .lesson {
   padding: 15px 12px;
   display: flex;
+}
+.nolesson {
+  padding: 15px 10px;
+  display: flex;
+  background-color: rgb(237,238,240);
 }
 
 .lesson_time {
@@ -15,25 +20,32 @@
   flex-direction: column;
   margin-right: 10px;
   text-align: right;
-  justify-content: space-between;
 }
 
 .lesson_content {
-  padding-left: 10px;
-  border-left: 1.5px solid #4286f4;
+  /*padding-left: 10px;*/
+  /*border-left: 1.5px solid #4286f4;*/
 }
 
-.lesson_content div {
+/*.lesson_content div {
   padding: 5px 0px;
-}
+}*/
 
 .lesson_type {
   font-weight: 400;
   color: #4286f4;
 }
 
+.lesson_name [scheme='bright_light'] {
+  font-weight: 500;
+  color: #000;
+}
 .lesson_name {
-  font-weight: 400;
+  font-weight: 500;
+}
+
+.lesson_teacher {
+  font-size: 1;
 }
 
 .spinner {

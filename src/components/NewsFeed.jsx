@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 import {
   Panel, PanelHeader, Search, Cell, Separator, IS_PLATFORM_ANDROID
@@ -77,7 +73,7 @@ class NewsFeed extends Component {
           >
             <div className="post_title">{post.title}</div>
           </Cell>
-          <Separator />
+          <Separator wide/>
         </div>
       ));
 

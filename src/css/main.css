@@ -1,4 +1,4 @@
-:root[scheme="client_dark"] {
+body[scheme="space_gray"] * {
   --activity_indicator_tint: #5d5f61;
   --accent: #5d5f61;
   --text_primary: #e1e3e6;
@@ -28,9 +28,6 @@
   --modal_card_background: #2c2d2e;
   --modal_card_border: rgba(255, 255, 255, 0.12);
   --modal_card_header_close: #ffffff;
-  --header_background: #19191a;
-  --header_background_before_blur: #141414;
-  --header_background_before_blur_alternate: #141414;
   --header_search_field_background: #454647;
   --header_search_field_tint: #aaaeb3;
   --search_bar_background: #2c2d2e;
@@ -38,24 +35,44 @@
   --search_bar_field_tint: #aaaeb3;
   --search_bar_segmented_control_tint: #909499;
   --separator_common: #313233;
+  --header_background: #19191a;
+  --header_background_before_blur: #141414;
+  --header_background_before_blur_alternate: #141414;
+    font-family: TT Norms;
 }
-:root{
-  /*--header_alternate_background: #4b8bf4;*/
-  --header_background: #4b8bf4;
-  --background_page: none;
-}
+
 body * {
+  --header_background: #4680C2;
+  --background_page: #fff;
   font-family: TT Norms;
 }
+
+.profileL * {
+    --background_page: rgb(237,238,240);
+}
+.profileD * {
+    --background_page: var(--background_page);
+}
+.Header--level-secondary .Header__content {
+    text-transform: none;
+    font-size: 17px;
+}
+#groupl * {
+  color: #000;
+}
+
 .View__header * {
   box-shadow: none !important;
-  font-weight: 700 !important;
+  font-weight: Medium !important;
   border: none !important;
 }
 .PanelHeader-content * {
   color: #fff !important;
 }
 
+.PanelHeader-left-in--brand, .PanelHeader-addon--brand, .PanelHeader-right--brand{
+  color: #fff;
+}
 /*@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap&subset=cyrillic');*/
 
 @font-face {

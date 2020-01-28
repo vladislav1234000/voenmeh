@@ -4,3 +4,7 @@ dist
 .vscode/
 
 .tmp/
+
+.build/
+
+build

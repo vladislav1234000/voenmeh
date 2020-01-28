@@ -3,10 +3,10 @@ import '../css/DatePickerComponent.css';
 import '../css/main.css';
 
 import moment from 'moment';
-import { HorizontalScroll, Footer, Div, Separator } from '@vkontakte/vkui';
+import { HorizontalScroll } from '@vkontakte/vkui';
 
 require('moment/locale/ru');
-//const scrollWidth = 1
+
 class DatePickerComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -26,9 +26,7 @@ class DatePickerComponent extends React.Component {
     const selected = selectedDate ? moment(selectedDate) : first;
     const selectedDayIndex = moment.duration(selected.diff(first)).asDays();
 
-    this.setState({
-      selectedDayIndex,
-    });
+    this.setState({ selectedDayIndex, });
 
     variable.pickDate(selected);
   }
@@ -45,7 +43,7 @@ class DatePickerComponent extends React.Component {
         selectedDay: props.date
       }
     );
-    this.props.variable.pickDate(props.date)
+    this.props.variable.pickDate(props.date);
 
     if (typeof onDateSelect === 'function') {
       onDateSelect(props.date);
@@ -56,17 +54,17 @@ class DatePickerComponent extends React.Component {
     const date = moment(props.firstDate);
     const disabledDates = props.disabledDates ? props.disabledDates : [];
 
-    const first = props.firstDate
+  /*  const first = props.firstDate
       ? moment(props.firstDate)
       : moment(new Date());
-    const last = props.lastDate ? moment(props.lastDate) : null;
+    const last = props.lastDate ? moment(props.lastDate) : null;*/
 
-    const numberOfDays = last
+  /*  const numberOfDays = last
       ? moment.duration(last.diff(first)).asDays() + 1
       : props.numberOfDays;
-
+*/
     const dates = [];
-    for (let i = 0; i < numberOfDays; i += 1) {
+    for (let i = 0; i < 6; i++ ) {
       const isDisabled = !!disabledDates.includes(date.format('YYYY-MM-DD'));
 
       dates.push({
@@ -87,14 +85,10 @@ class DatePickerComponent extends React.Component {
       firstDate,
       lastDate,
       numberOfDays,
-  //    width,
       selectedDay,
       selectedDayIndex
     } = this.state;
 
-  /*  if (width) {
-      scrollWidth = width;
-    }*/
 
     const daysProps = {
       firstDate,
@@ -106,8 +100,10 @@ class DatePickerComponent extends React.Component {
 
     if (availableDates) {
       days = availableDates.map((val, key) => {
-        const selectedStyle = selectedDayIndex === key ? "dateText selectedDateText" : "dateText";
-
+        let selectedStyle = selectedDayIndex === key ? "dateTextDark selectedDateText" : "dateTextDark";
+        if(this.props.variable.props.scheme === 'bright_light'){
+          selectedStyle = selectedDayIndex === key ? "dateTextLight selectedDateText" : "dateTextLight";
+        }
         return (
           <div className={"singleContainer"}
             key={key}
@@ -117,11 +113,10 @@ class DatePickerComponent extends React.Component {
                 key, date: moment(availableDates[key].date)
               });
             }}>
-            <div className={selectedStyle}>{val.day}</div>
-              {
-            /*    <div className={"monthText"}>{val.month}</div>*/}
+            <div className={'day' + selectedStyle}>{val.day}</div>
+
               <div className={"dayContainer"}>
-                <div className={selectedStyle}>
+                <div className={'weekDay' + selectedStyle}>
                   {val.day_of_week}
                 </div>
             </div>
@@ -131,20 +126,26 @@ class DatePickerComponent extends React.Component {
     }
 
     let k = moment(selectedDay).week() / 2;
+
     return (<div>
-      <HorizontalScroll id='scroll'>
-        <div style={{ display: 'flex', padding: '25px 10px' }}>
+      <HorizontalScroll className={this.props.variable.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
+        <div style={{ display: 'flex', padding: '25px 0px' }}>
           {days || null}
         </div>
       </HorizontalScroll>
       <div style={{ display: 'flex' }}>
-      <div style={{ marginTop: 10, marginLeft: 10, fontSize: '14px' }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
+      <div style={{
+        marginTop: 10,
+        marginLeft: 10,
+        fontSize: '14px'
+      }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
       <div style={{
         marginTop: 10,
         marginRight: 10,
         position: 'absolute',
         right: 0,
-        fontSize: '14px' }}>{`${(k !== Math.floor(k)) ? 'Четная' : 'Нечетная'} неделя`}</div>
+        fontSize: '14px'
+      }}>{`${(k !== Math.floor(k)) ? 'Чётная' : 'Нечётная'} неделя`}</div>
       </div>
     </div>
     );

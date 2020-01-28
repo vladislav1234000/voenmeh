@@ -5,13 +5,13 @@
   background-position: center;
 }
 
-.post_title {
+.post_title *{
   font-size: 20px;
   font-weight: 300;
   line-height: 1.2;
   padding: 0px 10px 0px 0;
 }
-.post_title[scheme='client_dark'] {
+.post_title[scheme='space_gray'] {
   color: #fff;
 }
 
@@ -22,11 +22,13 @@
 .post_tags {
   display: flex;
 }
-.post_tag[scheme='client_dark'] {
+.post_tag[scheme='space_gray'] *{
   background-color: #2c2d2f;
   border: 1px solid #444547;
 }
-
+.post_tag *{
+  font-weight: 500px;
+}
 .post_tag {
   font-size: 15px;
   line-height: 1.2;

@@ -58,10 +58,14 @@
 .dot {
   margin: 0 4px;
   border-radius: 30px;
+  background-color: #7aa9dd;
 }
-.dot[scheme='client_dark'] {
+.dotD {
+  margin: 0 4px;
+  border-radius: 30px;
   background-color: #fff;
 }
+
 
 #onboarding > .Panel__in {
   padding-bottom: 0 !important;

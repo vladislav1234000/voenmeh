@@ -1,20 +1,14 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/prop-types */
-/* eslint-disable camelcase */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
 import {
-  Panel, PanelHeader, Link, Div, Spinner, Avatar, Separator, Select, Switch
+  Panel, PanelHeader, Link, List, Div, Cell, Spinner, FormLayout, Separator, Select,
+  Group, Switch
 } from '@vkontakte/vkui';
 import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
 
 import imageVKLogo from '../images/vk_logo.png';
-import imageGlobe from '../images/globe.png';
 
-const debug = 0;
+const debug = window.location.port === '8080';
 
 class Profile extends Component {
   constructor(props) {
@@ -30,23 +24,14 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    this.props.groupsList.filter((a) => a.faculty === this.state.fac).map((b) => this.setState({ faculty: JSON.stringify(b) }));
     if (debug) {
-      this.setState({
-        data: {
-          first_name: 'Vlad', last_name: 'Biralo', id: 198082755, photo_100: 'https://sun9-47.userapi.com/c850016/v850016414/13ab73/BY7D48azABA.jpg?ava=1'
+      this.props.setParentState({
+        fetchedUser: {
+          first_name: 'Test', last_name: 'User', id: 1, photo_100: 'https://sun9-48.userapi.com/c855720/v855720034/160922/eGFyRrMUaY8.jpg?ava=1'
         }
       });
     }
-
-    connect.sendPromise('VKWebAppGetUserInfo')
-      .then((data) => {
-        !debug ? this.setState({ data }) : null;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    this.props.groupsList.filter((a) => a.faculty === this.state.fac).map((b) => this.setState({ faculty: JSON.stringify(b) }));
   }
 
   onChange(e) {
@@ -66,7 +51,7 @@ class Profile extends Component {
   }
 
   render() {
-    if (!this.state.data) {
+    if (!this.props.fetchedUser) {
       return (
         <Panel id="profile">
           <PanelHeader>Профиль</PanelHeader>
@@ -81,102 +66,104 @@ class Profile extends Component {
 
     const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
       <option value={JSON.stringify(group)} key={group.name}>{group.name}</option>
-    )) : <option value={null} />;
+    )) : <option /*value={null}*/ />;
 
-    const {
-      last_name, first_name, photo_100
-    } = this.state.data;
+    const { last_name, first_name, photo_100 } = this.props.fetchedUser;
+
+    const scheme = this.props.state.scheme;
+
     return (
       <Panel id="profile">
         <PanelHeader>Профиль</PanelHeader>
-        <div className="profile_vk">
-          <div className="ava_vk">
-            <Avatar src={photo_100} size={65} />
-          </div>
-          <div className="name_vk">
-            <div className="flname">{`${first_name} ${last_name}`}</div>
-            <div className="status">студент</div>
-          </div>
-        </div>
-        <Separator style={{ margin: '0' }} />
 
-        <div className="group_data">
-          <div className="profile_title">Данные</div>
+        <Div className='name' >
+        <img alt='' style={{ borderRadius: 50, marginTop: 20 }} src={photo_100} />
+        </Div>
+          <Div className='name'>
+          {`${first_name} ${last_name}`}
+          </Div>
 
-          <div className="fac_dat">
-            <div className="data_name">Факультет</div>
-            <div className="data_select">
-              <Select
-                top="Выбери свой факультет"
-                placeholder="Не выбран"
-                onChange={this.onChange}
-                value={this.state.faculty}
-                name="faculty"
-              >
-                {faculties}
-              </Select>
-            </div>
-          </div>
+        <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} title='Данные' style={{ borderRadius: '20px 20px 0px 0px', marginTop: 20 }}>
+            <FormLayout>
+            <Select
+              top='Выбери свой факультет'
+              placeholder='Не выбран'
+              onChange={this.onChange}
+              value={this.state.faculty || ''}
+              name='faculty'
+            >
+              {faculties}
+            </Select>
 
-          <div className="fac_dat">
-            <div className="data_name">Группа</div>
-            <div className="data_select">
-              <Select
-                placeholder="Не выбрана"
-                onChange={this.onChange}
-                value={this.state.group}
-                disabled={!this.state.faculty}
-                name="group"
-              >
-                {groups}
-              </Select>
-            </div>
-          </div>
-        </div>
+            <Select
+              top='Группа'
+              placeholder='Не выбрана'
+              onChange={this.onChange}
+              value={this.state.group}
+              disabled={!this.state.faculty}
+              name='group'
+            >
+              {groups}
+            </Select>
+            </FormLayout>
+              </Group>
 
-        <div className="profile_notify">
-          <div className="profile_title">Уведомления</div>
-          <div className="profile_notify_deadline">
-            <div className="profile_notify_textblock">
-              <div className="profile_notify_title">Скоро дедлайн</div>
-              <div className="profile_notify_sub">Сервис пришлет уведомление о приближающемся дедлайне</div>
-            </div>
-            <Switch className="profile_notify_switch" disabled />
-          </div>
-        </div>
+            <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} style={{ marginTop: -10 }} title='Уведомления'>
+            <Cell className='cell' multiline asideContent={
+              <Switch
+                checked={this.props.state.noty}
+                onChange={(e) => {
+              if(e.currentTarget.checked) {
+                connect.send("VKWebAppAllowNotifications", {});
+              } else {
+                connect.send("VKWebAppDenyNotifications", {});
+                this.props.setParentState({ noty: false });
+              }
+            }}/>}>
+              Сервис будет присылать уведомления, например, об отмене занятий
+            </Cell>
+            </Group>
 
-        <div className="profile_feedback">
-          <div className="profile_title">Обратная связь</div>
-          <div className="profile_links">
-            <Link href="https://vk.com/voenmehgo" target="_blank">
-              <div className="profile_item">
-                <div className="profile_links_img" style={{ backgroundImage: `url(${imageVKLogo})` }} />
-                <div className="profile_links_text">
-                  <div className="profile_links_title">Сообщество сервиса</div>
-                  <div className="profile_links_sub">@voenmehgo</div>
-                </div>
-              </div>
-            </Link>
+            <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} style={{ marginTop: -10 }} title='Обратная связь'>
+            <List>
+                <Link href="https://vk.com/voenmehgo" target="_blank">
+                <Cell
+                  before={
+                  <img
+                    alt=''
+                    width='30'
+                    height='30'
+                    style={{
+                      marginRight: 5
+                    }}
+                    src={imageVKLogo}
+                  />
+                  }
+                  description='@voenmehgo'
+                  >
+                  Сообщество сервиса
+                  </Cell>
+                  </Link>
 
-            <Link href="https://vk.com/krethub" target="_blank">
-              <div className="profile_item">
-                <div className="profile_links_img" style={{ backgroundImage: `url(${imageVKLogo})` }} />
-                <div className="profile_links_text">
-                  <div className="profile_links_title">Владислав Кретов</div>
-                  <div className="profile_links_sub">@krethub</div>
-                </div>
-              </div>
-            </Link>
-
-            <div className="profile_item">
-              <div className="profile_links_img" style={{ backgroundImage: `url(${imageGlobe})` }} />
-              <div className="profile_links_text">
-                <div className="profile_links_title">Сайт разработчика</div>
-                <div className="profile_links_sub">BOT-X.me</div>
-              </div>
-            </div>
-          </div>
-        </div>
+                  <Link href="https://vk.com/krethub" target="_blank">
+                  <Cell
+                    before={
+                    <img
+                      alt=''
+                      width='30'
+                      height='30'
+                      style={{
+                        marginRight: 5
+                      }}
+                      src={imageVKLogo}
+                    />
+                    }
+                    description='@krethub'
+                    >Владислав Кретов
+                    </Cell>
+                    </Link>
+                </List>
+        </Group>
       </Panel>
     );
   }

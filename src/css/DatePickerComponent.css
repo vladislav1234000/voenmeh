@@ -4,11 +4,34 @@
 
 .dateText {
   font-size: 19px;
-  font-weight: bold;
+  font-weight: 500;
 }
-.dateText {
+
+
+.daydateTextLight {
+  font-size: 20px;
+  font-weight: 500;
   color: #9cf;
 }
+.daydateTextDark {
+  font-size: 20px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+
+.weekDaydateTextLight {
+  font-size: 17px;
+  font-weight: 500;
+  color: #9cf;
+}
+.weekDaydateTextDark {
+  font-size: 17px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+
 
 .selectedDateText/*[scheme="client_light"]*/ {
   color: #fff;
@@ -25,7 +48,7 @@
 
 .singleContainer {
   margin: 0px 3px;
-  height: 50px;
+  height: 25px;
   min-width: 55px;
   display: flex;
   justify-content: center;
@@ -35,11 +58,14 @@
   border-radius: 5px;
 }
 
-#scroll {
-  background-color: #4b8bf4;
+.scrollLight {
+  background-color: #4680C2;
+}
+.scrollDark {
+  background-color: #19191a;
 }
 
-.lesson_numb[scheme="client_dark"] {
+.lesson_numb[scheme="space_gray"] {
   color: rgba(255, 255, 255, 0.502);
 }
 .lesson_numb{
