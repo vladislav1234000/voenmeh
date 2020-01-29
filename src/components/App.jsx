@@ -168,6 +168,7 @@ class App extends Component {
       }
     });
       connect.send('VKWebAppGetUserInfo');
+      this.setSchedule()
   }
 
   setSchedule(group = localStorage.getItem('group')) {

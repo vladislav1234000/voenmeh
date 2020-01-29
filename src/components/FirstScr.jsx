@@ -49,8 +49,9 @@ class FirstScr extends Component {
        }
     
         const getGroups = async (value) => {
+            console.log(value)
             let result = await this.api.GetGroups(value);
-            result = [{group: '1'},{group: '2'},{group: '3'},{group: '4'},{group: '5'}]
+            /*result = [{group: '1'},{group: '2'},{group: '3'},{group: '4'},{group: '5'}]*/
             let gr = result.map((r) =>  (
                   <option value={r.group} key={r.group}>{r.group}</option>
               ));
@@ -89,7 +90,7 @@ class FirstScr extends Component {
               name="faculty"
             >
                <option value='А' >А</option>
-               <option value='Б' >Б</option>
+               <option value='В' >В</option>
                <option value='И' >И</option>
                <option value='К' >К</option>
                <option value='Н' >Н</option>
