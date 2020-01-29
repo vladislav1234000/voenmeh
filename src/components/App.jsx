@@ -173,7 +173,7 @@ class App extends Component {
   setSchedule(group = localStorage.getItem('group')) {
     console.log(group)
     group = '2286'
-    this.setScheduleNEW('ВЕ256')
+    //this.setScheduleNEW('ВЕ256')
     API.request(`getSchedule/${group}`, null, 'GET', 1).then((schedule) => {
       this.setState({ schedule });
       console.log(schedule)

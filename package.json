@@ -21,6 +21,7 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.7.0",
     "@babel/runtime": "^7.7.2",
+    "@vkontakte/vk-miniapps-deploy": "0.0.11",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
     "eruda-webpack-plugin": "^1.2.0",

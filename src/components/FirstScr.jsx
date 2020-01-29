@@ -5,46 +5,64 @@ import {
 } from '@vkontakte/vkui';
 import '../css/first.css';
 
+import API from '../helpers/apii.js';
+
 class FirstScr extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
-    this.onChange = this.onChange.bind(this);
-  }
+    this.state = {
+        fac: localStorage.getItem('faculty'),
+        faculty: false,
+        group: false || localStorage.getItem('group'),
+        groups: []
+      };
+      this.api = new API();
+    }
+
 
   componentDidMount() {
   }
 
-  onChange(e) {
-    const { name, value } = e.currentTarget;
-    if (value.trim().length > 0) {
-      this.setState({ [name]: value });
-    } else {
-      this.setState({ [name]: false });
-    }
-
-    if (name === 'group') this.props.variable.setSchedule(value);
-  }
 
   render() {
+      const onChange = (e) => {
+         const { name, value } = e.currentTarget;
+               console.log(name, value)
+         if (value.trim().length > 0) {
+           this.setState({ [name]: value });
+         } else {
+           this.setState({ [name]: false });
+         }
 
-    const faculties = (
-      <>
-      <option value='А' >А</option>
-      <option value='Б' >Б</option>
-      <option value='И' >И</option>
-      <option value='К' >К</option>
-      <option value='Н' >Н</option>
-      <option value='О' >О</option>
-      <option value='П' >П</option>
-      <option value='Р' >Р</option>
-      </>
-    );
+           
+         if (name === 'group') {
+             console.log(this.state.faculty)
+            // this.props.setScheduleNEW(value);
+             this.props.setSchedule();
+             //localStorage.setItem('faculty', this.state.faculty);
+            // localStorage.setItem('group', value);
+             }
+         if(name === 'faculty') {
+             getGroups(value);
+         }
+       }
+    
+        const getGroups = async (value) => {
+            let result = await this.api.GetGroups(value);
+            result = [{group: '1'},{group: '2'},{group: '3'},{group: '4'},{group: '5'}]
+            let gr = result.map((r) =>  (
+                  <option value={r.group} key={r.group}>{r.group}</option>
+              ));
+            this.setState({
+              groups: gr
+            })
+            console.log(this.state.groups)
+        }
 
-    const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
-      <option value={JSON.stringify(group)} key={group.name}>{group.name}</option>
-    )) : <option value={null} />;
+   // const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
+   //   <option value={JSON.stringify(group)} key={group.name}>{group.name}</option>
+  //  )) : <option value={null} />;
 
     return (
       <Panel id="first">
@@ -66,22 +84,29 @@ class FirstScr extends Component {
             <Select
               top="Выбери свой факультет"
               placeholder="Не выбран"
-              onChange={this.onChange}
+              onChange={onChange}
               value={this.state.faculty}
               name="faculty"
             >
-              {faculties}
+               <option value='А' >А</option>
+               <option value='Б' >Б</option>
+               <option value='И' >И</option>
+               <option value='К' >К</option>
+               <option value='Н' >Н</option>
+               <option value='О' >О</option>
+               <option value='П' >П</option>
+               <option value='Р' >Р</option>
             </Select>
 
             <Select
               top="Выбери свою группу"
               placeholder="Не выбрана"
-              onChange={this.onChange}
+              onChange={onChange}
               value={this.state.group}
               disabled={!this.state.faculty}
               name="group"
             >
-              {groups}
+              {this.state.groups}
             </Select>
           </FormLayout>
 

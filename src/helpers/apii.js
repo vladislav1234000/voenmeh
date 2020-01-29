@@ -32,7 +32,7 @@ export default class API {
         let response = await this.send('GET',  `GetGroups?faculty=${faculty}`, null);
 
         console.log('API: ', 'GetGroups', response);
-
+        //if(response === []) response = {group: '1'}
         return response;
     }
     async GetSchedule(faculty) {
