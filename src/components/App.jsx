@@ -174,9 +174,10 @@ class App extends Component {
   setSchedule(group = localStorage.getItem('group')) {
     console.log(group)
     group = '2286'
+    this.setScheduleNEW('ВЕ256')
     //this.setScheduleNEW('ВЕ256')
     API.request(`getSchedule/${group}`, null, 'GET', 1).then((schedule) => {
-      this.setState({ schedule });
+  //    this.setState({ schedule });
       console.log(schedule)
     }).catch(console.error);
   }
@@ -197,7 +198,7 @@ class App extends Component {
 
   pool(interval) {
     return setInterval(() => {
-      if (localStorage.getItem('group')) this.apiCall(`getSchedule/${JSON.parse(localStorage.getItem('group')).id}`);
+      if (localStorage.getItem('group')) this.apiCall(`getSchedule/${(localStorage.getItem('group'))}`);
       this.apiCall('getNews');
     }, interval * 1000);
   }
@@ -246,8 +247,40 @@ class App extends Component {
 
     const schedule = await this.api.GetSchedule(group);
 
-    this.setState({ schedule });
-    console.log(this.state)
+    const even = schedule.filter(e =>  // четная
+        e.WeekCode === '2'
+    );
+    const odd = schedule.filter(e =>  // нечетная
+        e.WeekCode === '1'
+    );
+    const getEven = () => {
+      let evn = [];
+      evn.push(even.filter(e => e.DayTitle === 'Понедельник'));
+      evn.push(even.filter(e => e.DayTitle === 'Вторник'));
+      evn.push(even.filter(e => e.DayTitle === 'Среда'));
+      evn.push(even.filter(e => e.DayTitle === 'Четверг'));
+      evn.push(even.filter(e => e.DayTitle === 'Пятница'));
+      evn.push(even.filter(e => e.DayTitle === 'Суббота'));
+      return evn;
+    }
+    const getOdd = () => {
+      let od = [];
+      od.push(odd.filter(e => e.DayTitle === 'Понедельник'));
+      od.push(odd.filter(e => e.DayTitle === 'Вторник'));
+      od.push(odd.filter(e => e.DayTitle === 'Среда'));
+      od.push(odd.filter(e => e.DayTitle === 'Четверг'));
+      od.push(odd.filter(e => e.DayTitle === 'Пятница'));
+      od.push(odd.filter(e => e.DayTitle === 'Суббота'));
+      return od;
+    }
+
+    const shed = {
+      GroupName: group,
+      even: getEven(),
+      odd: getOdd()
+    }
+    this.setState({ schedule: shed });
+    console.log(shed);
   }
   render() {
     const {
@@ -256,8 +289,6 @@ class App extends Component {
 
     const id = fetchedUser.id;
     const isAdmin = id===462723039||id===236820864||id===198082755||id===87478742;
-
-
 
     const onCloseModal = () => {
       this.setState({ modal: null })
@@ -277,7 +308,7 @@ class App extends Component {
                 </ModalPageHeader>
               }
             >
-            <Group title={data.title}>
+            <Group title={data.title && data.title}>
               <List>
                 {
                   data.form &&

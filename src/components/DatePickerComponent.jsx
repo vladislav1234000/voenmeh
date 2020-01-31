@@ -3,7 +3,7 @@ import '../css/DatePickerComponent.css';
 import '../css/main.css';
 
 import moment from 'moment';
-import { HorizontalScroll } from '@vkontakte/vkui';
+import { } from '@vkontakte/vkui';
 
 require('moment/locale/ru');
 
@@ -29,6 +29,7 @@ class DatePickerComponent extends React.Component {
     this.setState({ selectedDayIndex, });
 
     variable.pickDate(selected);
+    console.log('selected', selected)
   }
 
   firstLetterUP(str) {

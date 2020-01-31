@@ -35,11 +35,18 @@ export default class API {
         //if(response === []) response = {group: '1'}
         return response;
     }
+    async GetWeek() {
+        let response = await this.send('GET',  `GetWeek`, null);
+
+        console.table('API: ', 'GetWeek', response);
+
+        return response;
+    }
     async GetSchedule(faculty) {
         let response = await this.send('GET',  `GetSchedule?group=${faculty}`, null);
 
-        console.log('API: ', 'GetSchedule', response);
-
+        console.log('API: ', 'GetSchedule');
+        console.table(response)
         return response;
     }
 

@@ -7,6 +7,8 @@ import DatePickerComponent from './DatePickerComponent.jsx';
 
 import Icon20LikeOutline from '@vkontakte/icons/dist/20/like_outline';
 
+import API from '../helpers/apii.js';
+
 class Schedule extends Component {
   constructor(props) {
     super(props);
@@ -15,40 +17,37 @@ class Schedule extends Component {
       schedule: this.props.schedule
     };
     this.pickDate = this.pickDate.bind(this);
+    this.api = new API();
   }
 
-  pickDate = (d) =>  {
-    const { odd, even } = this.state.schedule;
+  pickDate = async (d) =>  {
+    let { odd, even  } = this.state.schedule;
+
+    if(odd[0].length === 0) odd = even;
 
     const weekDay = d.weekday();
-    const k = d.week() / 2;
+
+    const ned = await this.api.GetWeek();
+
+    console.table(odd[weekDay])
 
     if (weekDay === -1) return this.setState({ lessons: [null] });
     if (!odd[weekDay] || !even[weekDay]) return this.setState({ lessons: [null] });
     if ((odd[weekDay].length === 0) || (even[weekDay].length === 0)) return this.setState({ lessons: [null] });
 
+
     const les = [];
-    if (k !== Math.floor(k)) {
-      console.log('чётная', weekDay, k);
 
-      even[weekDay].map((l) => {
-        les[l.numb - 1] = l;
-        return true // убрать, если что-то пошло по *****
-      });
+    if (ned.week === 'even') {
+      console.warn('even')
+      even[weekDay].map(l => les[l.numb - 1] = l );
 
-      this.setState({ lessons: les });
     } else {
-      console.log('нечётная', weekDay, k);
-
-      odd[weekDay].map((l) => {
-        les[l.numb - 1] = l;
-        return true// убрать, если что-то пошло по *****
-      });
-
-      this.setState({ lessons: les });
+      console.error('odd')
+      odd[weekDay].map((l) => les[l.numb - 1] = l );
     }
 
-  //  return false;
+    this.setState({ lessons: les });
   }
 
   render() {
@@ -85,7 +84,7 @@ class Schedule extends Component {
         console.log(12123)
         this.props.openModal({
           form: TypeLesson,
-          teacher: Lecturer.FullName ? Lecturer.FullName : Lecturer.ShortName,
+          teacher: Lecturer,
           title: Discipline,
           aud: Classroom,
           time: `${Time[0]} - ${Time[1]}`
@@ -137,7 +136,6 @@ class Schedule extends Component {
         </div>
       );
     });
-
     return (
       <Panel id="schedule">
         <PanelHeader noShadow>Расписание</PanelHeader>
