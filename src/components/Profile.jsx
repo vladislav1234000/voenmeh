@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {
-  Panel, PanelHeader, Link, List, Div, Cell, Spinner, FormLayout, Separator, Select,
+  Panel, PanelHeader, Link, List, Div, Cell, Spinner, FormLayout, Select,
   Group, Switch
 } from '@vkontakte/vkui';
 import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
 
-import imageVKLogo from '../images/vk_logo.png';
+import imageVKLogoDark from '../images/vk_logo.png';
+import imageVKLogoLight from '../images/logol.png';
 
 import API from '../helpers/apii.js';
 
@@ -16,14 +17,10 @@ class Profile extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      groups: []
-    };
     this.api = new API();
   }
 
   componentDidMount() {
-  //  this.props.groupsList.filter((a) => a.faculty === this.state.fac).map((b) => this.setState({ faculty: JSON.stringify(b) }));
     if (debug) {
       this.props.setParentState({
         fetchedUser: {
@@ -52,10 +49,8 @@ class Profile extends Component {
       } else {
         this.props.setParentState({ [name]: false });
       }
-      console.log(5555, value)
       connect.send('VKWebAppStorageSet', { key: name, value });
       if (name === 'group') {
-        console.log(this.state.faculty);
         this.props.setScheduleNEW(value);
       }
       if (name === 'faculty') {
@@ -97,16 +92,21 @@ class Profile extends Component {
               <option value="Р">Р</option>
             </Select>
 
-            <Select
-              top="Группа"
-              placeholder="Не выбрана"
-              onChange={onChange}
-              value={ this.props.state.group }
-              disabled={!this.props.state.faculty}
-              name="group"
-            >
-              {this.props.state.groups}
-            </Select>
+            {
+              this.props.state.groupsLoading ?
+              <Div style={{ marginTop: 24 }}><Spinner/></Div>
+              :
+              <Select
+                top="Группа"
+                placeholder="Не выбрана"
+                onChange={onChange}
+                value={ this.props.state.group }
+                disabled={!this.props.state.faculty}
+                name="group"
+              >
+                {this.props.state.groups}
+              </Select>
+            }
           </FormLayout>
         </Group>
 
@@ -144,7 +144,7 @@ class Profile extends Component {
                     style={{
                       marginRight: 5
                     }}
-                    src={imageVKLogo}
+                    src={this.props.state.scheme === 'space_gray' ? imageVKLogoDark : imageVKLogoLight}
                   />
                 )}
                 description="@voenmehgo"
@@ -163,7 +163,7 @@ class Profile extends Component {
                     style={{
                       marginRight: 5
                     }}
-                    src={imageVKLogo}
+                    src={this.props.state.scheme === 'space_gray' ? imageVKLogoDark : imageVKLogoLight}
                   />
                   )}
                 description="@krethub"

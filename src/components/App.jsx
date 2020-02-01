@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import connect from '@vkontakte/vk-connect';
 import {
   Epic, Tabbar, TabbarItem, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner,
-  ModalRoot, ModalPage, ModalPageHeader, HeaderButton, Group, List, Cell, InfoRow
+  ModalRoot, ModalPage, ModalPageHeader, HeaderButton, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
 import '@vkontakte/vkui/dist/vkui.css';
 import '../css/main.css';
 import '../css/first.css';
 
-import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
+//import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
@@ -73,7 +73,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'schedule' ,
+      activePage: 'first', // schedule
       activePanel: 'feed',
       adminPagePanel: 'admin',
       history: ['feed'],
@@ -88,10 +88,11 @@ class App extends Component {
       news: [],
       banners: [],
       schedule: {},
-      groupsList: [],
+      groups: [],
       scheme: false ? 'space_gray' : 'bright_light',
       modal: null,
-      noty: false
+      noty: false,
+      groupsLoading: false
     };
     this.api = new APII();
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -104,32 +105,21 @@ class App extends Component {
       const his = [...this.state.history];
       his.pop();
       const active = his[his.length - 1];
-      if (active === 'feed') {
-        connect.send('VKWebAppDisableSwipeBack');
-        console.log('swipeBack off');
-      }
+      if(active === 'feed') connect.send('VKWebAppDisableSwipeBack');
       this.setState({ history: his, activePanel: active });
     }, false);
 
 
     // Получаем расписание, если сохранена группа
-    if (localStorage.getItem('group')) this.setScheduleNEW(localStorage.getItem('group'));
+    //if (localStorage.getItem('group')) this.setScheduleNEW(localStorage.getItem('group'));
 
     API.request('getBanners', null, 'GET', 1).then((banners) => {
       this.setState({ banners });
       API.request('getNews', null, 'GET', 1).then((news) => {
         this.setState({ news });
-        this.setState({ isLoaded: true });
-      }).catch((e) => {
-        console.error(e);
-        this.setState({ isLoaded: true });
-      });
-    }).catch((e) => {
-      console.error(e);
+      })
       this.setState({ isLoaded: true });
-    });
-
-   // this.pool(180);
+    })
 
     connect.subscribe((e) => {
      if(e.detail.data) console.log(e.detail.type, e.detail.data)
@@ -163,22 +153,26 @@ class App extends Component {
         case 'VKWebAppStorageGetResult':
           console.log('VKWebAppStorageGetResult')
           console.table(e.detail.data.keys)
-          let fac = e.detail.data.keys[0].key
-          let gr = e.detail.data.keys[1].key;
-
-          fac = 'И'
-          gr = 'И102'
+          let fac = e.detail.data.keys[0].value
+          let gr = e.detail.data.keys[1].value;
+          console.log(gr)
+        //  if(fac.startsWith('?')) fac = 'И'
+        //  if(gr.startsWith('?')) gr = 'И161'
+          if(gr) this.setScheduleNEW(gr);
           if(fac){
             this.setState({ faculty: fac });
             this.getGroups(fac);
           }
-          if(gr){
+          if(!gr.startsWith('?')){
             this.setState({
               group: gr,
               activePage: 'schedule'
             });
+          } else {
+            this.setState({
+              activePage: 'first'
+            });
           }
-          console.log(this.state)
           break;
         default:
           // code
@@ -186,7 +180,6 @@ class App extends Component {
     });
       connect.send('VKWebAppGetUserInfo');
       connect.send("VKWebAppStorageGet", {"keys": ["faculty", "group"]});
-     // this.setSchedule()
   }
 
 
@@ -246,19 +239,23 @@ class App extends Component {
   }
 
    getGroups = async (fac) => {
-    const result = await this.api.GetGroups(fac);
+    this.setState({ groupsLoading: true })
+    let result = await this.api.GetGroups(fac);
+    if(!result) result = []
+    console.log('getGroups', fac, result)
     const gr = result.map((r) => (
       <option value={r.group} key={r.group}>{r.group}</option>
     ));
     this.setState({
       groups: gr
     });
+    this.setState({ groupsLoading: false })
   };
 
   setScheduleNEW = async (group = localStorage.getItem('group')) => {
 
-    const schedule = await this.api.GetSchedule(group);
-
+    let schedule = await this.api.GetSchedule(group);
+    if(!schedule) schedule = []
     const even = schedule.filter(e =>  // четная
         e.WeekCode === '2'
     );
@@ -315,7 +312,7 @@ class App extends Component {
               onClose={onCloseModal}
               header={
                 <ModalPageHeader
-                  right={<HeaderButton onClick={onCloseModal}>{!IS_PLATFORM_ANDROID ? <Icon24Cancel /> : <Icon24Dismiss />}</HeaderButton>}
+                  right={!IS_PLATFORM_ANDROID === 234 && <HeaderButton onClick={onCloseModal}> <Icon24Cancel /> </HeaderButton>}
                 >
                   Информация о занятии
                 </ModalPageHeader>
@@ -364,7 +361,7 @@ class App extends Component {
                 }
                 </Cell>
               </List>
-              <Div/>
+                <Div style={{ marginBottom: 10 }}><Button size='xl' onClick={onCloseModal} level='secondary'>Закрыть</Button></Div>
             </Group>
             </ModalPage>
             </ModalRoot>
@@ -418,7 +415,7 @@ class App extends Component {
           <Icon28Profile />
         </TabbarItem>
       {
-        isAdmin &&
+        isAdmin === 345345 &&
         <TabbarItem
           onClick={() => this.changePage('admin') }
           selected={activePage === 'admin'}
@@ -429,11 +426,9 @@ class App extends Component {
       </Tabbar>
     );
 
-    if (localStorage.getItem('group') || this.state.group) {
-      // расписание
+    if (this.state.group) {
       if (!(isLoaded && 'GroupName' in schedule)) return <Spinner size="large" />;
     } else {
-      // онбординг
       if (!isLoaded) return <Spinner size="large" />;
     }
 
@@ -464,7 +459,7 @@ class App extends Component {
         </View>
 
         <View className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" activePanel="profile">
-          <Profile className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" {...props} variable={this} groupsList={this.state.groupsList} />
+          <Profile className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" {...props} variable={this} />
         </View>
 
         <View id="admin" activePanel={this.state.adminPagePanel}>
@@ -474,7 +469,7 @@ class App extends Component {
         </View>
 
         <View id="first" activePanel="first">
-          <FirstScr id="first" {...props} groupsList={this.state.groupsList} />
+          <FirstScr id="first" {...props} />
         </View>
 
         <View id="onbording" activePanel="onbording">

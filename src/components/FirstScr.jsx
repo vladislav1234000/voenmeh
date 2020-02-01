@@ -1,8 +1,6 @@
 
 import React, { Component } from 'react';
-import {
-  Button, Panel, FormLayout, Select
-} from '@vkontakte/vkui';
+import { Button, Panel, FormLayout, Select, Div, Spinner } from '@vkontakte/vkui';
 import '../css/first.css';
 
 import API from '../helpers/apii.js';
@@ -12,12 +10,6 @@ class FirstScr extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-        fac: false,
-        faculty: false,
-        group: false,
-        groups: []
-      };
       this.api = new API();
     }
 
@@ -31,30 +23,26 @@ class FirstScr extends Component {
          const { name, value } = e.currentTarget;
                console.log(name, value)
          if (value.trim().length > 0) {
-           this.setState({ [name]: value });
+           this.props.setParentState({ [name]: value });
          } else {
-           this.setState({ [name]: false });
+           this.props.setParentState({ [name]: false });
          }
 
         connect.send("VKWebAppStorageSet", {"key": name, "value": value});
-         if (name === 'group') {
-             console.log(this.state.faculty);
-             this.props.setScheduleNEW();
 
-             }
-         if(name === 'faculty') {
-             getGroups(value);
-         }
+         if (name === 'group') this.props.setScheduleNEW(value);
+         if(name === 'faculty') getGroups(value);
+         
        }
 
         const getGroups = async (value) => {
-            console.log(value)
+            console.log(55558, value)
             let result = await this.api.GetGroups(value);
 
             let gr = result.map((r) =>  (
                   <option value={r.group} key={r.group}>{r.group}</option>
               ));
-            this.setState({ groups: gr });
+            this.props.setParentState({ groups: gr });
         }
 
    // const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
@@ -82,7 +70,7 @@ class FirstScr extends Component {
               top="Выбери свой факультет"
               placeholder="Не выбран"
               onChange={onChange}
-              value={this.state.faculty}
+              value={this.props.state.faculty}
               name="faculty"
             >
                <option value='А' >А</option>
@@ -95,30 +83,33 @@ class FirstScr extends Component {
                <option value='Р' >Р</option>
             </Select>
 
-            <Select
-              top="Выбери свою группу"
-              placeholder="Не выбрана"
-              onChange={onChange}
-              value={this.state.group}
-              disabled={!this.state.faculty}
-              name="group"
-            >
-              {this.state.groups}
-            </Select>
+            {
+              this.props.state.groupsLoading ?
+              <Div style={{ marginTop: 24 }}><Spinner/></Div>
+              :
+              <Select
+                top="Группа"
+                placeholder="Не выбрана"
+                onChange={onChange}
+                value={ this.props.state.group }
+                disabled={!this.props.state.faculty}
+                name="group"
+              >
+                {this.props.state.groups}
+              </Select>
+            }
           </FormLayout>
 
           <div className="button_next_first">
             <Button
               onClick={() => {
-                localStorage.setItem('group', this.state.group);
-                localStorage.setItem('faculty', this.state.faculty);
                 this.props.variable.changePage('schedule');
               }}
               size="l"
               stretched
               className="button_Panel"
               style={{ margin: 0 }}
-              disabled={!this.state.group || !this.state.faculty}
+              disabled={!this.props.state.group || !this.props.state.faculty}
             >
               Поехали!
             </Button>

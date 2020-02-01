@@ -3,7 +3,7 @@ import '../css/DatePickerComponent.css';
 import '../css/main.css';
 
 import moment from 'moment';
-import { } from '@vkontakte/vkui';
+import { HorizontalScroll } from '@vkontakte/vkui';
 
 require('moment/locale/ru');
 
@@ -65,7 +65,7 @@ class DatePickerComponent extends React.Component {
       : props.numberOfDays;
 */
     const dates = [];
-    for (let i = 0; i < 6; i++ ) {
+    for (let i = 0; i < 7; i++ ) {
       const isDisabled = !!disabledDates.includes(date.format('YYYY-MM-DD'));
 
       dates.push({
@@ -126,14 +126,14 @@ class DatePickerComponent extends React.Component {
       });
     }
 
-    let k = moment(selectedDay).week() / 2;
+    //  let k = moment(selectedDay).week() / 2;
 
     return (<div>
-      <div className={this.props.variable.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
+      <HorizontalScroll className={this.props.variable.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
         <div style={{ display: 'flex', padding: '25px 0px'  }}>
           {days || null}
         </div>
-      </div>
+      </HorizontalScroll>
       <div style={{ display: 'flex' }}>
       <div style={{
         marginTop: 10,
@@ -146,7 +146,7 @@ class DatePickerComponent extends React.Component {
         position: 'absolute',
         right: 0,
         fontSize: '14px'
-      }}>{`${(k !== Math.floor(k)) ? 'Чётная' : 'Нечётная'} неделя`}</div>
+      }}>{`${this.props.week === 'even' ? 'Чётная' : 'Нечётная'} неделя`}</div>
       </div>
     </div>
     );

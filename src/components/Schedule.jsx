@@ -14,7 +14,8 @@ class Schedule extends Component {
     super(props);
     this.state = {
       lessons: [],
-      schedule: this.props.schedule
+      schedule: this.props.schedule,
+      ned: false
     };
     this.pickDate = this.pickDate.bind(this);
     this.api = new API();
@@ -23,11 +24,13 @@ class Schedule extends Component {
   pickDate = async (d) =>  {
     let { odd, even  } = this.state.schedule;
 
-    if(odd[0].length === 0) odd = even;
+  //  if(odd[0].length === 0) odd = even;
 
     const weekDay = d.weekday();
 
     const ned = await this.api.GetWeek();
+
+    this.setState({ ned: ned.week });
 
     console.table(odd[weekDay])
 
@@ -140,7 +143,7 @@ class Schedule extends Component {
       <Panel id="schedule">
         <PanelHeader noShadow>Расписание</PanelHeader>
         <div className="lessons_date">
-          <DatePickerComponent variable={this} />
+          <DatePickerComponent week={this.state.ned} variable={this} />
         </div>
         <div className="lessons">
           {lessons}

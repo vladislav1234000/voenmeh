@@ -183,9 +183,9 @@ Spinner {
   height: 100%;
 }
 
-.Spinner[scheme="client_dark"]  {
+/*.Spinner[scheme="client_dark"]  {
   background-color: #212123;
-}
+}*/
 
 input {
   font-variant-ligatures: no-common-ligatures;
