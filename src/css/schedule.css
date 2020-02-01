@@ -14,6 +14,7 @@
 }
 
 .lesson_time {
+  font-family: Roboto;
   font-weight: 400;
   min-width: 45px;
   display: flex;
@@ -44,8 +45,9 @@
   font-weight: 500;
 }
 
-.lesson_teacher {
+.lesson_aud {
   font-size: 1;
+  font-weight: 400;
   margin-top: 8px;
 }
 

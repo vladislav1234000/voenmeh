@@ -136,11 +136,13 @@ class DatePickerComponent extends React.Component {
       </HorizontalScroll>
       <div style={{ display: 'flex' }}>
       <div style={{
+        fontWeight: 400,
         marginTop: 10,
         marginLeft: 10,
         fontSize: '14px'
       }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
       <div style={{
+        fontWeight: 400,
         marginTop: 10,
         marginRight: 10,
         position: 'absolute',

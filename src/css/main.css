@@ -77,7 +77,11 @@ white-space: normal;
 .PanelHeader-left-in--brand, .PanelHeader-addon--brand, .PanelHeader-right--brand{
   color: #fff;
 }
-/*@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap&subset=cyrillic');*/
+#roboto * {
+  font-family: Roboto;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap&subset=cyrillic');*/
 
 @font-face {
   font-family: 'TT Norms';
@@ -89,7 +93,11 @@ white-space: normal;
   font-weight: bold;
   font-style: normal;
 }
-
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto'), local('Roboto'),
+    url('../fonts/Roboto.ttf') format('truetype');
+}
 @font-face {
   font-family: 'TT Norms';
   src: url('../fonts/TTNorms-Thin.eot');

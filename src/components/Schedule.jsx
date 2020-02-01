@@ -93,6 +93,11 @@ class Schedule extends Component {
           time: `${Time[0]} - ${Time[1]}`
         });
       }
+      const lcFirst = str => {
+        if (!str) return str;
+        if (!str.startsWith('П')) return str;
+        return str[0].toLowerCase() + str.slice(1);
+      }
       return (
         <div key={id}>
           {Discipline && <Separator style={{ marginTop: 8 }} wide />}
@@ -115,13 +120,13 @@ class Schedule extends Component {
                 <div className="lesson_name">{Discipline}</div>
                 {
                   /*Lecturer.ShortName &&*/ Classroom ?
-                  <div style={{ fontSize: 13 }} className="lesson_teacher">
+                  <div style={{ fontSize: 13 }} className="lesson_aud">
                     {/*Lecturer.FullName ? Lecturer.FullName : Lecturer.ShortName*/}
-                    {`Аудитория ${Classroom}`}
+                    {`Аудитория: ${lcFirst(Classroom)}`}
                   </div>
 
                 :
-                <div style={{ fontSize: 13 }} className="lesson_teacher">
+                <div style={{ fontSize: 13 }} className="lesson_aud">
                 Аудитория: зависит от распределения
                 </div>
               }

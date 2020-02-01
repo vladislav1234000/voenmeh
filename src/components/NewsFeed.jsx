@@ -25,12 +25,12 @@ class NewsFeed extends Component {
 
   get sposts() {
     const search = this.state.search.toLowerCase();
-    const { News } = this.props;
+    const { news } = this.props;
     if (search.substr(0, 1) === '#') {
-      return News.filter(({ tags }) => tags.join(' ').toLowerCase().indexOf(search.substr(1)) > -1);
+      return news.filter(({ tags }) => tags.join(' ').toLowerCase().indexOf(search.substr(1)) > -1);
     }
 
-    return News.filter(({ title, author }) => (title + author).toLowerCase().indexOf(search) > -1);
+    return news.filter(({ title, author }) => (title + author).toLowerCase().indexOf(search) > -1);
   }
 
   firstLetterUP(str) {
@@ -48,7 +48,7 @@ class NewsFeed extends Component {
             asideContent={IS_PLATFORM_ANDROID ? <Icon24Chevron className="Cell__chevron" /> : ''}
             onClick={() => {
               this.props.variable.goForward('page');
-              this.props.updateData.updateData(post);
+              this.props.variable.updateData(post);
             }}
             bottomContent={(
               <div>
@@ -56,7 +56,9 @@ class NewsFeed extends Component {
                   <div className="post_tags">
                     {post.tags.map((tag, id) => (
                       // eslint-disable-next-line react/no-array-index-key
-                      <div className="post_tag" key={id}>{`#${tag.toLowerCase()}`}</div>
+                      <div className={ this.props.state.scheme === 'space_gray' ?
+                      'post_tagDark' : 'post_tag'
+                      } key={id}>{`#${tag.toLowerCase()}`}</div>
                     ))}
                   </div>
                 </div>

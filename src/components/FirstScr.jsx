@@ -31,19 +31,9 @@ class FirstScr extends Component {
         connect.send("VKWebAppStorageSet", {"key": name, "value": value});
 
          if (name === 'group') this.props.setScheduleNEW(value);
-         if(name === 'faculty') getGroups(value);
-         
+         if(name === 'faculty') this.props.getGroups(value);
+
        }
-
-        const getGroups = async (value) => {
-            console.log(55558, value)
-            let result = await this.api.GetGroups(value);
-
-            let gr = result.map((r) =>  (
-                  <option value={r.group} key={r.group}>{r.group}</option>
-              ));
-            this.props.setParentState({ groups: gr });
-        }
 
    // const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
    //   <option value={JSON.stringify(group)} key={group.name}>{group.name}</option>
@@ -73,14 +63,11 @@ class FirstScr extends Component {
               value={this.props.state.faculty}
               name="faculty"
             >
-               <option value='А' >А</option>
-               <option value='В' >В</option>
-               <option value='И' >И</option>
-               <option value='К' >К</option>
-               <option value='Н' >Н</option>
-               <option value='О' >О</option>
-               <option value='П' >П</option>
-               <option value='Р' >Р</option>
+              <option value="А">А</option>
+              <option value="И">И</option>
+              <option value="Е">Е</option>
+              <option value="О">О</option>
+              <option value="Р">Р</option>
             </Select>
 
             {
@@ -88,7 +75,7 @@ class FirstScr extends Component {
               <Div style={{ marginTop: 24 }}><Spinner/></Div>
               :
               <Select
-                top="Группа"
+                top="Выбери свою группу"
                 placeholder="Не выбрана"
                 onChange={onChange}
                 value={ this.props.state.group }

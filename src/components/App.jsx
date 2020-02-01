@@ -68,6 +68,8 @@ if (connect.supports('VKWebAppResizeWindow')) {
   connect.send('VKWebAppResizeWindow', { width: 800, height: 1000 });
 }
 
+//const debug = window.location.port === '8080';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -101,15 +103,18 @@ class App extends Component {
   componentDidMount() {
     this.setState({ noty: ordered.vk_are_notifications_enabled === 1 ? true : false })
     window.addEventListener('resize', this.updateDimensions);
-    window.addEventListener('popstate', () => {
+    window.addEventListener('popstate', (e) => {
+      e.preventDefault();
       const his = [...this.state.history];
       his.pop();
       const active = his[his.length - 1];
+      this.setState({ modal: null });
       if(active === 'feed') connect.send('VKWebAppDisableSwipeBack');
       this.setState({ history: his, activePanel: active });
     }, false);
 
 
+  //  if(debug) this.setScheduleNEW();
     // Получаем расписание, если сохранена группа
     //if (localStorage.getItem('group')) this.setScheduleNEW(localStorage.getItem('group'));
 
@@ -158,19 +163,16 @@ class App extends Component {
           console.log(gr)
         //  if(fac.startsWith('?')) fac = 'И'
         //  if(gr.startsWith('?')) gr = 'И161'
-          if(gr) this.setScheduleNEW(gr);
-          if(fac){
+          if(fac !== '' && !fac.startsWith('?')){
             this.setState({ faculty: fac });
             this.getGroups(fac);
           }
-          if(!gr.startsWith('?')){
-            this.setState({
-              group: gr,
-              activePage: 'schedule'
-            });
+          if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
+            this.setScheduleNEW(gr, true, false);
+            this.setState({ group: gr });
           } else {
             this.setState({
-              activePage: 'first'
+              activePage: 'onbording'
             });
           }
           break;
@@ -223,6 +225,7 @@ class App extends Component {
 
   goBack() {
     window.history.back();
+    this.setState({ modal: null });
   }
 
   // метод добавления перехода из истории аппы
@@ -252,10 +255,16 @@ class App extends Component {
     this.setState({ groupsLoading: false })
   };
 
-  setScheduleNEW = async (group = localStorage.getItem('group')) => {
-
+  setScheduleNEW = async (group, go = true, openSchedule = false) => {
+    if(!group) return
     let schedule = await this.api.GetSchedule(group);
-    if(!schedule) schedule = []
+    if(!schedule && go) {
+      console.log(this.state)
+      if(this.state.activePage !== 'onbording'){
+        this.setState({ activePage: 'onbording' });
+      }
+      return
+    }
     const even = schedule.filter(e =>  // четная
         e.WeekCode === '2'
     );
@@ -290,6 +299,7 @@ class App extends Component {
     }
 
     this.setState({ schedule: shed });
+    if(openSchedule) this.setState({ activePage: 'schedule' })
     console.log(shed);
   }
   render() {
@@ -301,8 +311,13 @@ class App extends Component {
     const isAdmin = id===462723039||id===236820864||id===198082755||id===87478742;
 
     const onCloseModal = () => {
-      this.setState({ modal: null })
+      this.setState({ modal: null });
     }
+    const ucFirst = str => {
+      if (!str) return str;
+      return str[0].toUpperCase() + str.slice(1);
+    }
+
     const openModal = data => {
         this.setState({
           modal: (
@@ -352,7 +367,7 @@ class App extends Component {
                 {
                     data.aud ?
                     <InfoRow /*style={{ marginBottom: -8 }}*/ title="Аудитория">
-                     {data.aud}
+                     {ucFirst(data.aud)}
                     </InfoRow>
                     :
                     <InfoRow title="Аудитория">
@@ -361,8 +376,9 @@ class App extends Component {
                 }
                 </Cell>
               </List>
-                <Div style={{ marginBottom: 10 }}><Button size='xl' onClick={onCloseModal} level='secondary'>Закрыть</Button></Div>
-            </Group>
+                <Div style={{ marginBottom: -10, marginTop: -10 }}><Button size='xl' onClick={onCloseModal} level='secondary'>Закрыть</Button></Div>
+                <Div/>
+          </Group>
             </ModalPage>
             </ModalRoot>
           )
@@ -373,7 +389,7 @@ class App extends Component {
     const state = this.state;
 
     const variable =  this;
-    const props = { getGroups, variable, data, banners, setScheduleNEW, setParentState: this.setState.bind(this), fetchedUser, openModal, state }
+    const props = { news, getGroups, variable, data, banners, setScheduleNEW, setParentState: this.setState.bind(this), fetchedUser, openModal, state }
 
     const tabbar = (
       <Tabbar className={classTab}>
@@ -427,7 +443,7 @@ class App extends Component {
     );
 
     if (this.state.group) {
-      if (!(isLoaded && 'GroupName' in schedule)) return <Spinner size="large" />;
+      if (!this.state.schedule/*(isLoaded && 'GroupName' in schedule)*/) return <Spinner size="large" />;
     } else {
       if (!isLoaded) return <Spinner size="large" />;
     }
@@ -442,7 +458,7 @@ class App extends Component {
           history={history}
           onSwipeBack={this.goBack}
         >
-          <NewsFeed id="feed" {...props} updateData={this} News={news} />
+          <NewsFeed id="feed" {...props}/>
           <Page id="page" {...props}  />
         </View>
 
@@ -479,10 +495,10 @@ class App extends Component {
             pages={[
               { image: state.scheme === 'bright_light' ? light1 : dark1 , title: 'Встречайте —\nВоенмех Go', subtitle: 'Первый локальный студенческий сервис\n внутри социальной сети.\n Не нужно ничего скачивать и устанавливать —\n это чудесно, не правда ли?' },
               { image: state.scheme === 'bright_light' ? light2 : dark2 , title: 'Следи за новостями!', subtitle: 'В этом разделе у нас царит гармония и порядок:\nвсе новости отсортированы по хэштегам,\nпоэтому ты не пропустишь ничего важного.' },
-          /*    { image: state.scheme === 'bright_light' ? light2 : phone2Dark , title: 'Создавай дедлайны!', subtitle: 'Укажи название задачи, комментарий и время.\nКогда сроки начнут гореть —\nсервис пришлет уведомление ВКонтакте.' },*/
+          /*    { image: state.scheme === 'bright_light' ? light2 : phone2Dark , title: 'Создавай дедлайны!', subtitle: 'Укажи название задачи, комментарий и время.\nКогда сроки начнут гореть, —\nсервис пришлет уведомление ВКонтакте.' },*/
               { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Смотри расписание!', subtitle: 'Свайпни календарь и выбери дату,\nчтобы посмотреть расписание на другой день.' },
           //    { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Самое важное в архиве!', subtitle: 'Здесь размещена полезная информация\nдля каждого студента Военмеха.\nНе отвлекай никого — посмотри в архиве.' },
-              { image: state.scheme === 'bright_light' ? light6 : dark6 , title: 'Настрой сервис под себя!', subtitle: 'В профиле ты сможешь изменить факультет или группу,\n а также включить уведомления, чтобы всегда быть в курсе.' },
+              { image: state.scheme === 'bright_light' ? light6 : dark6 , title: 'Настрой сервис под себя!', subtitle: 'В профиле ты сможешь\n изменить факультет или группу, а также\n включить уведомления, \nчтобы всегда быть в курсе событий.' },
               { image: state.scheme === 'bright_light' ? light7 : dark7 , title: 'Почти готово!', subtitle: 'Осталось дело за малым:\nдобавь сервис в избранное, чтобы не потерять его\n и наслаждаться функционалом сервиса в полной мере.' },
             ]}
           />

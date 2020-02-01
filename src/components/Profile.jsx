@@ -50,8 +50,10 @@ class Profile extends Component {
         this.props.setParentState({ [name]: false });
       }
       connect.send('VKWebAppStorageSet', { key: name, value });
+
+      // посмотреть кейс, когда изменяется фак, но не изменяется группа
       if (name === 'group') {
-        this.props.setScheduleNEW(value);
+        this.props.setScheduleNEW(value, false);
       }
       if (name === 'faculty') {
         this.props.getGroups(value);
@@ -83,12 +85,9 @@ class Profile extends Component {
               name="faculty"
             >
               <option value="А">А</option>
-              <option value="В">В</option>
+              <option value="Е">Е</option>
               <option value="И">И</option>
-              <option value="К">К</option>
-              <option value="Н">Н</option>
               <option value="О">О</option>
-              <option value="П">П</option>
               <option value="Р">Р</option>
             </Select>
 

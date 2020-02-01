@@ -22,19 +22,26 @@
 .post_tags {
   display: flex;
 }
-.post_tag[scheme='space_gray'] *{
-  background-color: #2c2d2f;
-  border: 1px solid #444547;
-}
-.post_tag *{
-  font-weight: 500px;
-}
+
 .post_tag {
   font-size: 15px;
   line-height: 1.2;
   margin-right: 10px;
   border-radius: 5px;
   padding: 2px 4px;
+  font-weight: 500px;
+  border: 1px solid #ccc;
+}
+.post_tagDark {
+  font-size: 15px;
+  line-height: 1.2;
+  margin-right: 10px;
+  border-radius: 5px;
+  padding: 2px 4px;
+  font-weight: 500px;
+  color: #ccc;
+  border: 1px solid rgb(63,64,66);
+  background-color: rgb(44,45,47);
 }
 
 .post_td {

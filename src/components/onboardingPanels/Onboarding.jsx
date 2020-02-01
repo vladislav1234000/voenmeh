@@ -40,7 +40,10 @@ class Onboarding extends Component {
 
     const PageDot = ({ selected, id }) => (
       <div
-        className="dot"
+        className={
+          this.props.state.scheme === 'space_gray' ?
+          'dotDark' : 'dot'
+        }
         style={{
           width: (selected ? '8px' : '6px'),
           height: (selected ? '8px' : '6px')
