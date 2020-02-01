@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_URL 	= 'http://85.143.221.137:8000/';
+const API_URL 	= 'https://krethub.design:8000/';
 
 axios.defaults.headers.common = {
     Accept: "application/json, text/plain, */*"
-}
+};
 
 export default class API {
 

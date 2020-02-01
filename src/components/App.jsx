@@ -13,9 +13,9 @@ import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
-import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
+//import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
-import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
+//import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
 import Icon28Profile from '@vkontakte/icons/dist/28/profile';
 import Icon28KeyOutline from '@vkontakte/icons/dist/28/key_outline';
 
@@ -42,6 +42,8 @@ import dark2 from './onboardingPanels/dark2.png';
 import dark4 from './onboardingPanels/dark4.png';
 //import dark5 from './onboardingPanels/dark5.png';
 import dark6 from './onboardingPanels/dark6.png';
+import dark7 from './onboardingPanels/dark7.png';
+
 
 import light1 from './onboardingPanels/light1.png';
 import light2 from './onboardingPanels/light2.png';
@@ -49,9 +51,8 @@ import light2 from './onboardingPanels/light2.png';
 import light4 from './onboardingPanels/light4.png';
 //import light5 from './onboardingPanels/light5.png';
 import light6 from './onboardingPanels/light6.png';
+import light7 from './onboardingPanels/light7.png';
 
-// Sends event to client
-//connect.send('VKWebAppSetViewSettings', { status_bar_style: 'light', action_bar_color: '#19191a' });
 const qs = require('querystring');
 var params = window.location.search.replace('?', '').replace('%2C', ',');
 
@@ -72,7 +73,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: localStorage.group !== undefined ? 'schedule' : 'onbording',
+      activePage: 'schedule' ,
       activePanel: 'feed',
       adminPagePanel: 'admin',
       history: ['feed'],
@@ -82,6 +83,7 @@ class App extends Component {
       data: '',
       classTab: '',
       height: 0,
+      group: false,
       isLoaded: false,
       news: [],
       banners: [],
@@ -109,7 +111,9 @@ class App extends Component {
       this.setState({ history: his, activePanel: active });
     }, false);
 
-    if (localStorage.getItem('group')) this.setSchedule();
+
+    // Получаем расписание, если сохранена группа
+    if (localStorage.getItem('group')) this.setScheduleNEW(localStorage.getItem('group'));
 
     API.request('getBanners', null, 'GET', 1).then((banners) => {
       this.setState({ banners });
@@ -125,23 +129,16 @@ class App extends Component {
       this.setState({ isLoaded: true });
     });
 
-    API.request('getGroups', null, 'GET', 1).then((groupsList) => {
-      this.setState({ groupsList });
-    }).catch((e) => {
-      console.error(e);
-    });
-
-    this.pool(180);
+   // this.pool(180);
 
     connect.subscribe((e) => {
-    //  if(e.detail.data) console.log(e.detail.type, e.detail.data)
+     if(e.detail.data) console.log(e.detail.type, e.detail.data)
       switch (e.detail.type) {
         case 'VKWebAppGetUserInfoResult':
           this.setState({ fetchedUser: e.detail.data });
-          console.log(e.detail.type, e.detail.data);
+         // console.log(e.detail.type, e.detail.data);
           break;
           case 'VKWebAppUpdateConfig':
-          console.log(e.detail.data.scheme)
           const schemeAttribute = document.createAttribute('scheme');
           let schemeK = e.detail.data.scheme;
           switch (schemeK) {
@@ -163,24 +160,35 @@ class App extends Component {
           case 'VKWebAppAllowNotificationsResult':
           this.setState({ noty: e.detail.data.result });
           break;
+        case 'VKWebAppStorageGetResult':
+          console.log('VKWebAppStorageGetResult')
+          console.table(e.detail.data.keys)
+          let fac = e.detail.data.keys[0].key
+          let gr = e.detail.data.keys[1].key;
+
+          fac = 'И'
+          gr = 'И102'
+          if(fac){
+            this.setState({ faculty: fac });
+            this.getGroups(fac);
+          }
+          if(gr){
+            this.setState({
+              group: gr,
+              activePage: 'schedule'
+            });
+          }
+          console.log(this.state)
+          break;
         default:
           // code
       }
     });
       connect.send('VKWebAppGetUserInfo');
-      this.setSchedule()
+      connect.send("VKWebAppStorageGet", {"keys": ["faculty", "group"]});
+     // this.setSchedule()
   }
 
-  setSchedule(group = localStorage.getItem('group')) {
-    console.log(group)
-    group = '2286'
-    this.setScheduleNEW('ВЕ256')
-    //this.setScheduleNEW('ВЕ256')
-    API.request(`getSchedule/${group}`, null, 'GET', 1).then((schedule) => {
-  //    this.setState({ schedule });
-      console.log(schedule)
-    }).catch(console.error);
-  }
 
   changePage(name) {
     this.setState({ height: window.innerHeight });
@@ -194,13 +202,6 @@ class App extends Component {
 
   updateData(value) {
     this.setState({ data: value });
-  }
-
-  pool(interval) {
-    return setInterval(() => {
-      if (localStorage.getItem('group')) this.apiCall(`getSchedule/${(localStorage.getItem('group'))}`);
-      this.apiCall('getNews');
-    }, interval * 1000);
   }
 
   updateDimensions() {
@@ -243,6 +244,17 @@ class App extends Component {
 
     this.setState({ history, activePanel });
   }
+
+   getGroups = async (fac) => {
+    const result = await this.api.GetGroups(fac);
+    const gr = result.map((r) => (
+      <option value={r.group} key={r.group}>{r.group}</option>
+    ));
+    this.setState({
+      groups: gr
+    });
+  };
+
   setScheduleNEW = async (group = localStorage.getItem('group')) => {
 
     const schedule = await this.api.GetSchedule(group);
@@ -279,6 +291,7 @@ class App extends Component {
       even: getEven(),
       odd: getOdd()
     }
+
     this.setState({ schedule: shed });
     console.log(shed);
   }
@@ -358,9 +371,13 @@ class App extends Component {
           )
         })
     }
-    const setScheduleNEW = this.setScheduleNEW;
+
+    const { getGroups, setScheduleNEW } = this
     const state = this.state;
-    const props = { setScheduleNEW, setParentState: this.setState.bind(this), fetchedUser, openModal, state }
+
+    const variable =  this;
+    const props = { getGroups, variable, data, banners, setScheduleNEW, setParentState: this.setState.bind(this), fetchedUser, openModal, state }
+
     const tabbar = (
       <Tabbar className={classTab}>
         <TabbarItem
@@ -412,14 +429,14 @@ class App extends Component {
       </Tabbar>
     );
 
-    if (localStorage.getItem('group')) {
+    if (localStorage.getItem('group') || this.state.group) {
       // расписание
       if (!(isLoaded && 'GroupName' in schedule)) return <Spinner size="large" />;
     } else {
       // онбординг
       if (!isLoaded) return <Spinner size="large" />;
     }
-    //console.log(history)
+
     return (
       <ConfigProvider scheme={scheme}>
       <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? null : tabbar}>
@@ -430,8 +447,8 @@ class App extends Component {
           history={history}
           onSwipeBack={this.goBack}
         >
-          <NewsFeed id="feed" {...props} variable={this} updateData={this} banners={banners} News={news} />
-          <Page id="page" {...props} variable={this} data={data} />
+          <NewsFeed id="feed" {...props} updateData={this} News={news} />
+          <Page id="page" {...props}  />
         </View>
 
         <View id="time" activePanel="time">
@@ -451,18 +468,17 @@ class App extends Component {
         </View>
 
         <View id="admin" activePanel={this.state.adminPagePanel}>
-          <AdminPage id="admin" {...props} variable={this}  />
-          <AdminSendNoty id="noty" {...props} variable={this} />
-          <AdminAddNews id="news" {...props} variable={this}  />
+          <AdminPage id="admin" {...props}  />
+          <AdminSendNoty id="noty" {...props} />
+          <AdminAddNews id="news" {...props} />
         </View>
 
         <View id="first" activePanel="first">
-          <FirstScr id="first" {...props} variable={this} groupsList={this.state.groupsList} />
+          <FirstScr id="first" {...props} groupsList={this.state.groupsList} />
         </View>
 
         <View id="onbording" activePanel="onbording">
           <Onboarding
-            variable={this}
             {...props}
             id="onbording"
             pages={[
@@ -471,8 +487,8 @@ class App extends Component {
           /*    { image: state.scheme === 'bright_light' ? light2 : phone2Dark , title: 'Создавай дедлайны!', subtitle: 'Укажи название задачи, комментарий и время.\nКогда сроки начнут гореть —\nсервис пришлет уведомление ВКонтакте.' },*/
               { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Смотри расписание!', subtitle: 'Свайпни календарь и выбери дату,\nчтобы посмотреть расписание на другой день.' },
           //    { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Самое важное в архиве!', subtitle: 'Здесь размещена полезная информация\nдля каждого студента Военмеха.\nНе отвлекай никого — посмотри в архиве.' },
-          //    { image: state.scheme === 'bright_light' ? light5 : dark5 , title: 'Настрой сервис под себя!', subtitle: 'В профиле ты сможешь изменить факультет или группу,\n а также включить уведомления, чтобы всегда быть в курсе.' },
-              { image: state.scheme === 'bright_light' ? light6 : dark6 , title: 'Почти готово!', subtitle: 'Осталось дело за малым:\nдобавь сервис в избранное, чтобы не потерять его\n и наслаждаться функционалом сервиса в полной мере.' },
+              { image: state.scheme === 'bright_light' ? light6 : dark6 , title: 'Настрой сервис под себя!', subtitle: 'В профиле ты сможешь изменить факультет или группу,\n а также включить уведомления, чтобы всегда быть в курсе.' },
+              { image: state.scheme === 'bright_light' ? light7 : dark7 , title: 'Почти готово!', subtitle: 'Осталось дело за малым:\nдобавь сервис в избранное, чтобы не потерять его\n и наслаждаться функционалом сервиса в полной мере.' },
             ]}
           />
         </View>

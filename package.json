@@ -11,7 +11,9 @@
     "gitdeploy": "gh-pages -d dist",
     "deploy": "vk-miniapps-deploy",
     "start": "cross-env PORT=8080 react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "ssl": "ssh -R 80:localhost:8080 ssh.localhost.run"
+
   },
   "repository": "https://github.com/botxme/voenmex",
   "author": "danyadev <danyadev@mail.ru>, vbiralo <admin@bot-x.me>, krethub <krethub@mail.ru>",

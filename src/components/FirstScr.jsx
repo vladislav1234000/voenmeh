@@ -6,15 +6,16 @@ import {
 import '../css/first.css';
 
 import API from '../helpers/apii.js';
+import connect from '@vkontakte/vk-connect';
 
 class FirstScr extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-        fac: localStorage.getItem('faculty'),
+        fac: false,
         faculty: false,
-        group: false || localStorage.getItem('group'),
+        group: false,
         groups: []
       };
       this.api = new API();
@@ -35,30 +36,25 @@ class FirstScr extends Component {
            this.setState({ [name]: false });
          }
 
-           
+        connect.send("VKWebAppStorageSet", {"key": name, "value": value});
          if (name === 'group') {
-             console.log(this.state.faculty)
-            // this.props.setScheduleNEW(value);
-             this.props.setSchedule();
-             //localStorage.setItem('faculty', this.state.faculty);
-            // localStorage.setItem('group', value);
+             console.log(this.state.faculty);
+             this.props.setScheduleNEW();
+
              }
          if(name === 'faculty') {
              getGroups(value);
          }
        }
-    
+
         const getGroups = async (value) => {
             console.log(value)
             let result = await this.api.GetGroups(value);
-            /*result = [{group: '1'},{group: '2'},{group: '3'},{group: '4'},{group: '5'}]*/
+
             let gr = result.map((r) =>  (
                   <option value={r.group} key={r.group}>{r.group}</option>
               ));
-            this.setState({
-              groups: gr
-            })
-            console.log(this.state.groups)
+            this.setState({ groups: gr });
         }
 
    // const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
@@ -115,7 +111,7 @@ class FirstScr extends Component {
             <Button
               onClick={() => {
                 localStorage.setItem('group', this.state.group);
-                localStorage.setItem('faculty', JSON.parse(this.state.faculty).faculty);
+                localStorage.setItem('faculty', this.state.faculty);
                 this.props.variable.changePage('schedule');
               }}
               size="l"
