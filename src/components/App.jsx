@@ -168,7 +168,7 @@ class App extends Component {
             this.getGroups(fac);
           }
           if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
-            this.setScheduleNEW(gr, true, false);
+            this.setScheduleNEW(gr, true, true);
             this.setState({ group: gr });
           } else {
             this.setState({
@@ -493,7 +493,7 @@ class App extends Component {
             {...props}
             id="onbording"
             pages={[
-              { image: state.scheme === 'bright_light' ? light1 : dark1 , title: 'Встречайте —\nВоенмех Go', subtitle: 'Первый локальный студенческий сервис\n внутри социальной сети.\n Не нужно ничего скачивать и устанавливать —\n это чудесно, не правда ли?' },
+              { image: state.scheme === 'bright_light' ? light1 : dark1 , title: 'Встречайте — Военмех Go', subtitle: 'Первый локальный студенческий сервис\n внутри социальной сети.\n Не нужно ничего скачивать и устанавливать —\n это чудесно, не правда ли?' },
               { image: state.scheme === 'bright_light' ? light2 : dark2 , title: 'Следи за новостями!', subtitle: 'В этом разделе у нас царит гармония и порядок:\nвсе новости отсортированы по хэштегам,\nпоэтому ты не пропустишь ничего важного.' },
           /*    { image: state.scheme === 'bright_light' ? light2 : phone2Dark , title: 'Создавай дедлайны!', subtitle: 'Укажи название задачи, комментарий и время.\nКогда сроки начнут гореть, —\nсервис пришлет уведомление ВКонтакте.' },*/
               { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Смотри расписание!', subtitle: 'Свайпни календарь и выбери дату,\nчтобы посмотреть расписание на другой день.' },
