@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Panel, PanelHeader, Div, Separator, Cell } from '@vkontakte/vkui';
+import { Panel, PanelHeader, List, Div, Separator, Cell } from '@vkontakte/vkui';
 
 import '../css/schedule.css';
 
 import DatePickerComponent from './DatePickerComponent.jsx';
 
 import Icon20LikeOutline from '@vkontakte/icons/dist/20/like_outline';
+import Icon28InfoOutline from '@vkontakte/icons/dist/28/info_outline';
 
 import API from '../helpers/apii.js';
 
@@ -99,9 +100,11 @@ class Schedule extends Component {
         return str[0].toLowerCase() + str.slice(1);
       }
       return (
-        <div key={id}>
-          {Discipline && <Separator style={{ marginTop: 8 }} wide />}
-          {!Discipline && <Div/>}
+
+        <div className='test' key={id}>
+        {Discipline && id !== 0 && <Separator /*style={{ marginTop: 8 }}*/ wide />}
+        {
+        /*!Discipline && <Div/>*/}
           {
             Discipline ?
             <div onClick={() => openModal()}  className="lesson">
@@ -109,28 +112,26 @@ class Schedule extends Component {
                 <div>{Time[0]}</div>
                 <div style={{ color: '#ccc' }}>{Time[1]}</div>
               </div>
-            {/*
+              {/*
               already ?
                 <img src={require('../images/green.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
               :
                 <img src={require('../images/red.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
-            */}
-              <div className="lesson_border" />
+*/}
               <div className="lesson_content">
                 <div className="lesson_name">{Discipline}</div>
                 {
-                  /*Lecturer.ShortName &&*/ Classroom ?
+                  Classroom ?
                   <div style={{ fontSize: 13 }} className="lesson_aud">
-                    {/*Lecturer.FullName ? Lecturer.FullName : Lecturer.ShortName*/}
-                    {`Аудитория: ${lcFirst(Classroom)}`}
+                  {`Аудитория: ${lcFirst(Classroom)}`}
                   </div>
-
                 :
                 <div style={{ fontSize: 13 }} className="lesson_aud">
                 Аудитория: зависит от распределения
                 </div>
               }
               </div>
+              <div id='info'><Icon28InfoOutline width={20} height={20}/></div>
             </div>
             :
             <Cell
@@ -150,7 +151,7 @@ class Schedule extends Component {
         <div className="lessons_date">
           <DatePickerComponent week={this.state.ned} variable={this} />
         </div>
-        <div className="lessons">
+        <div style={{ marginTop: 8 }} className="lessons">
           {lessons}
         </div>
       </Panel>

@@ -58,7 +58,7 @@ class NewsFeed extends Component {
                       // eslint-disable-next-line react/no-array-index-key
                       <div className={ this.props.state.scheme === 'space_gray' ?
                       'post_tagDark' : 'post_tag'
-                      } key={id}>{`#${tag.toLowerCase()}`}</div>
+                    } key={id}>{`#${tag/*.toLowerCase()*/}`}</div>
                     ))}
                   </div>
                 </div>
@@ -103,14 +103,11 @@ class NewsFeed extends Component {
       <Panel id="feed">
         <PanelHeader>Новости</PanelHeader>
         <Search value={this.state.search} onChange={this.onChange} className="NewsFeedSearch" />
-        {this.state.search.length === 0 ? (
-          <Carousel
-            list={this.props.banners}
-            autoplay
-            sizePadding={52.63}
-          />
-        ) : null}
-        {this.sposts.length === 0 ? zaglushka : null}
+        {
+          this.state.search.length === 0 &&
+          <Carousel list={this.props.banners} autoplay sizePadding={52.63} />
+        }
+        {this.sposts.length === 0 && zaglushka}
         <div className="posts">{posts}</div>
       </Panel>
     );
