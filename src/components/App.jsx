@@ -242,10 +242,10 @@ class App extends Component {
   }
 
    getGroups = async (fac) => {
-    this.setState({ groupsLoading: true })
+    this.setState({ groupsLoading: true });
     let result = await this.api.GetGroups(fac);
-    if(!result) result = []
-    console.log('getGroups', fac, result)
+    if(!result) result = [];
+    console.log('getGroups', fac, result);
     const gr = result.map((r) => (
       <option value={r.group} key={r.group}>{r.group}</option>
     ));
@@ -280,7 +280,7 @@ class App extends Component {
       evn.push(even.filter(e => e.DayTitle === 'Пятница'));
       evn.push(even.filter(e => e.DayTitle === 'Суббота'));
       return evn;
-    }
+    };
     const getOdd = () => {
       let od = [];
       od.push(odd.filter(e => e.DayTitle === 'Понедельник'));
@@ -296,27 +296,27 @@ class App extends Component {
       GroupName: group,
       even: getEven(),
       odd: getOdd()
-    }
+    };
 
     this.setState({ schedule: shed });
-    if(openSchedule) this.setState({ activePage: 'schedule' })
+    if(openSchedule) this.setState({ activePage: 'schedule' });
     console.log(shed);
-  }
+  };
   render() {
     const {
       isLoaded, fetchedUser, banners, news, scheme, schedule, activePage, activePanel, history, data, classTab
     } = this.state;
 
-    const id = fetchedUser.id;
-    const isAdmin = id===462723039||id===236820864||id===198082755||id===87478742;
+    //const id = fetchedUser.id;
+    //const isAdmin = id===462723039||id===236820864||id===198082755||id===87478742;
 
     const onCloseModal = () => {
       this.setState({ modal: null });
-    }
+    };
     const ucFirst = str => {
       if (!str) return str;
       return str[0].toUpperCase() + str.slice(1);
-    }
+    };
 
     const openModal = data => {
         this.setState({
@@ -383,9 +383,9 @@ class App extends Component {
             </ModalRoot>
           )
         })
-    }
+    };
 
-    const { getGroups, setScheduleNEW } = this
+    const { getGroups, setScheduleNEW } = this;
     const state = this.state;
 
     const variable =  this;
@@ -430,15 +430,15 @@ class App extends Component {
         >
           <Icon28Profile />
         </TabbarItem>
-      {
-        isAdmin === 345345 &&
+      {/*
+        isAdmin &&
         <TabbarItem
           onClick={() => this.changePage('admin') }
           selected={activePage === 'admin'}
         >
           <Icon28KeyOutline />
         </TabbarItem>
-      }
+      */}
       </Tabbar>
     );
 
