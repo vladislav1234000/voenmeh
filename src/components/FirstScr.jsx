@@ -90,13 +90,19 @@ class FirstScr extends Component {
           <div className="button_next_first">
             <Button
               onClick={() => {
-                this.props.variable.changePage('schedule');
+
+                  this.props.variable.changePage('schedule');
+
               }}
               size="l"
               stretched
               className="button_Panel"
               style={{ margin: 0 }}
-              disabled={!this.props.state.group || !this.props.state.faculty}
+              disabled={
+                !this.props.state.group ||
+                !this.props.state.faculty ||
+                !this.props.state.schedule.odd
+              }
             >
               Поехали!
             </Button>

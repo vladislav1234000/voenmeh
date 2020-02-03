@@ -93,6 +93,7 @@ class App extends Component {
       groups: [],
       scheme: false ? 'space_gray' : 'bright_light',
       modal: null,
+      lessons: [],
       noty: false,
       groupsLoading: false
     };
@@ -374,6 +375,14 @@ class App extends Component {
                      По распределению
                     </InfoRow>
                 }
+                </Cell>
+                <Cell>
+                  {
+                    data.aud &&
+                      <InfoRow /*style={{ marginBottom: -8 }}*/ title="Корпус">
+                        {data.aud.endsWith('*') ? 'Новый' : 'Старый'}
+                      </InfoRow>
+                  }
                 </Cell>
               </List>
                 <Div style={{ marginBottom: -10, marginTop: -5 }}><Button size='xl' onClick={onCloseModal} level='secondary'>Закрыть</Button></Div>

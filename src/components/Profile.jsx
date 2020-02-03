@@ -6,9 +6,6 @@ import {
 import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
 
-import imageVKLogoDark from '../images/vk_logo.png';
-import imageVKLogoLight from '../images/logol.png';
-
 import Icon24LinkCircle from '@vkontakte/icons/dist/24/link_circle';
 
 import API from '../helpers/apii.js';
@@ -82,39 +79,40 @@ class Profile extends Component {
           id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
           title="Данные студента"
           /*style={{ borderRadius: '20px 20px 0px 0px', marginTop: 20 }}*/
-        >
-          <FormLayout>
-            <Select
-              top="Факультет"
-              placeholder="Не выбран"
-              onChange={onChange}
-              value={ this.props.state.faculty }
-              name="faculty"
-            >
-              <option value="А">А</option>
-              <option value="Е">Е</option>
-              <option value="И">И</option>
-              <option value="О">О</option>
-              <option value="Р">Р</option>
-            </Select>
+       />
+       <Group style={{ marginTop: -10 }}>
+         <FormLayout>
+           <Select
+             top="Факультет"
+             placeholder="Не выбран"
+             onChange={onChange}
+             value={ this.props.state.faculty }
+             name="faculty"
+           >
+             <option value="А">А</option>
+             <option value="Е">Е</option>
+             <option value="И">И</option>
+             <option value="О">О</option>
+             <option value="Р">Р</option>
+           </Select>
 
-            {
-              this.props.state.groupsLoading ?
-              <Div style={{ marginTop: 24 }}><Spinner/></Div>
-              :
-              <Select
-                top="Группа"
-                placeholder="Не выбрана"
-                onChange={onChange}
-                value={ this.props.state.group }
-                disabled={!this.props.state.faculty}
-                name="group"
-              >
-                {this.props.state.groups}
-              </Select>
-            }
-          </FormLayout>
-        </Group>
+           {
+             this.props.state.groupsLoading ?
+               <Div style={{ marginTop: 24 }}><Spinner/></Div>
+               :
+               <Select
+                 top="Группа"
+                 placeholder="Не выбрана"
+                 onChange={onChange}
+                 value={ this.props.state.group }
+                 disabled={!this.props.state.faculty}
+                 name="group"
+               >
+                 {this.props.state.groups}
+               </Select>
+           }
+         </FormLayout>
+         </Group>
 
         <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} style={{ marginTop: -10 }} title="Уведомления">
           <Cell
@@ -145,7 +143,7 @@ class Profile extends Component {
             asideContent={(
               <Switch
                 disabled
-                checked={false}
+                checked={true}
                 onChange={(e) => {
                   if (e.currentTarget.checked) {
 
@@ -183,7 +181,7 @@ class Profile extends Component {
                 Владислав Кретов
               </Cell>
             </Link>
-            <Link href="https://vk.me/krethub" target="_blank">
+            <Link href="https://vk.me/join/AJQ1dyvbCxZfidHoAmAJE5Bh" target="_blank">
               <Cell
                 before={
                   <Icon24LinkCircle fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>

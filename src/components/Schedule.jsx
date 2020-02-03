@@ -14,7 +14,6 @@ class Schedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lessons: [],
       schedule: this.props.schedule,
       ned: false
     };
@@ -32,12 +31,12 @@ class Schedule extends Component {
     const ned = await this.api.GetWeek();
 
     this.setState({ ned: ned.week });
-
+    if(!odd || !even) return
     console.table(odd[weekDay])
 
-    if (weekDay === -1) return this.setState({ lessons: [null] });
-    if (!odd[weekDay] || !even[weekDay]) return this.setState({ lessons: [null] });
-    if ((odd[weekDay].length === 0) || (even[weekDay].length === 0)) return this.setState({ lessons: [null] });
+    if (weekDay === -1) return this.props.setParentState({ lessons: [null] });
+    if (!odd[weekDay] || !even[weekDay]) return this.props.setParentState({ lessons: [null] });
+    if ((odd[weekDay].length === 0) || (even[weekDay].length === 0)) return this.props.setParentState({ lessons: [null] });
 
 
     const les = [];
@@ -51,11 +50,11 @@ class Schedule extends Component {
       odd[weekDay].map((l) => les[l.numb - 1] = l );
     }
 
-    this.setState({ lessons: les });
+    this.props.setParentState({ lessons: les });
   }
 
   render() {
-    const lessons = this.state.lessons.map((les, id) => {
+    const lessons = this.props.state.lessons.map((les, id) => {
       if (!les) {
         return (
           <div
@@ -101,7 +100,7 @@ class Schedule extends Component {
       }
       return (
 
-        <div className='test' key={id}>
+        <div className={this.props.state.scheme === 'bright_light' ? 'test' : 'dark'} key={id}>
         {Discipline /*&& id !== 0 */ && <Separator /*style={{ marginTop: 8 }}*/ wide />}
         {
         /*!Discipline && <Div/>*/}

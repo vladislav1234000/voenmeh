@@ -53,6 +53,8 @@
 }
 
 .test:active { background: #ebebeb}
+.dark:active { background: #19191a}
+
 
 #info  {
   max-width: 8em; /* блок занимает ширину родителя, max-width её ограничивает */
