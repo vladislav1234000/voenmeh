@@ -46,7 +46,9 @@ body * {
   --background_page: #fff;
   /*font-family: TT Norms;*/
 }
-
+* {
+  user-select: none;
+}
 .profileL * {
     --background_page: rgb(237,238,240);
 }
