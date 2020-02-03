@@ -1,10 +1,17 @@
 .name {
-  color: #4680C2;
+ /* color: #4680C2;*/
   font-size: 20px;
-  font-weight: 450;
-  text-align: center;
+  font-weight: 450;display: flex;
+ /* text-align: center;*/
 }
-
+.name2 {
+    /* color: #4680C2;*/
+    font-size: 20px;
+    font-weight: 450;
+    margin-top: 35px;
+    margin-left: 20px;
+    /* text-align: center;*/
+}
 .cell * {
  line-height: 20px;
  font-size: 14px;

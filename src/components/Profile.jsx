@@ -9,6 +9,8 @@ import connect from '@vkontakte/vk-connect';
 import imageVKLogoDark from '../images/vk_logo.png';
 import imageVKLogoLight from '../images/logol.png';
 
+import Icon24LinkCircle from '@vkontakte/icons/dist/24/link_circle';
+
 import API from '../helpers/apii.js';
 
 const debug = window.location.port === '8080';
@@ -67,18 +69,23 @@ class Profile extends Component {
     return (
       <Panel id="profile">
         <PanelHeader>Профиль</PanelHeader>
+        <Group>
 
-        <Div className="name">
-          <img alt="" style={{ borderRadius: 50, marginTop: 20 }} src={photo_100} />
-        </Div>
-        <Div className="name">
-          {`${first_name} ${last_name}`}
-        </Div>
-
-        <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} title="Данные" style={{ borderRadius: '20px 20px 0px 0px', marginTop: 20 }}>
+          <Div className="name">
+            <img alt="" style={{ borderRadius: 50 }} src={photo_100} />
+            <div className='name2'> {`${first_name} ${last_name}`}</div>
+          </Div>
+          <Div/>
+        </Group>
+        <Group
+          style={{ marginTop: -10 }}
+          id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
+          title="Данные студента"
+          /*style={{ borderRadius: '20px 20px 0px 0px', marginTop: 20 }}*/
+        >
           <FormLayout>
             <Select
-              top="Выбери свой факультет"
+              top="Факультет"
               placeholder="Не выбран"
               onChange={onChange}
               value={ this.props.state.faculty }
@@ -127,7 +134,31 @@ class Profile extends Component {
               />
             )}
           >
-              Сервис будет присылать уведомления, например, об отмене занятий
+
+              Вы разрешаете сервису присылать уведомления. <br/>Например, об отмене занятий
+          </Cell>
+        </Group>
+        <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} style={{ marginTop: -10 }} title="Настройки">
+          <Cell
+            className="cell"
+            multiline
+            asideContent={(
+              <Switch
+                disabled
+                checked={false}
+                onChange={(e) => {
+                  if (e.currentTarget.checked) {
+
+                  } else {
+
+                   // this.props.setParentState({ noty: false });
+                  }
+                }}
+              />
+            )}
+          >
+
+            Сортировать новостную ленту. <br/>Показывать новости своего факультета и общие.
           </Cell>
         </Group>
 
@@ -135,18 +166,9 @@ class Profile extends Component {
           <List>
             <Link href="https://vk.com/voenmehgo" target="_blank">
               <Cell
-                before={(
-                  <img
-                    alt=""
-                    width="30"
-                    height="30"
-                    style={{
-                      marginRight: 5
-                    }}
-                    src={this.props.state.scheme === 'space_gray' ? imageVKLogoDark : imageVKLogoLight}
-                  />
-                )}
-                description="@voenmehgo"
+                before={
+                  <Icon24LinkCircle fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                }
               >
                   Сообщество сервиса
               </Cell>
@@ -154,20 +176,20 @@ class Profile extends Component {
 
             <Link href="https://vk.com/krethub" target="_blank">
               <Cell
-                before={(
-                  <img
-                    alt=""
-                    width="30"
-                    height="30"
-                    style={{
-                      marginRight: 5
-                    }}
-                    src={this.props.state.scheme === 'space_gray' ? imageVKLogoDark : imageVKLogoLight}
-                  />
-                  )}
-                description="@krethub"
+                before={
+                  <Icon24LinkCircle fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                }
               >
-Владислав Кретов
+                Владислав Кретов
+              </Cell>
+            </Link>
+            <Link href="https://vk.me/krethub" target="_blank">
+              <Cell
+                before={
+                  <Icon24LinkCircle fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                }
+              >
+                  Присоединиться к чату
               </Cell>
             </Link>
           </List>

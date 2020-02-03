@@ -102,7 +102,7 @@ class Schedule extends Component {
       return (
 
         <div className='test' key={id}>
-        {Discipline && id !== 0 && <Separator /*style={{ marginTop: 8 }}*/ wide />}
+        {Discipline /*&& id !== 0 */ && <Separator /*style={{ marginTop: 8 }}*/ wide />}
         {
         /*!Discipline && <Div/>*/}
           {
