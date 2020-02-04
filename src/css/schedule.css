@@ -51,7 +51,12 @@
   font-weight: 400;
   margin-top: 5px;
 }
-
+.dark {
+  transition: All 0.3s ease;
+}
+.test {
+  transition: All 0.3s ease;
+}
 .test:active { background: #ebebeb}
 .dark:active { background: #19191a}
 

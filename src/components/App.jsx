@@ -390,7 +390,8 @@ class App extends Component {
     const state = this.state;
 
     const variable =  this;
-    const props = { news, getGroups, variable, data, banners, setScheduleNEW, setParentState: this.setState.bind(this), fetchedUser, openModal, state }
+    const props = { setParentState: this.setState.bind(this), news,
+      getGroups, variable, data, banners, setScheduleNEW,  fetchedUser, openModal, state }
 
     const tabbar = (
       <Tabbar className={classTab}>
