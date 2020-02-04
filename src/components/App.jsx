@@ -368,21 +368,13 @@ class App extends Component {
                 {
                     data.aud ?
                     <InfoRow /*style={{ marginBottom: -8 }}*/ title="Аудитория">
-                     {ucFirst(data.aud)}
+                     {ucFirst(data.aud)}{data.aud.endsWith('*') ? ', новый корпус' : ', старый корпус'}
                     </InfoRow>
                     :
                     <InfoRow title="Аудитория">
                      По распределению
                     </InfoRow>
                 }
-                </Cell>
-                <Cell>
-                  {
-                    data.aud &&
-                      <InfoRow /*style={{ marginBottom: -8 }}*/ title="Корпус">
-                        {data.aud.endsWith('*') ? 'Новый' : 'Старый'}
-                      </InfoRow>
-                  }
                 </Cell>
               </List>
                 <Div style={{ marginBottom: -10, marginTop: -5 }}><Button size='xl' onClick={onCloseModal} level='secondary'>Закрыть</Button></Div>

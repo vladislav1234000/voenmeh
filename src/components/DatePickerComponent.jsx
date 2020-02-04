@@ -130,7 +130,7 @@ class DatePickerComponent extends React.Component {
 
     return (<div>
       <HorizontalScroll className={this.props.variable.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
-        <div style={{ display: 'flex', padding: '25px 0px'  }}>
+        <div style={{ display: 'flex', padding: '25px 0px', justifyContent:'center' }}>
           {days || null}
         </div>
       </HorizontalScroll>
