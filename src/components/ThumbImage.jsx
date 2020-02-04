@@ -7,7 +7,7 @@ class ThumbImage extends Component {
   }*/
 
   render() {
-		let { url, sizePadding, style } = this.props
+		let { url, sizePadding, style, link } = this.props
 		let imgStyle = {
 			background: `#EDEEF0 url(${url}) no-repeat center center/cover `,
 		}
@@ -15,12 +15,16 @@ class ThumbImage extends Component {
 			...style,
 			paddingTop: sizePadding + '%'
 		}
-		return <div className="ThumbImage">
-			<div className={"ThumbImage__image-wrapper"} style={wrapperStyle}>
-				<span className="ThumbImage__image" style={imgStyle}>
-				</span>
-			</div>
-		</div>
+		return (
+      <a href={link} target='_blank'>
+      <div className="ThumbImage">
+  			<div className={"ThumbImage__image-wrapper"} style={wrapperStyle}>
+  				<span className="ThumbImage__image" style={imgStyle}>
+  				</span>
+  			</div>
+  		</div>
+      </a>
+    )
 	}
 }
 

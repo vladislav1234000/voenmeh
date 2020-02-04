@@ -44,10 +44,12 @@ body[scheme="space_gray"] * {
 body * {
   --header_background: #4680C2;
   --background_page: #fff;
-  /*font-family: TT Norms;*/
 }
 * {
   user-select: none;
+}
+body {
+  font-family: TT Norms;
 }
 .profileL * {
     --background_page: rgb(237,238,240);

@@ -52,6 +52,7 @@
 
 .post_date {
   font-size: 15px;
+  /*font-size: calc(7px + 8px);*/
 }
 
 .post_bot {

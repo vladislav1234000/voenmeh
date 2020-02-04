@@ -40,15 +40,17 @@ class NewsFeed extends Component {
   render() {
     const posts = this.sposts.length > 0
       && this.sposts.map((post) => (
-        <div key={post.id}>
+        <a style={{
+          textDecoration: 'none'
+        }} href={post.link || ''} rel="noopener noreferrer" target='_blank' key={post.id}>
           <Cell
             size="l"
             expandable
             multiline
             asideContent={IS_PLATFORM_ANDROID ? <Icon24Chevron className="Cell__chevron" /> : ''}
             onClick={() => {
-              this.props.variable.goForward('page');
-              this.props.variable.updateData(post);
+            /*  this.props.variable.goForward('page');
+              this.props.variable.updateData(post);*/
             }}
             bottomContent={(
               <div>
@@ -64,10 +66,10 @@ class NewsFeed extends Component {
                 </div>
                 <div className="post_bot">
                   <div className="post_date">
-                    {`${post.date} в ${post.time}`}
+                    {post.date && post.time && `${post.date} в ${post.time} · `}
                   </div>
                   <div className="post_author">
-                    {` · ${post.author}`}
+                    {post.author && `${post.author}`}
                   </div>
                 </div>
               </div>
@@ -76,7 +78,7 @@ class NewsFeed extends Component {
             <div className="post_title">{post.title}</div>
           </Cell>
           <Separator wide/>
-        </div>
+        </a>
       ));
 
     const zaglushka = (
