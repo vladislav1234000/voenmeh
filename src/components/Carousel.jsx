@@ -95,7 +95,7 @@ class Carousel extends Component {
         style={{ maxWidth: this.props.deviceWidth }}
         onTouchMove={(e) => e.preventDefault()}
       >
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+
         <Slider {...settings}>
           {list.map((cover, key) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -103,14 +103,14 @@ class Carousel extends Component {
               <div
                 className={!this.isSingleImage() ? 'Carousel__image-multiple safari-scale-border-radius-fix' : ''}
               >
-                {!cover.preview ? <ThumbImage url={cover.image.url} sizePadding={sizePadding} /> : (
-                  <div
+                {cover.photo ? <ThumbImage link={cover.link} url={cover.photo} sizePadding={sizePadding} /> : 
+                /*<div
                     className="Carousel__video"
-                    style={{ background: `#FFFFFF url(${cover.preview}) no-repeat center center/contain `, paddingTop: `${sizePadding}%` }}
+                    style={{ background: `#FFFFFF url(${cover.photo}) no-repeat center center/contain `, paddingTop: `${sizePadding}%` }}
                   >
                     <span className="Carousel__play" />
-                  </div>
-                )}
+</div>*/null
+                }
               </div>
             </div>
           ))}

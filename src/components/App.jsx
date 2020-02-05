@@ -31,7 +31,7 @@ import FirstScr from './FirstScr.jsx';
 import NewsFeed from './NewsFeed.jsx';
 import Deadlines from './Deadlines.jsx';
 import Page from './Page.jsx';
-import API from '../helpers/API.js';
+//import API from '../helpers/API.js';
 import APII from '../helpers/apii.js';
 
 import Onboarding from './onboardingPanels/Onboarding.jsx';
@@ -114,18 +114,7 @@ class App extends Component {
       this.setState({ history: his, activePanel: active });
     }, false);
 
-
-  //  if(debug) this.setScheduleNEW();
-    // Получаем расписание, если сохранена группа
-    //if (localStorage.getItem('group')) this.setScheduleNEW(localStorage.getItem('group'));
-
-    API.request('getBanners', null, 'GET', 1).then((banners) => {
-      this.setState({ banners });
-      API.request('getNews', null, 'GET', 1).then((news) => {
-        this.setState({ news });
-      })
-      this.setState({ isLoaded: true });
-    })
+    this.setState({ isLoaded: true });
 
     connect.subscribe((e) => {
      if(e.detail.data) console.log(e.detail.type, e.detail.data)
@@ -205,7 +194,7 @@ class App extends Component {
     this.setState({ classTab: (IS_PLATFORM_ANDROID && (window.innerHeight < height)) ? 'tabbarDisable' : '' });
   }
 
-  apiCall(method) {
+/*  apiCall(method) {
     let name;
     switch (method) {
       case 'getBanners':
@@ -222,7 +211,7 @@ class App extends Component {
     API.request(method, null, 'GET', 1).then((value) => {
       this.setState({ [name]: value });
     }).catch(console.error);
-  }
+  }*/
 
   goBack() {
     window.history.back();
@@ -243,6 +232,8 @@ class App extends Component {
   }
 
    getGroups = async (fac) => {
+    this.getBanners(fac);
+    this.getNews(fac);
     this.setState({ groupsLoading: true });
     let result = await this.api.GetGroups(fac);
     if(!result) result = [];
@@ -255,6 +246,16 @@ class App extends Component {
     });
     this.setState({ groupsLoading: false })
   };
+
+  getBanners = async (fac) => {
+      let result = await this.api.GetBanners(fac ? fac : '');
+      this.setState({ banners: result });
+  }
+
+  getNews = async (fac) => {
+      let result = await this.api.GetNews(fac ? fac : '');
+      this.setState({ news: result });
+  }
 
   setScheduleNEW = async (group, go = true, openSchedule = false) => {
     if(!group) return
