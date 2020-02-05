@@ -95,6 +95,7 @@ class App extends Component {
       modal: null,
       lessons: [],
       noty: false,
+      week: false,
       groupsLoading: false
     };
     this.api = new APII();
@@ -232,6 +233,8 @@ class App extends Component {
   }
 
    getGroups = async (fac) => {
+    let w = await this.api.GetWeek();
+    this.setState({ week: w });
     this.getBanners(fac);
     this.getNews(fac);
     this.setState({ groupsLoading: true });

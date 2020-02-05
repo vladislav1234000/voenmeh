@@ -12,7 +12,8 @@ class DatePickerComponent extends React.Component {
     super(props);
     this.state = {
       selectedDayIndex: 0,
-      selectedDay: moment(new Date())
+      selectedDay: moment(new Date()),
+      key: false
     };
     this.dateSelect = this.dateSelect.bind(this);
     this.generateDates = this.generateDates.bind(this);
@@ -24,7 +25,37 @@ class DatePickerComponent extends React.Component {
     const { variable } = this.props;
     const first = firstDate ? moment(firstDate) : moment(new Date());
     const selected = selectedDate ? moment(selectedDate) : first;
-    const selectedDayIndex = moment.duration(selected.diff(first)).asDays();
+    const selectedDayIndex = getSelectedDay()//moment.duration(selected.diff(first)).asDays();
+
+  function getSelectedDay() {
+      let cur = moment(new Date()).format('dd');
+      switch (cur) {
+        case 'пн':
+          cur =  0
+          break;
+        case 'вт':
+          cur =  1
+          break;
+        case 'ср':
+          cur =  2
+          break;
+        case 'чт':
+          cur =  3
+          break;
+        case 'пт':
+          cur =  4
+          break;
+        case 'сб':
+          cur =  5
+          break;
+        case 'вс':
+          cur =  6
+          break;
+        default:
+
+      }
+      return cur
+    }
 
     this.setState({ selectedDayIndex, });
 
@@ -37,7 +68,10 @@ class DatePickerComponent extends React.Component {
   }
 
   dateSelect(props) {
+    console.log(props)
     const { onDateSelect } = this.props;
+    this.setState({ key: props.key });
+
     this.setState(
       {
         selectedDayIndex: props.key,
@@ -65,6 +99,7 @@ class DatePickerComponent extends React.Component {
       : props.numberOfDays;
 */
     const dates = [];
+
     for (let i = 0; i < 7; i++ ) {
       const isDisabled = !!disabledDates.includes(date.format('YYYY-MM-DD'));
 
@@ -72,12 +107,22 @@ class DatePickerComponent extends React.Component {
         date: date.format('YYYY-MM-DD'),
         day: date.format('D'),
         day_of_week: date.format('dd'),
-        month: date.format('DD MMMM').split(' ')[1],
+      /*  month: date.format('DD MMMM').split(' ')[1],*/
         disabled: isDisabled,
       });
       date.add(1, 'days');
     }
-    return dates;
+    let ddd = [] ;
+    ddd.push(dates.filter(e => e.day_of_week === 'пн')[0]);
+    ddd.push(dates.filter(e => e.day_of_week === 'вт')[0]);
+    ddd.push(dates.filter(e => e.day_of_week === 'ср')[0]);
+    ddd.push(dates.filter(e => e.day_of_week === 'чт')[0]);
+    ddd.push(dates.filter(e => e.day_of_week === 'пт')[0]);
+    ddd.push(dates.filter(e => e.day_of_week === 'сб')[0]);
+    ddd.push(dates.filter(e => e.day_of_week === 'вс')[0]);
+    console.log(dates)
+    console.log(ddd)
+    return ddd;
   };
 
   render() {
@@ -141,7 +186,19 @@ class DatePickerComponent extends React.Component {
         marginLeft: 10,
         fontSize: '14px'
       }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
-      <div style={{
+      <div
+        onClick={() => {
+/*
+          this.props.setParentState({
+            week: this.props.state.week === 'odd' ? 'even' : 'odd'
+          });
+          let key = this.state.key
+          this.dateSelect({
+            key, date: moment(availableDates[key].date)
+          });
+*/
+        }}
+        style={{
         fontWeight: 400,
         marginTop: 10,
         marginRight: 10,

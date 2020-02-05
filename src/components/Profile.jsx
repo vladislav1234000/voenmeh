@@ -72,14 +72,15 @@ class Profile extends Component {
             <img alt="" style={{ borderRadius: 50 }} src={photo_100} />
             <div className='name2'> {`${first_name} ${last_name}`}</div>
           </Div>
-          <Div style={{ marginBottom: -10 }}/>
+          <Div/>
         </Group>
         <Group
-          className={'grr'}
+          style={{ marginTop: -10 }}
           id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
           title="Данные студента"
           /*style={{ borderRadius: '20px 20px 0px 0px', marginTop: 20 }}*/
-     >
+       />
+       <Group style={{ marginTop: -10 }}>
          <FormLayout>
            <Select
              top="Факультет"
