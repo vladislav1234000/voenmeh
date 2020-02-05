@@ -62,6 +62,9 @@ body * {
 #groupl * {
   color: #000;
 }
+.FormField FormField--ios  * {
+  color: #ccc;
+}
 /*div.InfoRow * {
  font-weight: 500;
 }*/
