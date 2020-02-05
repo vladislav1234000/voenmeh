@@ -121,7 +121,17 @@ class DatePickerComponent extends React.Component {
     ddd.push(dates.filter(e => e.day_of_week === 'сб')[0]);
     ddd.push(dates.filter(e => e.day_of_week === 'вс')[0]);
     console.log(dates)
+
     console.log(ddd)
+    let cur = moment(new Date()).format('dd');
+  /*  for(let i = 0; ddd.length; i++){
+      if(ddd[i].day_of_week === cur){
+        let dayy = ddd[i].day;
+        for(let e = i; e = 0; e = e-1 ){
+          ddd[i].day = dayy - 1
+        }
+      }
+    }*/
     return ddd;
   };
 
