@@ -49,7 +49,7 @@ class DatePickerComponent extends React.Component {
   }
 
   dateSelect(props) {
-
+  console.log(this.props)
     this.setState({
         selectedDayIndex: props.key,
         selectedDay: props.date

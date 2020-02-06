@@ -25,7 +25,7 @@ class Schedule extends Component {
     const weekDay = d.weekday();
 
     const ned = this.props.state.week;
-
+    console.log(99, ned)
     this.setState({ ned: ned.week });
     if(!odd || !even) return;
 
@@ -42,8 +42,10 @@ class Schedule extends Component {
     const les = [];
 
       if (ned.week === 'even') {
+        console.log('чет')
         even[weekDay].map(l => les[l.numb - 1] = l );
       } else {
+        console.log('нечет')
         odd[weekDay].map((l) => les[l.numb - 1] = l );
       }
     this.props.setParentState({ lessons: les });
@@ -143,7 +145,7 @@ class Schedule extends Component {
       <Panel id="schedule">
         <PanelHeader noShadow>Расписание</PanelHeader>
         <div className="lessons_date">
-          <DatePickerComponent {...this.props} week={this.props.state.week} variable={this} />
+          <DatePickerComponent {...this.props} week={this.props.state.week.week} variable={this} />
         </div>
         <div style={{ marginTop: 8 }} className="lessons">
           {lessons}

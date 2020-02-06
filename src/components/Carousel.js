@@ -86,10 +86,7 @@ class Carousel extends Component {
         this.justSwiped = true;
       }
     };
-    let wrapperStyle = {
-			/*...style,*/
-			paddingTop: sizePadding + '%'
-		}
+    
     return (
       <div
         ref={(el) => {
