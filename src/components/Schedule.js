@@ -117,15 +117,26 @@ class Schedule extends Component {
               :
                 <img src={require('../images/red.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
                 */}
-              <div className="lesson_contentD">
-                <div className="lesson_name">{Discipline}</div>
+              <div className={this.props.state.scheme === 'bright_light'
+                ? 'lesson_content' : 'lesson_contentD' }>
+                <div className={
+                  this.props.state.scheme === 'bright_light'
+                    ? 'lesson_name' : 'lesson_nameD'
+                } >>{Discipline}</div>
                 {
                   Classroom ?
-                  <div style={{ fontSize: 13 }} className="lesson_aud">
-                  {`Аудитория: ${lcFirst(Classroom)}`}
+                  <div style={{ fontSize: 13 }} className={
+                    this.props.state.scheme === 'bright_light'
+                      ? 'lesson_aud' : 'lesson_audD'
+                  } >
+                      {`Аудитория: ${lcFirst(Classroom)}`
+                  }}
                   </div>
                 :
-                <div style={{ fontSize: 13 }} className="lesson_aud">
+                <div style={{ fontSize: 13 }}  className={
+                  this.props.state.scheme === 'bright_light'
+                    ? 'lesson_aud' : 'lesson_audD'
+                }>
                 Аудитория: не указана
                 </div>
               }

@@ -1,8 +1,11 @@
-body [scheme="space_gray"], .lessons {
+.lessons {
   color: #fff;
   margin: 0px 0px;
 }
-
+.lessonsD {
+  color: #fff;
+  margin: 0px 0px;
+}
 .lesson {
   padding: 15px 12px;
   display: flex;
@@ -47,13 +50,16 @@ body [scheme="space_gray"], .lessons {
   color: #4286f4;
 }
 
-body [scheme='bright_light'], .lesson_name  {
+.lesson_name  {
   font-weight: 500;
   color: #000;
 }
+.lesson_nameD  {
+  font-weight: 500;
+  color: #fff;
+}
 .lesson_name {
   font-weight: 500;
-  margin-top: 1px;
 }
 
 .lesson_aud {
