@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import '../css/carousel.css';
 import Slider from 'react-slick';
-import ThumbImage from './ThumbImage.js';
 import '../css/slick.css';
 import '../css/slick-theme.css';
+import '../css/ThumbImage.css';
 
 class Carousel extends Component {
   constructor(props) {
@@ -86,6 +86,10 @@ class Carousel extends Component {
         this.justSwiped = true;
       }
     };
+    let wrapperStyle = {
+			/*...style,*/
+			paddingTop: sizePadding + '%'
+		}
     return (
       <div
         ref={(el) => {
@@ -103,14 +107,22 @@ class Carousel extends Component {
               <div
                 className={!this.isSingleImage() ? 'Carousel__image-multiple safari-scale-border-radius-fix' : ''}
               >
-                {cover.photo ? <ThumbImage link={cover.link} url={cover.photo} sizePadding={sizePadding} /> :
-                /*<div
-                    className="Carousel__video"
-                    style={{ background: `#FFFFFF url(${cover.photo}) no-repeat center center/contain `, paddingTop: `${sizePadding}%` }}
-                  >
-                    <span className="Carousel__play" />
-</div>*/null
-                }
+          {
+            cover.photo && (
+              <a href={cover.link} rel="noopener noreferrer" target='_blank'>
+              <div className="ThumbImage">
+                <div className={"ThumbImage__image-wrapper"} style={{
+                  paddingTop: sizePadding + '%'
+                }}>
+                  <span className="ThumbImage__image" style={{
+                    background: `#EDEEF0 url(${cover.photo}) no-repeat center center/cover `,
+                  }}>
+                  </span>
+                </div>
+              </div>
+              </a>
+            )
+        }
               </div>
             </div>
           ))}
