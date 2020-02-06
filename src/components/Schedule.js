@@ -25,7 +25,7 @@ class Schedule extends Component {
     const weekDay = d.weekday();
 
     const ned = this.props.state.week;
-    console.log(99, ned)
+
     this.setState({ ned: ned.week });
     if(!odd || !even) return;
 
@@ -106,7 +106,9 @@ class Schedule extends Component {
             <div onClick={() => openModal()}  className="lesson">
               <div className={this.props.state.scheme === 'bright_light'
               ? 'lesson_time' : 'lesson_timeD' }>
-                <div>{Time[0]}</div>
+                <div style={{
+                  color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff'
+                }}>{Time[0]}</div>
                 <div style={{ color: '#ccc' }}>{Time[1]}</div>
               </div>
               {/*

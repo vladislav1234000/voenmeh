@@ -160,7 +160,7 @@ class Profile extends Component {
             <Link href="https://vk.com/voenmehgo" target="_blank">
               <Cell
                 before={
-                  <Icon28LogoVk fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                  <Icon28LogoVk fill='#ccc' />
                 }
               >
                   Сообщество сервиса
@@ -170,7 +170,7 @@ class Profile extends Component {
             <Link href="https://vk.com/krethub" target="_blank">
               <Cell
                 before={
-                  <Icon28LogoVk fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                  <Icon28LogoVk fill='#ccc' />
                 }
               >
                 Владислав Кретов

@@ -47,7 +47,7 @@ body [scheme="space_gray"], .lessons {
   color: #4286f4;
 }
 
-.lesson_name [scheme='bright_light'] {
+body [scheme='bright_light'], .lesson_name  {
   font-weight: 500;
   color: #000;
 }
@@ -60,6 +60,13 @@ body [scheme="space_gray"], .lessons {
   font-size: 1;
   font-weight: 400;
   margin-top: 5px;
+  color: #000;
+}
+.lesson_audD {
+  font-size: 1;
+  font-weight: 400;
+  margin-top: 5px;
+  color: #fff;
 }
 .dark {
   transition: All 0.3s ease;
