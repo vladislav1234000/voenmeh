@@ -17,7 +17,6 @@ import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 //import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
 import Icon28Profile from '@vkontakte/icons/dist/28/profile';
-import Icon28KeyOutline from '@vkontakte/icons/dist/28/key_outline';
 
 import Schedule from './Schedule.jsx';
 import Archive from './Archive.jsx';
@@ -118,15 +117,17 @@ class App extends Component {
     this.setState({ isLoaded: true });
 
     connect.subscribe((e) => {
-     if(e.detail.data) console.log(e.detail.type, e.detail.data)
       switch (e.detail.type) {
         case 'VKWebAppGetUserInfoResult':
+
           this.setState({ fetchedUser: e.detail.data });
-         // console.log(e.detail.type, e.detail.data);
+
           break;
-          case 'VKWebAppUpdateConfig':
+        case 'VKWebAppUpdateConfig':
+
           const schemeAttribute = document.createAttribute('scheme');
           let schemeK = e.detail.data.scheme;
+
           switch (schemeK) {
             case 'client_light':
               schemeK = 'bright_light'
@@ -142,33 +143,30 @@ class App extends Component {
           schemeAttribute.value = schemeK;
           this.setState({ scheme: schemeK });
           document.body.attributes.setNamedItem(schemeAttribute);
+
           break;
           case 'VKWebAppAllowNotificationsResult':
+
           this.setState({ noty: e.detail.data.result });
+
           break;
         case 'VKWebAppStorageGetResult':
-          console.log('VKWebAppStorageGetResult')
           console.table(e.detail.data.keys)
           let fac = e.detail.data.keys[0].value
           let gr = e.detail.data.keys[1].value;
-          console.log(gr)
-        //  if(fac.startsWith('?')) fac = 'И'
-        //  if(gr.startsWith('?')) gr = 'И161'
+
           if(fac !== '' && !fac.startsWith('?')){
             this.setState({ faculty: fac });
             this.getGroups(fac);
           }
           if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
-            this.setScheduleNEW(gr, true, true);
             this.setState({ group: gr });
+            this.setScheduleNEW(gr, true, true);
           } else {
-            this.setState({
-              activePage: 'onbording'
-            });
+            this.setState({ activePage: 'onbording' });
           }
           break;
-        default:
-          // code
+        default: break;
       }
     });
       connect.send('VKWebAppGetUserInfo');
@@ -195,31 +193,11 @@ class App extends Component {
     this.setState({ classTab: (IS_PLATFORM_ANDROID && (window.innerHeight < height)) ? 'tabbarDisable' : '' });
   }
 
-/*  apiCall(method) {
-    let name;
-    switch (method) {
-      case 'getBanners':
-        name = 'banners';
-        break;
-      case 'getNews':
-        name = 'news';
-        break;
-      default:
-        name = 'schedule';
-        break;
-    }
-
-    API.request(method, null, 'GET', 1).then((value) => {
-      this.setState({ [name]: value });
-    }).catch(console.error);
-  }*/
-
   goBack() {
     window.history.back();
     this.setState({ modal: null });
   }
 
-  // метод добавления перехода из истории аппы
   goForward(activePanel) {
     const history = [...this.state.history];
     history.push(activePanel);
@@ -233,6 +211,7 @@ class App extends Component {
   }
 
    getGroups = async (fac) => {
+    if(this.state.activePage !== 'profile') this.setState({ isLoaded: false });
     let w = await this.api.GetWeek();
     this.setState({ week: w });
     this.getBanners(fac);
@@ -247,7 +226,10 @@ class App extends Component {
     this.setState({
       groups: gr
     });
-    this.setState({ groupsLoading: false })
+    this.setState({
+      groupsLoading: false,
+      isLoaded: true
+     })
   };
 
   getBanners = async (fac) => {
@@ -311,9 +293,6 @@ class App extends Component {
     const {
       isLoaded, fetchedUser, banners, news, scheme, schedule, activePage, activePanel, history, data, classTab
     } = this.state;
-
-    //const id = fetchedUser.id;
-    //const isAdmin = id===462723039||id===236820864||id===198082755||id===87478742;
 
     const onCloseModal = () => {
       this.setState({ modal: null });
@@ -448,11 +427,7 @@ class App extends Component {
       </Tabbar>
     );
 
-    if (this.state.group) {
-      if (!this.state.schedule/*(isLoaded && 'GroupName' in schedule)*/) return <Spinner size="large" />;
-    } else {
-      if (!isLoaded) return <Spinner size="large" />;
-    }
+    if (!isLoaded) return <Spinner size="large" />;
 
     return (
       <ConfigProvider scheme={scheme}>

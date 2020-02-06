@@ -7,6 +7,7 @@ import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
 
 import Icon24LinkCircle from '@vkontakte/icons/dist/24/link_circle';
+import Icon28LogoVk from '@vkontakte/icons/dist/28/logo_vk';
 
 import API from '../helpers/apii.js';
 
@@ -165,7 +166,7 @@ class Profile extends Component {
             <Link href="https://vk.com/voenmehgo" target="_blank">
               <Cell
                 before={
-                  <Icon24LinkCircle fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                  <Icon28LogoVk fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
                 }
               >
                   Сообщество сервиса
@@ -175,7 +176,7 @@ class Profile extends Component {
             <Link href="https://vk.com/krethub" target="_blank">
               <Cell
                 before={
-                  <Icon24LinkCircle fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                  <Icon28LogoVk fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
                 }
               >
                 Владислав Кретов

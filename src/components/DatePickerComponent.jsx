@@ -12,8 +12,7 @@ class DatePickerComponent extends React.Component {
     super(props);
     this.state = {
       selectedDayIndex: 0,
-      selectedDay: moment(new Date()),
-      key: false
+      selectedDay: moment(new Date())
     };
     this.dateSelect = this.dateSelect.bind(this);
     this.generateDates = this.generateDates.bind(this);
@@ -25,42 +24,25 @@ class DatePickerComponent extends React.Component {
     const { variable } = this.props;
     const first = firstDate ? moment(firstDate) : moment(new Date());
     const selected = selectedDate ? moment(selectedDate) : first;
-    const selectedDayIndex = getSelectedDay()//moment.duration(selected.diff(first)).asDays();
+    const selectedDayIndex = getSelectedDay();
 
   function getSelectedDay() {
       let cur = moment(new Date()).format('dd');
       switch (cur) {
-        case 'пн':
-          cur =  0
-          break;
-        case 'вт':
-          cur =  1
-          break;
-        case 'ср':
-          cur =  2
-          break;
-        case 'чт':
-          cur =  3
-          break;
-        case 'пт':
-          cur =  4
-          break;
-        case 'сб':
-          cur =  5
-          break;
-        case 'вс':
-          cur =  6
-          break;
-        default:
-
+        case 'пн': cur = 0; break;
+        case 'вт': cur = 1; break;
+        case 'ср': cur = 2; break;
+        case 'чт': cur = 3; break;
+        case 'пт': cur = 4; break;
+        case 'сб': cur = 5; break;
+        case 'вс': cur = 6; break;
+        default: break;
       }
       return cur
     }
 
-    this.setState({ selectedDayIndex, });
-
+    this.setState({ selectedDayIndex });
     variable.pickDate(selected);
-    console.log('selected', selected)
   }
 
   firstLetterUP(str) {
@@ -68,71 +50,29 @@ class DatePickerComponent extends React.Component {
   }
 
   dateSelect(props) {
-    console.log(props)
-    const { onDateSelect } = this.props;
-    this.setState({ key: props.key });
 
-    this.setState(
-      {
+    this.setState({
         selectedDayIndex: props.key,
         selectedDay: props.date
-      }
-    );
+      });
     this.props.variable.pickDate(props.date);
 
-    if (typeof onDateSelect === 'function') {
-      onDateSelect(props.date);
-    }
+    if (typeof this.props.onDateSelect === 'function')
+    this.props.onDateSelect(props.date);
   };
 
   generateDates(props) {
-    const date = moment(props.firstDate);
-    const disabledDates = props.disabledDates ? props.disabledDates : [];
+      var days = [];
 
-  /*  const first = props.firstDate
-      ? moment(props.firstDate)
-      : moment(new Date());
-    const last = props.lastDate ? moment(props.lastDate) : null;*/
-
-  /*  const numberOfDays = last
-      ? moment.duration(last.diff(first)).asDays() + 1
-      : props.numberOfDays;
-*/
-    const dates = [];
-
-    for (let i = 0; i < 7; i++ ) {
-      const isDisabled = !!disabledDates.includes(date.format('YYYY-MM-DD'));
-
-      dates.push({
-        date: date.format('YYYY-MM-DD'),
-        day: date.format('D'),
-        day_of_week: date.format('dd'),
-      /*  month: date.format('DD MMMM').split(' ')[1],*/
-        disabled: isDisabled,
-      });
-      date.add(1, 'days');
-    }
-    let ddd = [] ;
-    ddd.push(dates.filter(e => e.day_of_week === 'пн')[0]);
-    ddd.push(dates.filter(e => e.day_of_week === 'вт')[0]);
-    ddd.push(dates.filter(e => e.day_of_week === 'ср')[0]);
-    ddd.push(dates.filter(e => e.day_of_week === 'чт')[0]);
-    ddd.push(dates.filter(e => e.day_of_week === 'пт')[0]);
-    ddd.push(dates.filter(e => e.day_of_week === 'сб')[0]);
-    ddd.push(dates.filter(e => e.day_of_week === 'вс')[0]);
-    console.log(dates)
-
-    console.log(ddd)
-    let cur = moment(new Date()).format('dd');
-  /*  for(let i = 0; ddd.length; i++){
-      if(ddd[i].day_of_week === cur){
-        let dayy = ddd[i].day;
-        for(let e = i; e = 0; e = e-1 ){
-          ddd[i].day = dayy - 1
-        }
+      for (var i = 0; i <= 5; i++) {
+        let ddday = moment(moment().clone().startOf('isoWeek')).add(i, 'days');
+        days.push({
+          date: ddday.format('YYYY-MM-DD'),
+          day: ddday.format('D'),
+          day_of_week: ddday.format('dd'),
+        });
       }
-    }*/
-    return ddd;
+    return days;
   };
 
   render() {

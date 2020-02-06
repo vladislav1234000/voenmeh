@@ -16,7 +16,7 @@ class ThumbImage extends Component {
 			paddingTop: sizePadding + '%'
 		}
 		return (
-      <a href={link} target='_blank'>
+      <a href={link} rel="noopener noreferrer" target='_blank'>
       <div className="ThumbImage">
   			<div className={"ThumbImage__image-wrapper"} style={wrapperStyle}>
   				<span className="ThumbImage__image" style={imgStyle}>
