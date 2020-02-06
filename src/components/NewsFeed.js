@@ -4,7 +4,7 @@ import {
 } from '@vkontakte/vkui';
 import '../css/newsfeed.css';
 import Icon24Chevron from '@vkontakte/icons/dist/24/chevron';
-import Carousel from './Carousel.jsx';
+import Carousel from './Carousel.js';
 
 class NewsFeed extends Component {
   constructor(props) {

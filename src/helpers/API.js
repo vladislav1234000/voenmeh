@@ -1,132 +1,67 @@
+import axios from 'axios';
+
+const API_URL 	= 'https://krethub.design:8000/';
+
+axios.defaults.headers.common = {
+    Accept: "application/json, text/plain, */*"
+};
+
 export default class API {
 
-	static __call(method, params, httpMethod = "GET") {
-		//let url = (process.env.NODE_ENV=="development"?'http://localhost:3030/api/':'https://bgtu.now.sh/api/') + method;
-		let url = 'https://bgtu.now.sh/api/' + method;
+    async send(method = 'GET', action, data = {}) {
+        const response = await axios({
+            method,
+            url: `${API_URL}${action}`,
+            data
+        }).catch(error => {
+            console.error('Error API:', error);
+        //    window.showAlert(getMessage('server_offline'));
+          //  return { "status": false, "failed": error.response.data.message }
+        });
+        return response ? response.data : [];
+    }
 
-		let requestParams = {
-			'method': httpMethod,
-			'cache': 'no-cache',
-			'redirect': 'error',
-			'headers': {
-				//'X-vk-sign': VkSdk.startSearch
-			}
-		}
+    async POSTGeoPosition(meet) {
+        let response = await this.send('POST', 'GeoPosition', meet);
 
-		if (httpMethod.toString().toUpperCase() !== "GET") {
-			if (!(params instanceof FormData)) {
-				requestParams['headers']['Content-Type'] = 'application/json'
-			}
-			requestParams['body'] = params instanceof FormData ? params : JSON.stringify(params)
-		} else {
-			url += '?' + API.stringify(params)
-		}
-		return new Promise((resolve, reject) => {
-			try {
-				fetch(url, requestParams)
-					.then(resolve)
-					.catch(e => {
-						if (e instanceof TypeError) {
-							e['network'] = true
-							e['message'] = e.message + ' ' + url
-						}
-						reject(e)
-					})
-			} catch (e) {
-				reject(e)
-			}
-		})
-	}
+        console.log('API: ', 'POSTGeoPosition', response);
 
-	static request(method, params, httpMethod = "GET", retry = 5) {
-		return new Promise((resolve, reject) => {
-			try {
-				API.__call(method, params, httpMethod)
-					.then(r => {
-						let contentType = r.headers.get('Content-Type')
-						if (contentType && contentType.indexOf('application/json') !== -1) {
-							r.json().then(data => {
-								if (data.response !== undefined) {
-									resolve(data.response)
-								} else if (data.error !== undefined && data.error && data.error.message !== undefined) {
-									reject(data.error)
-								} else {
-									reject(data)
-								}
-							})
-						} else {
-							if (retry > 0) {
-								setTimeout(() => {
-									API.request(method, params, httpMethod, retry - 1)
-										.then(resolve)
-										.catch(reject)
-								}, Math.random() * 1000)
-							} /*else {
-								throw new ConnectionError(
-									httpMethod +
-									" " +
-									method +
-									" response " +
-									r.status +
-									" Content-Type: " +
-									contentType
-								)
-							}*/
-						}
-					})
-					.catch(e => {
-						if (e && e.network && retry > 0) {
-							setTimeout(() => {
-								API.request(method, params, httpMethod, retry - 1)
-									.then(resolve)
-									.catch(reject)
-							}, Math.random() * 1000)
-						} else {
-							reject(e)
-						}
-					})
-			} catch (e) {
-				if (retry > 0) {
-					setTimeout(() => {
-						API.request(method, params, httpMethod, retry - 1)
-							.then(resolve)
-							.catch(reject)
-					}, Math.random() * 1000)
-				} else {
-					reject(e)
-				}
-			}
-		})
-	}
+        return response;
+    }
+    async GetBanners(faculty) {
+        let response = await this.send('GET',  `GetBanners?faculty=${faculty}`, null);
 
-	static stringify(object, asRaw = false, prefix = false) {
-		let arr = []
-		for (let key in object) {
-			if (object.hasOwnProperty(key)) {
-				let value = object[key]
-				if (value === undefined) {
-					continue
-				}
-				if (typeof value.forEach === 'function') {
-					value.forEach(i => arr.push({
-						k: (prefix ? prefix + '[' + key + ']' : key) + '[]',
-						v: i
-					}))
-				} else if (typeof value === 'object') {
-					let resolve = API.stringify(value, true, (prefix ? prefix + '[' + key + ']' : key))
-					resolve.forEach(i => arr.push(i))
-				} else {
-					arr.push({
-						k: (prefix ? prefix + '[' + key + ']' : key),
-						v: value
-					})
-				}
-			}
-		}
-		if (asRaw) {
-			return arr
-		} else {
-			return arr.map(e => e.k + '=' + encodeURIComponent(e.v)).join("&")
-		}
-	}
+        console.log('API: ', 'GetBanners', response);
+
+        return response;
+    }
+    async GetNews(faculty) {
+        let response = await this.send('GET',  `GetNews?faculty=${faculty}`, null);
+
+        console.log('API: ', 'GetNews', response);
+
+        return response;
+    }
+    async GetGroups(faculty) {
+        let response = await this.send('GET',  `GetGroups?faculty=${faculty}`, null);
+
+        console.log('API: ', 'GetGroups', response);
+        //if(response === []) response = {group: '1'}
+        return response;
+    }
+    async GetWeek() {
+        let response = await this.send('GET',  `GetWeek`, null);
+
+        console.table('API: ', 'GetWeek', response);
+
+        return response;
+    }
+    async GetSchedule(faculty) {
+        let response = await this.send('GET',  `GetSchedule?group=${faculty}`, null);
+
+        console.log('API: ', 'GetSchedule');
+        console.table(response)
+        return response;
+    }
+
 }

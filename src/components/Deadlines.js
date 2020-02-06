@@ -1,5 +1,4 @@
-/* eslint-disable react/prefer-stateless-function */
-/* eslint-disable global-require */
+
 import React, { Component } from 'react';
 import {
   Panel, PanelHeader
@@ -7,9 +6,6 @@ import {
 import '../css/deadlines.css';
 
 class Deadlines extends Component {
-/*  constructor(props) {
-    super(props);
-  }*/
 
   render() {
     return (

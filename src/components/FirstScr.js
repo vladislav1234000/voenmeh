@@ -6,24 +6,13 @@ import {
 import '../css/first.css';
 
 import connect from '@vkontakte/vk-connect';
-import API from '../helpers/apii.js';
 
 class FirstScr extends Component {
-  constructor(props) {
-    super(props);
-
-    this.api = new API();
-  }
-
-
-  componentDidMount() {
-  }
 
 
   render() {
     const onChange = (e) => {
       const { name, value } = e.currentTarget;
-      console.log(name, value);
       if (value.trim().length > 0) {
         this.props.setParentState({ [name]: value });
       } else {
@@ -38,27 +27,23 @@ class FirstScr extends Component {
         });
         this.props.setScheduleNEW(value);
       }
-      if (name === 'faculty') this.props.getGroups(value);
+      if (name === 'faculty') this.props.getGroups(value, false);
     };
 
-    // const groups = this.state.faculty ? JSON.parse(this.state.faculty).groups.map((group) => (
-    //   <option value={JSON.stringify(group)} key={group.name}>{group.name}</option>
-    //  )) : <option value={null} />;
 
     return (
       <Panel id="first">
         <div className="onboarding">
           {/* <img src={require('../images/firstP_dark.png')} className="image_first" /> */}
-
           <span className="title">Пора знакомиться!</span>
           <span className="subtitle">
-Чтобы продолжить работу с сервисом,
-            <br />
-необходимо выбрать свой факультет и группу.
-            <br />
-Благодаря этим данным мы сможем фильтровать
-            <br />
-ленту новостей и показать твоё расписание.
+          Чтобы продолжить работу с сервисом,
+              <br />
+            необходимо выбрать свой факультет и группу.
+              <br />
+            Благодаря этим данным мы сможем фильтровать
+              <br />
+            ленту новостей и показать твоё расписание.
           </span>
 
           <FormLayout className="select_group">
@@ -70,8 +55,8 @@ class FirstScr extends Component {
               name="faculty"
             >
               <option value="А">А</option>
-              <option value="И">И</option>
               <option value="Е">Е</option>
+              <option value="И">И</option>
               <option value="О">О</option>
               <option value="Р">Р</option>
             </Select>

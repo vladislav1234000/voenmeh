@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../css/carousel.css';
 import Slider from 'react-slick';
-import ThumbImage from './ThumbImage.jsx';
+import ThumbImage from './ThumbImage.js';
 import '../css/slick.css';
 import '../css/slick-theme.css';
 
@@ -103,7 +103,7 @@ class Carousel extends Component {
               <div
                 className={!this.isSingleImage() ? 'Carousel__image-multiple safari-scale-border-radius-fix' : ''}
               >
-                {cover.photo ? <ThumbImage link={cover.link} url={cover.photo} sizePadding={sizePadding} /> : 
+                {cover.photo ? <ThumbImage link={cover.link} url={cover.photo} sizePadding={sizePadding} /> :
                 /*<div
                     className="Carousel__video"
                     style={{ background: `#FFFFFF url(${cover.photo}) no-repeat center center/contain `, paddingTop: `${sizePadding}%` }}

@@ -2,15 +2,12 @@ import React, { Component } from 'react';
 import connect from '@vkontakte/vk-connect';
 import {
   Epic, Tabbar, TabbarItem, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner,
-  ModalRoot, ModalPage, ModalPageHeader, HeaderButton, Group, List, Cell, InfoRow, Button
+  ModalRoot, ModalPage, ModalPageHeader, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
 import '@vkontakte/vkui/dist/vkui.css';
-import '../css/main.css';
-import '../css/first.css';
-
-//import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
-import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
+import './css/main.css';
+import './css/first.css';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
 //import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
@@ -18,39 +15,35 @@ import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 //import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
 import Icon28Profile from '@vkontakte/icons/dist/28/profile';
 
-import Schedule from './Schedule.jsx';
-import Archive from './Archive.jsx';
-import Profile from './Profile.jsx';
+import Schedule from './components/Schedule.js';
+import Archive from './components/Archive.js';
+import Profile from './components/Profile.js';
 
-import AdminPage from './AdminPage.jsx';
-import AdminAddNews from './AdminAddNews.jsx';
-import AdminSendNoty from './AdminSendNoty.jsx';
+import FirstScr from './components/FirstScr.js';
+import NewsFeed from './components/NewsFeed.js';
+import Deadlines from './components/Deadlines.js';
+import Page from './components/Page.js';
 
-import FirstScr from './FirstScr.jsx';
-import NewsFeed from './NewsFeed.jsx';
-import Deadlines from './Deadlines.jsx';
-import Page from './Page.jsx';
-//import API from '../helpers/API.js';
-import APII from '../helpers/apii.js';
+import API from './helpers/API.js';
 
-import Onboarding from './onboardingPanels/Onboarding.jsx';
+import Onboarding from './components/onboardingPanels/Onboarding.js';
 
-import dark1 from './onboardingPanels/dark1.png';
-import dark2 from './onboardingPanels/dark2.png';
-//import dark3 from './onboardingPanels/dark3.png';
-import dark4 from './onboardingPanels/dark4.png';
-//import dark5 from './onboardingPanels/dark5.png';
-import dark6 from './onboardingPanels/dark6.png';
-import dark7 from './onboardingPanels/dark7.png';
+import dark1 from './components/onboardingPanels/dark1.png';
+import dark2 from './components/onboardingPanels/dark2.png';
+//import dark3 from './components/onboardingPanels/dark3.png';
+import dark4 from './components/onboardingPanels/dark4.png';
+//import dark5 from './components/onboardingPanels/dark5.png';
+import dark6 from './components/onboardingPanels/dark6.png';
+import dark7 from './components/onboardingPanels/dark7.png';
 
 
-import light1 from './onboardingPanels/light1.png';
-import light2 from './onboardingPanels/light2.png';
-//import light3 from './onboardingPanels/light3.png';
-import light4 from './onboardingPanels/light4.png';
-//import light5 from './onboardingPanels/light5.png';
-import light6 from './onboardingPanels/light6.png';
-import light7 from './onboardingPanels/light7.png';
+import light1 from './components/onboardingPanels/light1.png';
+import light2 from './components/onboardingPanels/light2.png';
+//import light3 from './components/onboardingPanels/light3.png';
+import light4 from './components/onboardingPanels/light4.png';
+//import light5 from './components/onboardingPanels/light5.png';
+import light6 from './components/onboardingPanels/light6.png';
+import light7 from './components/onboardingPanels/light7.png';
 
 const qs = require('querystring');
 var params = window.location.search.replace('?', '').replace('%2C', ',');
@@ -67,14 +60,12 @@ if (connect.supports('VKWebAppResizeWindow')) {
   connect.send('VKWebAppResizeWindow', { width: 800, height: 1000 });
 }
 
-//const debug = window.location.port === '8080';
-
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      activePage: 'first', // schedule
+      activePage: 'onbording', // schedule
       activePanel: 'feed',
       adminPagePanel: 'admin',
       history: ['feed'],
@@ -97,7 +88,7 @@ class App extends Component {
       week: false,
       groupsLoading: false
     };
-    this.api = new APII();
+    this.api = new API();
     this.updateDimensions = this.updateDimensions.bind(this);
   }
 
@@ -210,8 +201,8 @@ class App extends Component {
     this.setState({ history, activePanel });
   }
 
-   getGroups = async (fac) => {
-    if(this.state.activePage !== 'profile') this.setState({ isLoaded: false });
+   getGroups = async (fac, load = true) => {
+    if(load) this.setState({ isLoaded: false });
     let w = await this.api.GetWeek();
     this.setState({ week: w });
     this.getBanners(fac);
@@ -219,14 +210,11 @@ class App extends Component {
     this.setState({ groupsLoading: true });
     let result = await this.api.GetGroups(fac);
     if(!result) result = [];
-    console.log('getGroups', fac, result);
     const gr = result.map((r) => (
       <option value={r.group} key={r.group}>{r.group}</option>
     ));
     this.setState({
-      groups: gr
-    });
-    this.setState({
+      groups: gr,
       groupsLoading: false,
       isLoaded: true
      })
@@ -246,7 +234,6 @@ class App extends Component {
     if(!group) return
     let schedule = await this.api.GetSchedule(group);
     if(!schedule && go) {
-      console.log(this.state)
       if(this.state.activePage !== 'onbording'){
         this.setState({ activePage: 'onbording' });
       }
@@ -287,11 +274,11 @@ class App extends Component {
 
     this.setState({ schedule: shed });
     if(openSchedule) this.setState({ activePage: 'schedule' });
-    console.log(shed);
   };
   render() {
     const {
-      isLoaded, fetchedUser, banners, news, scheme, schedule, activePage, activePanel, history, data, classTab
+      isLoaded, fetchedUser, banners, news, scheme, schedule, activePage,
+       activePanel, history, data, classTab
     } = this.state;
 
     const onCloseModal = () => {
@@ -310,9 +297,7 @@ class App extends Component {
               id='lesson'
               onClose={onCloseModal}
               header={
-                <ModalPageHeader
-                  right={!IS_PLATFORM_ANDROID === 234 && <HeaderButton onClick={onCloseModal}> <Icon24Cancel /> </HeaderButton>}
-                >
+                <ModalPageHeader>
                   Информация о занятии
                 </ModalPageHeader>
               }
@@ -335,7 +320,7 @@ class App extends Component {
                       </InfoRow>
                       :
                       <InfoRow /*style={{ marginBottom: -8 }}*/ title="Преподаватель">
-                       По распределению
+                       Не указан
                       </InfoRow>
                   }
                   </Cell>
@@ -351,11 +336,11 @@ class App extends Component {
                 {
                     data.aud ?
                     <InfoRow /*style={{ marginBottom: -8 }}*/ title="Аудитория">
-                     {ucFirst(data.aud)}{data.aud.endsWith('*') ? ', новый корпус' : ', старый корпус'}
+                     {data.aud.endsWith('*') ? 'Новый корпус,' : 'Старый корпус,'} {ucFirst(data.aud)}
                     </InfoRow>
                     :
                     <InfoRow title="Аудитория">
-                     По распределению
+                       Не указана
                     </InfoRow>
                 }
                 </Cell>
@@ -431,7 +416,7 @@ class App extends Component {
 
     return (
       <ConfigProvider scheme={scheme}>
-      <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? null : tabbar}>
+      <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? [] : tabbar}>
         <View
           modal={this.state.modal}
           id="feed"
@@ -457,12 +442,6 @@ class App extends Component {
 
         <View className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" activePanel="profile">
           <Profile className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" {...props} variable={this} />
-        </View>
-
-        <View id="admin" activePanel={this.state.adminPagePanel}>
-          <AdminPage id="admin" {...props}  />
-          <AdminSendNoty id="noty" {...props} />
-          <AdminAddNews id="news" {...props} />
         </View>
 
         <View id="first" activePanel="first">

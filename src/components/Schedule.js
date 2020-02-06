@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Panel, PanelHeader, List, Div, Separator, Cell } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Separator, Cell } from '@vkontakte/vkui';
 
 import '../css/schedule.css';
 
-import DatePickerComponent from './DatePickerComponent.jsx';
+import DatePickerComponent from './DatePickerComponent.js';
 
 import Icon20LikeOutline from '@vkontakte/icons/dist/20/like_outline';
 import Icon28InfoOutline from '@vkontakte/icons/dist/28/info_outline';
 
-import API from '../helpers/apii.js';
 
 class Schedule extends Component {
   constructor(props) {
@@ -18,26 +17,27 @@ class Schedule extends Component {
       ned: false
     };
     this.pickDate = this.pickDate.bind(this);
-    this.api = new API();
   }
 
   pickDate = async (d) =>  {
     let { odd, even  } = this.state.schedule;
-
-  //  if(odd[0].length === 0) odd = even;
 
     const weekDay = d.weekday();
 
     const ned = this.props.state.week;
 
     this.setState({ ned: ned.week });
-    if(!odd || !even) return
-    console.table(odd[weekDay])
+    if(!odd || !even) return;
 
-    if (weekDay === -1) return this.props.setParentState({ lessons: [null] });
-    if (!odd[weekDay] || !even[weekDay]) return this.props.setParentState({ lessons: [null] });
-    if ((odd[weekDay].length === 0) || (even[weekDay].length === 0)) return this.props.setParentState({ lessons: [null] });
-
+    if (
+      weekDay === -1 ||
+      !odd[weekDay] ||
+      !even[weekDay] ||
+      odd[weekDay].length === 0 ||
+      even[weekDay].length === 0
+    ) {
+      return this.props.setParentState({ lessons: [null] });
+    }
 
     const les = [];
 
@@ -62,7 +62,7 @@ class Schedule extends Component {
               flexDirection: 'column'
             }}
           >
-            <img alt='' src={require('../images/schedule.png')} style={{ width: '40%', marginTop: '30%' }} />
+            <img alt='' src={require('../images/schedule.png')} style={{ width: '20%', marginTop: '30%' }} />
             <span style={{
               marginTop: '40px', fontWeight: '550', color: '#7f8285', width: '80%', textAlign: 'center'
             }}
@@ -97,9 +97,8 @@ class Schedule extends Component {
       return (
 
         <div className={this.props.state.scheme === 'bright_light' ? 'test' : 'dark'} key={id}>
-        {Discipline /*&& id !== 0 */ && <Separator /*style={{ marginTop: 8 }}*/ wide />}
-        {
-        /*!Discipline && <Div/>*/}
+        { Discipline && <Separator wide /> }
+
           {
             Discipline ?
             <div onClick={() => openModal()}  className="lesson">
@@ -112,7 +111,7 @@ class Schedule extends Component {
                 <img src={require('../images/green.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
               :
                 <img src={require('../images/red.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
-*/}
+                */}
               <div className="lesson_content">
                 <div className="lesson_name">{Discipline}</div>
                 {
@@ -122,7 +121,7 @@ class Schedule extends Component {
                   </div>
                 :
                 <div style={{ fontSize: 13 }} className="lesson_aud">
-                Аудитория: зависит от распределения
+                Аудитория: не указана
                 </div>
               }
               </div>
