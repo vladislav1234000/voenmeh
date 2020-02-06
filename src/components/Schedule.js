@@ -104,7 +104,8 @@ class Schedule extends Component {
           {
             Discipline ?
             <div onClick={() => openModal()}  className="lesson">
-              <div className="lesson_time">
+              <div className={this.props.state.scheme === 'bright_light'
+              ? 'lesson_time' : 'lesson_timeD' }>
                 <div>{Time[0]}</div>
                 <div style={{ color: '#ccc' }}>{Time[1]}</div>
               </div>
@@ -114,7 +115,7 @@ class Schedule extends Component {
               :
                 <img src={require('../images/red.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
                 */}
-              <div className="lesson_content">
+              <div className="lesson_contentD">
                 <div className="lesson_name">{Discipline}</div>
                 {
                   Classroom ?

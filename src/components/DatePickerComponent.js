@@ -123,7 +123,7 @@ class DatePickerComponent extends React.Component {
     //  let k = moment(selectedDay).week() / 2;
 
     return (<div>
-      <div className={this.props.variable.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
+      <div className={this.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
         <div style={{ display: 'flex', padding: '25px 0px', justifyContent:'center' }}>
           {days || null}
         </div>
@@ -133,6 +133,7 @@ class DatePickerComponent extends React.Component {
         fontWeight: 400,
         marginTop: 10,
         marginLeft: 10,
+        color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff',
         fontSize: '14px'
       }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
       <div
@@ -151,7 +152,7 @@ class DatePickerComponent extends React.Component {
         fontWeight: 400,
         marginTop: 10,
         marginRight: 10,
-      /*  marginBottom: 10,*/
+          color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff',
         position: 'absolute',
         right: 0,
         fontSize: '14px'

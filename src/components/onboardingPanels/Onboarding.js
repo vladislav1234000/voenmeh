@@ -68,6 +68,7 @@ class Onboarding extends Component {
           {pages.map((page, key) => {
             const { image, title, subtitle } = page;
             const { slideIndex } = this.state;
+            const scheme = this.props.state.scheme;
             return (
               <div
                 // eslint-disable-next-line react/no-array-index-key
@@ -76,8 +77,8 @@ class Onboarding extends Component {
               >
                 <img src={image} className="image" />
 
-                <span className="title">{title}</span>
-                <span className="subtitle">{subtitle}</span>
+                <span className={scheme === 'bright_light' ? 'title' : 'titleD'}>{title}</span>
+                <span className={scheme === 'bright_light' ? 'subtitle' : 'subtitleD'}>{subtitle}</span>
 
                 <div className="button_next">
                   <Button

@@ -1,4 +1,4 @@
-.lessons[scheme="space_gray"] {
+body [scheme="space_gray"], .lessons {
   color: #fff;
   margin: 0px 0px;
 }
@@ -21,6 +21,16 @@
   flex-direction: column;
   margin-right: 15px;
   text-align: right;
+}
+.lesson_timeD {
+  font-family: Roboto;
+  font-weight: 400;
+  min-width: 45px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 15px;
+  text-align: right;
+  color: #fff;
 }
 
 .lesson_content {

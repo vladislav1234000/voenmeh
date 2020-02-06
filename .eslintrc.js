@@ -1,4 +1,4 @@
-module.exports = {
+/*module.exports = {
   env: {
     browser: true,
     es6: true,
@@ -28,4 +28,4 @@ module.exports = {
     'import/extensions': ['error', 'ignorePackages'],
     'comma-dangle': ['error', 'only-multiline']
   },
-};
+};*/

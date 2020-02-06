@@ -81,7 +81,7 @@ class App extends Component {
       banners: [],
       schedule: {},
       groups: [],
-      scheme: false ? 'space_gray' : 'bright_light',
+      scheme: true ? 'space_gray' : 'bright_light',
       modal: null,
       lessons: [],
       noty: false,
@@ -336,7 +336,7 @@ class App extends Component {
                 {
                     data.aud ?
                     <InfoRow /*style={{ marginBottom: -8 }}*/ title="Аудитория">
-                     {data.aud.endsWith('*') ? 'Новый корпус,' : 'Старый корпус,'} {ucFirst(data.aud)}
+                     {data.aud.endsWith('*') ? 'Новый корпус,' : 'Главный корпус,'} {ucFirst(data.aud)}
                     </InfoRow>
                     :
                     <InfoRow title="Аудитория">

@@ -30,13 +30,14 @@ class FirstScr extends Component {
       if (name === 'faculty') this.props.getGroups(value, false);
     };
 
+    const scheme = this.props.state.scheme;
 
     return (
       <Panel id="first">
         <div className="onboarding">
           {/* <img src={require('../images/firstP_dark.png')} className="image_first" /> */}
-          <span className="title">Пора знакомиться!</span>
-          <span className="subtitle">
+          <span className={scheme === 'bright_light' ? 'title' : 'titleD'}>Пора знакомиться!</span>
+          <span className={scheme === 'bright_light' ? 'subtitle' : 'subtitleD'}>
           Чтобы продолжить работу с сервисом,
               <br />
             необходимо выбрать свой факультет и группу.

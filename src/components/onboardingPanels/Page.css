@@ -21,8 +21,13 @@
   font-size: 25px;
   line-height: 1.2;
 }
-.title[scheme='client_dark'] {
-  color: rgb(255, 255, 255);
+.titleD {
+  font-family: "TT Norms";
+  font-weight: bold;
+  padding: 5vh 0 2vh 0;
+  font-size: 25px;
+  line-height: 1.2;
+  color: #fff;
 }
 
 .subtitle {
@@ -31,8 +36,12 @@
   font-size: 15px;
   line-height: 1.2;
 }
-.subtitle[scheme='client_dark'] {
-  color: rgb(255, 255, 255);
+.subtitleD {
+  font-family: "TT Norms";
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 1.2;
+  color: #fff;
 }
 
 .button_next {

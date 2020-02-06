@@ -36,3 +36,32 @@
   width: 90vw !important;
   justify-content: center;
 }
+.title {
+  font-family: "TT Norms";
+  font-weight: bold;
+  padding: 5vh 0 2vh 0;
+  font-size: 25px;
+  line-height: 1.2;
+}
+.titleD {
+  font-family: "TT Norms";
+  font-weight: bold;
+  padding: 5vh 0 2vh 0;
+  font-size: 25px;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.subtitle {
+  font-family: "TT Norms";
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 1.2;
+}
+.subtitleD {
+  font-family: "TT Norms";
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 1.2;
+  color: #fff;
+}
