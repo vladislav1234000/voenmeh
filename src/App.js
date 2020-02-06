@@ -223,12 +223,12 @@ class App extends Component {
   getBanners = async (fac) => {
       let result = await this.api.GetBanners(fac ? fac : '');
       this.setState({ banners: result });
-  }
+  };
 
   getNews = async (fac) => {
       let result = await this.api.GetNews(fac ? fac : '');
       this.setState({ news: result });
-  }
+  };
 
   setScheduleNEW = async (group, go = true, openSchedule = false) => {
     if(!group) return
@@ -238,7 +238,7 @@ class App extends Component {
         this.setState({ activePage: 'onbording' });
       }
       return
-    }
+    };
     const even = schedule.filter(e =>  // четная
         e.WeekCode === '2'
     );
