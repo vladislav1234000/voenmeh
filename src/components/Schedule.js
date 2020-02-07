@@ -82,7 +82,6 @@ class Schedule extends Component {
       } = les;
       //const already = false;
       const openModal = () => {
-        console.log(12123)
         this.props.openModal({
           form: TypeLesson,
           teacher: Lecturer,
@@ -129,8 +128,7 @@ class Schedule extends Component {
                     this.props.state.scheme === 'bright_light'
                       ? 'lesson_aud' : 'lesson_audD'
                   } >
-                      {`Аудитория: ${lcFirst(Classroom)}`
-                  }}
+                      {`Аудитория: ${lcFirst(Classroom)}`}
                   </div>
                 :
                 <div style={{ fontSize: 13 }}  className={

@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import connect from '@vkontakte/vk-connect';
 import {
   Epic, Tabbar, TabbarItem, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner,
-  ModalRoot, ModalPage, ModalPageHeader, Group, List, Cell, InfoRow, Button
+  ModalRoot, ModalPage, HeaderButton, ModalPageHeader, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
 import '@vkontakte/vkui/dist/vkui.css';
 import './css/main.css';
 import './css/first.css';
+
+import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
+import Icon24Done from '@vkontakte/icons/dist/24/done';
+import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
 //import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
@@ -49,7 +53,9 @@ const qs = require('querystring');
 var params = window.location.search.replace('?', '').replace('%2C', ',');
 
 const urlParams = qs.parse(params);
-const ordered = {};
+const ordered = {
+  vk_are_notifications_enabled: 0,
+};
 Object.keys(urlParams).sort().forEach((key) => {
     if (key.slice(0, 3) === 'vk_') {
         ordered[key] = urlParams[key];
@@ -57,7 +63,8 @@ Object.keys(urlParams).sort().forEach((key) => {
 });
 
 if (connect.supports('VKWebAppResizeWindow')) {
-  connect.send('VKWebAppResizeWindow', { width: 800, height: 1000 });
+  console.log('VKWebAppResizeWindow', connect.supports('VKWebAppResizeWindow'))
+  connect.send('VKWebAppResizeWindow', { "width": "800", "height": "1000" });
 }
 
 class App extends Component {
@@ -69,9 +76,7 @@ class App extends Component {
       activePanel: 'feed',
       adminPagePanel: 'admin',
       history: ['feed'],
-      fetchedUser: {
-        id: 1
-      },
+      fetchedUser: null,
       data: '',
       classTab: '',
       height: 0,
@@ -93,7 +98,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({ noty: ordered.vk_are_notifications_enabled === 1 ? true : false })
+    this.setState({ noty: ordered.vk_are_notifications_enabled === 1 ? true : false });
     window.addEventListener('resize', this.updateDimensions);
     window.addEventListener('popstate', (e) => {
       e.preventDefault();
@@ -105,56 +110,72 @@ class App extends Component {
       this.setState({ history: his, activePanel: active });
     }, false);
 
-    this.setState({ isLoaded: true });
+    if(window.location.port === '8080') this.setState({ isLoaded: true });
 
     connect.subscribe((e) => {
       switch (e.detail.type) {
+
         case 'VKWebAppGetUserInfoResult':
-
           this.setState({ fetchedUser: e.detail.data });
-
           break;
-        case 'VKWebAppUpdateConfig':
 
+        case 'VKWebAppUpdateConfig':
           const schemeAttribute = document.createAttribute('scheme');
-          let schemeK = e.detail.data.scheme;
+          let schemeK;
 
           switch (schemeK) {
             case 'client_light':
-              schemeK = 'bright_light'
+              schemeK = 'bright_light';
+              console.log('поставили светлую тему(у вас старый дизайн в вк)');
               connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#4680C2"});
               break;
             case 'client_dark':
-              schemeK = 'space_gray'
+              console.log('поставили темную тему(у вас старый дизайн в вк)');
+              schemeK = 'space_gray';
               connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#19191a"});
               break;
+            case 'space_gray':
+              console.log('space_gray');
+              schemeK = 'space_gray';
+              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#19191a"});
+              break;
+            case 'bright_light':
+              schemeK = 'bright_light';
+              console.log('поставили светлую тему');
+              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#4680C2"});
+              break;
             default:
-              schemeK = e.detail.data.scheme
+              schemeK = e.detail.data.scheme;
           }
           schemeAttribute.value = schemeK;
           this.setState({ scheme: schemeK });
           document.body.attributes.setNamedItem(schemeAttribute);
-
           break;
+
           case 'VKWebAppAllowNotificationsResult':
-
           this.setState({ noty: e.detail.data.result });
-
           break;
+
         case 'VKWebAppStorageGetResult':
-          console.table(e.detail.data.keys)
-          let fac = e.detail.data.keys[0].value
+          console.table(e.detail.data.keys);
+          let fac = e.detail.data.keys[0].value;
           let gr = e.detail.data.keys[1].value;
 
           if(fac !== '' && !fac.startsWith('?')){
             this.setState({ faculty: fac });
-            this.getGroups(fac);
+            this.getGroups(fac, true);
+            console.log('факультет обнаружен');
           }
           if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
             this.setState({ group: gr });
+            console.log('группа обнаружена');
             this.setScheduleNEW(gr, true, true);
           } else {
-            this.setState({ activePage: 'onbording' });
+            console.log('группа не найдена, держи онбординг');
+            this.setState({
+              activePage: 'onbording',
+              isLoaded:  true
+            });
           }
           break;
         default: break;
@@ -201,8 +222,8 @@ class App extends Component {
     this.setState({ history, activePanel });
   }
 
-   getGroups = async (fac, load = true) => {
-    if(load) this.setState({ isLoaded: false });
+   getGroups = async (fac, load) => {
+    if(load) this.setState({ isLoaded: load });
     let w = await this.api.GetWeek();
     this.setState({ week: w });
     this.getBanners(fac);
@@ -235,6 +256,7 @@ class App extends Component {
     let schedule = await this.api.GetSchedule(group);
     if(!schedule && go) {
       if(this.state.activePage !== 'onbording'){
+        this.setState({ isLoaded: true });
         this.setState({ activePage: 'onbording' });
       }
       return
@@ -264,7 +286,7 @@ class App extends Component {
       od.push(odd.filter(e => e.DayTitle === 'Пятница'));
       od.push(odd.filter(e => e.DayTitle === 'Суббота'));
       return od;
-    }
+    };
 
     const shed = {
       GroupName: group,
@@ -273,7 +295,10 @@ class App extends Component {
     };
 
     this.setState({ schedule: shed });
-    if(openSchedule) this.setState({ activePage: 'schedule' });
+    if(openSchedule) {
+      this.setState({ activePage: 'schedule' });
+      this.setState({ isLoaded: true });
+    }
   };
   render() {
     const {
@@ -297,7 +322,18 @@ class App extends Component {
               id='lesson'
               onClose={onCloseModal}
               header={
-                <ModalPageHeader>
+                <ModalPageHeader
+                  left={
+                    IS_PLATFORM_ANDROID &&
+                    <HeaderButton onClick={this.backModal}><Icon24Cancel /></HeaderButton>
+                   }
+                  right={(
+                    <>
+                      { IS_PLATFORM_ANDROID && <HeaderButton onClick={onCloseModal}><Icon24Done /></HeaderButton> }
+                      {!IS_PLATFORM_ANDROID && <HeaderButton onClick={onCloseModal}><Icon24Dismiss /></HeaderButton > }
+                    </>
+                  )}
+                >
                   Информация о занятии
                 </ModalPageHeader>
               }
@@ -345,7 +381,16 @@ class App extends Component {
                 }
                 </Cell>
               </List>
-                <Div style={{ marginBottom: -10, marginTop: -5 }}><Button size='xl' onClick={onCloseModal} level='secondary'>Закрыть</Button></Div>
+                <Div style={{ marginBottom: -10, marginTop: -5 }}>
+                  <Button
+                    size='xl'
+                    component='a'
+                    href='https://vk.me/voenmehgo'
+                    level='secondary'
+                    target='_blank'
+                  >Сообщить о проблеме
+                  </Button>
+                </Div>
                 <Div/>
           </Group>
             </ModalPage>
