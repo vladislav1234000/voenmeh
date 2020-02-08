@@ -62,11 +62,6 @@ Object.keys(urlParams).sort().forEach((key) => {
     }
 });
 
-if (connect.supports('VKWebAppResizeWindow')) {
-  console.log('VKWebAppResizeWindow', connect.supports('VKWebAppResizeWindow'))
-  connect.send('VKWebAppResizeWindow', { "width": "800", "height": "1000" });
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -101,6 +96,14 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const getWeek = async () => {
+      let w = await this.api.GetWeek();
+      this.setState({
+        week: w,
+        startWeek: w
+      });
+    }
+    getWeek();
     this.setState({ noty: ordered.vk_are_notifications_enabled === 1 ? true : false });
     window.addEventListener('resize', this.updateDimensions);
     window.addEventListener('popstate', (e) => {
@@ -122,6 +125,9 @@ class App extends Component {
           this.setState({ fetchedUser: e.detail.data });
           break;
 
+        case 'VKWebAppViewRestore' :
+         // window.location.reload();
+          break;
         case 'VKWebAppUpdateConfig':
           const schemeAttribute = document.createAttribute('scheme');
           let schemeK = e.detail.data.scheme;
@@ -164,26 +170,44 @@ class App extends Component {
           console.log('error', e.detail.data)
           break;
         case 'VKWebAppStorageGetResult':
-          console.table(e.detail.data.keys);
-          let fac = e.detail.data.keys[0].value;
-          let gr = e.detail.data.keys[1].value;
 
-          if(fac !== '' && !fac.startsWith('?')){
-            this.setState({ faculty: fac });
-            this.getGroups(fac, true);
-            console.log('факультет обнаружен');
-          }
-          if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
-            this.setState({ group: gr });
-            console.log('группа обнаружена');
-            this.setScheduleNEW(gr, true, true);
-          } else {
-            console.log('группа не найдена, держи онбординг');
+          const get = async () => {
+            let fac = e.detail.data.keys[0].value;
+            let gr = e.detail.data.keys[1].value;
+
+            let w = await this.api.GetWeek();
             this.setState({
-              activePage: 'onbording',
-              isLoaded:  true
+              week: w,
+              startWeek: w
             });
-          }
+            let banners = await this.api.GetBanners(fac ? fac : '');
+            this.setState({ banners: banners });
+
+            let news = await this.api.GetNews(fac ? fac : '');
+            this.setState({ news: news });
+            console.log(1)
+            console.log(2)
+            console.table(e.detail.data.keys);
+
+            if(fac !== '' && !fac.startsWith('?')){
+              this.setState({ faculty: fac });
+              this.getGroups(fac, true);
+              console.log('факультет обнаружен');
+            }
+            if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
+              this.setState({ group: gr });
+              console.log('группа обнаружена');
+              this.setScheduleNEW(gr, true, true);
+            } else {
+              console.log('группа не найдена, держи онбординг');
+              this.setState({
+                activePage: 'onbording',
+                isLoaded:  true
+              });
+            }
+          };
+          get();
+
           break;
         default: break;
       }
@@ -232,13 +256,7 @@ class App extends Component {
    getGroups = async (fac, load) => {
     this.setState({ groupsLoading: true });
     if(load) this.setState({ isLoaded: load });
-    let w = await this.api.GetWeek();
-    this.setState({
-      week: w.week,
-      startWeek: w.week
-    });
-    this.getBanners(fac);
-    this.getNews(fac);
+
     let result = await this.api.GetGroups(fac);
     if(!result) result = [];
     const gr = result.map((r) => (
@@ -246,23 +264,14 @@ class App extends Component {
     ));
     this.setState({
       groups: gr,
-      groupsLoading: false,
-      isLoaded: true
+      groupsLoading: false
      })
   };
 
-  getBanners = async (fac) => {
-      let result = await this.api.GetBanners(fac ? fac : '');
-      this.setState({ banners: result });
-  };
-
-  getNews = async (fac) => {
-      let result = await this.api.GetNews(fac ? fac : '');
-      this.setState({ news: result });
-  };
 
   setScheduleNEW = async (group, go = true, openSchedule = false) => {
-    if(!group) return
+
+    if(!group) return;
     let schedule = await this.api.GetSchedule(group);
     if(!schedule && go) {
       if(this.state.activePage !== 'onbording'){

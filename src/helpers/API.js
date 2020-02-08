@@ -52,9 +52,9 @@ export default class API {
     async GetWeek() {
         let response = await this.send('GET',  `GetWeek`, null);
 
-        console.table('API: ', 'GetWeek', response);
+        console.log('API: ', 'GetWeek', response.week);
 
-        return response;
+        return response.week;
     }
     async GetSchedule(faculty) {
         let response = await this.send('GET',  `GetSchedule?group=${faculty}`, null);
