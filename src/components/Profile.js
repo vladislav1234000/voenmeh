@@ -29,7 +29,7 @@ class Profile extends Component {
       return (
         <Panel id="profile">
           <PanelHeader>Профиль</PanelHeader>
-          <Div><Spinner size="s" /></Div>
+          <Div><Spinner size="small" /></Div>
         </Panel>
       );
     }

@@ -10,7 +10,6 @@ import './css/main.css';
 import './css/first.css';
 
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
-import Icon24Done from '@vkontakte/icons/dist/24/done';
 import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
@@ -72,7 +71,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'onbording', // schedule
+      activePage: 'first', // onbording
       activePanel: 'feed',
       adminPagePanel: 'admin',
       history: ['feed'],
@@ -121,7 +120,7 @@ class App extends Component {
 
         case 'VKWebAppUpdateConfig':
           const schemeAttribute = document.createAttribute('scheme');
-          let schemeK;
+          let schemeK = e.detail.data.scheme;
 
           switch (schemeK) {
             case 'client_light':
@@ -146,7 +145,9 @@ class App extends Component {
               break;
             default:
               schemeK = e.detail.data.scheme;
+              console.log('дефолт')
           }
+          console.log(e.detail.data.scheme);
           schemeAttribute.value = schemeK;
           this.setState({ scheme: schemeK });
           document.body.attributes.setNamedItem(schemeAttribute);
@@ -156,6 +157,9 @@ class App extends Component {
           this.setState({ noty: e.detail.data.result });
           break;
 
+        case 'VKWebAppSetViewSettingsFailed' :
+          console.log('error', e.detail.data)
+          break;
         case 'VKWebAppStorageGetResult':
           console.table(e.detail.data.keys);
           let fac = e.detail.data.keys[0].value;
@@ -225,7 +229,7 @@ class App extends Component {
    getGroups = async (fac, load) => {
     if(load) this.setState({ isLoaded: load });
     let w = await this.api.GetWeek();
-    this.setState({ week: w });
+    this.setState({ week: w.week });
     this.getBanners(fac);
     this.getNews(fac);
     this.setState({ groupsLoading: true });
@@ -325,11 +329,10 @@ class App extends Component {
                 <ModalPageHeader
                   left={
                     IS_PLATFORM_ANDROID &&
-                    <HeaderButton onClick={this.backModal}><Icon24Cancel /></HeaderButton>
+                    <HeaderButton onClick={onCloseModal}><Icon24Cancel /></HeaderButton>
                    }
                   right={(
                     <>
-                      { IS_PLATFORM_ANDROID && <HeaderButton onClick={onCloseModal}><Icon24Done /></HeaderButton> }
                       {!IS_PLATFORM_ANDROID && <HeaderButton onClick={onCloseModal}><Icon24Dismiss /></HeaderButton > }
                     </>
                   )}
@@ -388,7 +391,7 @@ class App extends Component {
                     href='https://vk.me/voenmehgo'
                     level='secondary'
                     target='_blank'
-                  >Сообщить о проблеме
+                  >Сообщить об ошибке
                   </Button>
                 </Div>
                 <Div/>
@@ -445,15 +448,6 @@ class App extends Component {
         >
           <Icon28Profile />
         </TabbarItem>
-      {/*
-        isAdmin &&
-        <TabbarItem
-          onClick={() => this.changePage('admin') }
-          selected={activePage === 'admin'}
-        >
-          <Icon28KeyOutline />
-        </TabbarItem>
-      */}
       </Tabbar>
     );
 
@@ -501,7 +495,7 @@ class App extends Component {
               { image: state.scheme === 'bright_light' ? light1 : dark1 , title: 'Встречайте — Военмех Go', subtitle: 'Первый локальный студенческий сервис\n внутри социальной сети.\n Не нужно ничего скачивать и устанавливать —\n это чудесно, не правда ли?' },
               { image: state.scheme === 'bright_light' ? light2 : dark2 , title: 'Следи за новостями!', subtitle: 'В этом разделе у нас царит гармония и порядок:\nвсе новости отсортированы по хэштегам,\nпоэтому ты не пропустишь ничего важного.' },
           /*    { image: state.scheme === 'bright_light' ? light2 : dark2 , title: 'Создавай дедлайны!', subtitle: 'Укажи название задачи, комментарий и время.\nКогда сроки начнут гореть, —\nсервис пришлет уведомление ВКонтакте.' },*/
-              { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Смотри расписание!', subtitle: 'Свайпни календарь и выбери дату, \nчтобы посмотреть расписание на другой день.\nТакже ты можешь нажать на занятие и увидеть более детальную информацию о нём.' },
+              { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Смотри расписание!', subtitle: 'Нажми на занятие, \nчтобы увидеть более детальную информацию о нём.' },
           //    { image: state.scheme === 'bright_light' ? light4 : dark4 , title: 'Самое важное в архиве!', subtitle: 'Здесь размещена полезная информация\nдля каждого студента Военмеха.\nНе отвлекай никого — посмотри в архиве.' },
               { image: state.scheme === 'bright_light' ? light6 : dark6 , title: 'Настрой сервис под себя!', subtitle: 'В профиле ты сможешь\n изменить факультет или группу, а также\n включить уведомления, \nчтобы всегда быть в курсе событий.' },
               { image: state.scheme === 'bright_light' ? light7 : dark7 , title: 'Почти готово!', subtitle: 'Осталось дело за малым:\nдобавь сервис в избранное, чтобы не потерять его\n и наслаждаться функционалом сервиса в полной мере.' },

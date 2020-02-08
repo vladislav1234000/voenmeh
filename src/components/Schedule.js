@@ -14,45 +14,41 @@ class Schedule extends Component {
     super(props);
     this.state = {
       schedule: this.props.schedule,
+      lessons: [null],
       ned: false
     };
     this.pickDate = this.pickDate.bind(this);
   }
 
-  pickDate = async (d) =>  {
+  pickDate = async (d, ned = this.props.state.week) =>  {
     let { odd, even  } = this.state.schedule;
 
     const weekDay = d.weekday();
 
-    const ned = this.props.state.week;
-
-    this.setState({ ned: ned.week });
+    this.setState({ ned: ned });
     if(!odd || !even) return;
-
     if (
       weekDay === -1 ||
       !odd[weekDay] ||
       !even[weekDay] ||
       odd[weekDay].length === 0 ||
       even[weekDay].length === 0
-    ) {
-      return this.props.setParentState({ lessons: [null] });
-    }
+    ) return this.setState({ lessons: [null] });
 
     const les = [];
 
-      if (ned.week === 'even') {
+      if (ned === 'even') {
         console.log('чет')
         even[weekDay].map(l => les[l.numb - 1] = l );
       } else {
         console.log('нечет')
         odd[weekDay].map((l) => les[l.numb - 1] = l );
       }
-    this.props.setParentState({ lessons: les });
+    this.setState({ lessons: les });
   }
 
   render() {
-    const lessons = this.props.state.lessons.map((les, id) => {
+    const lessons = this.state.lessons.map((les, id) => {
       if (!les) {
         return (
           <div
@@ -157,7 +153,7 @@ class Schedule extends Component {
       <Panel id="schedule">
         <PanelHeader noShadow>Расписание</PanelHeader>
         <div className="lessons_date">
-          <DatePickerComponent {...this.props} week={this.props.state.week.week} variable={this} />
+          <DatePickerComponent {...this.props} week={this.props.state.week} variable={this} />
         </div>
         <div style={{ marginTop: 8 }} className="lessons">
           {lessons}

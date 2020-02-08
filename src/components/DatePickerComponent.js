@@ -4,6 +4,10 @@ import '../css/main.css';
 
 import moment from 'moment';
 
+//import Icon24Chevron from '@vkontakte/icons/dist/24/chevron';
+//import Icon16Dropdown from '@vkontakte/icons/dist/16/dropdown';
+import { Link, HorizontalScroll } from '@vkontakte/vkui';
+
 require('moment/locale/ru');
 
 class DatePickerComponent extends React.Component {
@@ -11,6 +15,8 @@ class DatePickerComponent extends React.Component {
     super(props);
     this.state = {
       selectedDayIndex: 0,
+      week: this.props.state.week,
+      currentId: 0,
       selectedDay: moment(new Date())
     };
     this.dateSelect = this.dateSelect.bind(this);
@@ -49,23 +55,50 @@ class DatePickerComponent extends React.Component {
   }
 
   dateSelect(props) {
-  console.log(this.props)
     this.setState({
         selectedDayIndex: props.key,
         selectedDay: props.date
       });
-    this.props.variable.pickDate(props.date);
+    let week = this.state.week;
+    console.log(props.id, this.state.selectedDayIndex)
 
-    if (typeof this.props.onDateSelect === 'function')
-    this.props.onDateSelect(props.date);
+    if(props.id >= 7 && this.state.selectedDayIndex <= 6){
+      console.log(7777)
+      if(week === 'even') {
+        week = 'odd';
+      } else {
+        week = 'even';
+      }
+      this.setState({
+        week: week
+      });
+      this.props.setParentState({
+        week: week
+      });
+
+    } else if(props.id <= 7 && this.state.selectedDayIndex >= 7 &&
+      props.id !== this.state.selectedDayIndex) {
+      console.log(99999)
+
+      this.setState({
+        week: this.state.week === 'odd' ? 'even' : 'odd'
+      });
+      this.props.setParentState({
+        week: this.state.week
+      });
+    }
+
+
+    this.props.variable.pickDate(props.date, week);
   };
 
   generateDates(props) {
       var days = [];
 
-      for (var i = 0; i <= 5; i++) {
+      for (var i = 0; i <= 13; i++) {
         let ddday = moment(moment().clone().startOf('isoWeek')).add(i, 'days');
         days.push({
+          id: i,
           date: ddday.format('YYYY-MM-DD'),
           day: ddday.format('D'),
           day_of_week: ddday.format('dd'),
@@ -102,11 +135,13 @@ class DatePickerComponent extends React.Component {
         return (
           <div className={"singleContainer"}
             key={key}
-            disabled={val.disabled}
             onClick={() => {
               this.dateSelect({
-                key, date: moment(availableDates[key].date)
+                key,
+                date: moment(availableDates[key].date),
+                id: val.id
               });
+              console.log(availableDates[key].date)
             }}>
             <div className={'day' + selectedStyle}>{val.day}</div>
 
@@ -123,11 +158,11 @@ class DatePickerComponent extends React.Component {
     //  let k = moment(selectedDay).week() / 2;
 
     return (<div>
-      <div className={this.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
-        <div style={{ display: 'flex', padding: '25px 0px', justifyContent:'center' }}>
+      <HorizontalScroll className={this.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
+        <div style={{ display: 'flex', padding: '25px 0px', /*justifyContent:'center'*/ }}>
           {days || null}
         </div>
-      </div>
+      </HorizontalScroll>
       <div style={{ display: 'flex' }}>
       <div style={{
         fontWeight: 400,
@@ -138,15 +173,12 @@ class DatePickerComponent extends React.Component {
       }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
       <div
         onClick={() => {
-/*
-          this.props.setParentState({
-            week: this.props.state.week === 'odd' ? 'even' : 'odd'
+          return;
+          this.setState({
+            week: this.state.week === 'odd' ? 'even' : 'odd'
           });
-          let key = this.state.key
-          this.dateSelect({
-            key, date: moment(availableDates[key].date)
-          });
-*/
+          this.props.setParentState({ week: this.state.week });
+          this.props.variable.pickDate(this.state.selectedDay)
         }}
         style={{
         fontWeight: 400,
@@ -155,8 +187,17 @@ class DatePickerComponent extends React.Component {
           color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff',
         position: 'absolute',
         right: 0,
+          display: 'flex',
+          alignItems: 'center',
         fontSize: '14px'
-      }}>{`${this.props.week === 'even' ? 'Чётная' : 'Нечётная'} неделя`}</div>
+      }}>
+        <Link
+        style={{ color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff'}}
+        >{`${this.state.week === 'even' ? 'Чётная' : 'Нечётная'} неделя`}</Link>
+        {/* <Icon24Chevron width={20} height={20} />
+        <Icon16Dropdown style={{ marginTop: 5, marginLeft: 2 }} />*/}
+
+      </div>
       </div>
     </div>
     );
