@@ -381,7 +381,7 @@ class App extends Component {
                 {
                     data.aud ?
                     <InfoRow /*style={{ marginBottom: -8 }}*/ title="Аудитория">
-                     {data.aud.endsWith('*') ? 'Новый корпус,' : 'Главный корпус,'} {ucFirst(data.aud)}
+                     {data.aud.includes('*') ? 'Новый корпус,' : 'Главный корпус,'} {ucFirst(data.aud)}
                     </InfoRow>
                     :
                     <InfoRow title="Аудитория">
