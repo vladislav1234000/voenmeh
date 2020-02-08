@@ -312,7 +312,7 @@ class App extends Component {
       even: getEven(),
       odd: getOdd()
     };
-
+    if(!this.state.week) console.log('пиздец');
     this.setState({ schedule: shed });
     if(openSchedule) {
       this.setState({ activePage: 'schedule' });
