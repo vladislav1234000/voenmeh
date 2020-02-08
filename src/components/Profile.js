@@ -160,7 +160,7 @@ class Profile extends Component {
             <Link href="https://vk.com/voenmehgo" target="_blank">
               <Cell
                 before={
-                  <Icon28LogoVk fill='#ccc' />
+                  <Icon28LogoVk  fill='#ccc' />
                 }
               >
                   Сообщество сервиса
@@ -179,10 +179,10 @@ class Profile extends Component {
             <Link href="https://vk.me/join/AJQ1dyvbCxZfidHoAmAJE5Bh" target="_blank">
               <Cell
                 before={
-                  <Icon24LinkCircle fill={scheme === 'bright_light' ? '#7eaae9' : '#ccc'}/>
+                  <Icon24LinkCircle width={28} heigth={28} fill={'#ccc'}/>
                 }
               >
-                  Присоединиться к чату
+                  <div >Присоединиться к чату</div>
               </Cell>
             </Link>
           </List>

@@ -147,7 +147,6 @@ class App extends Component {
               schemeK = e.detail.data.scheme;
               console.log('дефолт')
           }
-          console.log(e.detail.data.scheme);
           schemeAttribute.value = schemeK;
           this.setState({ scheme: schemeK });
           document.body.attributes.setNamedItem(schemeAttribute);

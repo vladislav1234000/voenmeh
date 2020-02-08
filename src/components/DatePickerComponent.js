@@ -55,10 +55,7 @@ class DatePickerComponent extends React.Component {
   }
 
   dateSelect(props) {
-    this.setState({
-        selectedDayIndex: props.key,
-        selectedDay: props.date
-      });
+
     let week = this.state.week;
     console.log(props.id, this.state.selectedDayIndex)
 
@@ -79,7 +76,11 @@ class DatePickerComponent extends React.Component {
     } else if(props.id < 7 && this.state.selectedDayIndex >= 7 &&
       props.id !== this.state.selectedDayIndex) {
       console.log(99999)
-
+      if(week === 'even') {
+        week = 'odd';
+      } else {
+        week = 'even';
+      }
       this.setState({
         week: this.state.week === 'odd' ? 'even' : 'odd'
       });
@@ -90,6 +91,11 @@ class DatePickerComponent extends React.Component {
 
 
     this.props.variable.pickDate(props.date, week);
+    this.setState({
+      selectedDayIndex: props.key,
+      selectedDay: props.date
+    });
+    console.log(this.props.state.schedule)
   };
 
   generateDates(props) {

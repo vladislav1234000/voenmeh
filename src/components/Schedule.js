@@ -117,7 +117,7 @@ class Schedule extends Component {
                 <div className={
                   this.props.state.scheme === 'bright_light'
                     ? 'lesson_name' : 'lesson_nameD'
-                } >>{Discipline}</div>
+                } >{Discipline}</div>
                 {
                   Classroom ?
                   <div style={{ fontSize: 13 }} className={
