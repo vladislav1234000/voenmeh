@@ -15,11 +15,11 @@ class NewsFeed extends Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.firstLetterUP = this.firstLetterUP.bind(this);
   }
 
   /* поиск */
   onChange(search) {
+    console.log(5, search)
     this.setState({ search: search.replace(/\s+/g, ' ') });
   }
 
@@ -31,10 +31,6 @@ class NewsFeed extends Component {
     }
 
     return news.filter(({ title, author }) => (title + author).toLowerCase().indexOf(search) > -1);
-  }
-
-  firstLetterUP(str) {
-    return str[0].toUpperCase() + str.slice(1);
   }
 
   render() {
@@ -109,7 +105,7 @@ class NewsFeed extends Component {
           this.state.search.length === 0 &&
           <Carousel list={this.props.banners} autoplay sizePadding={52.63} />
         }
-        {this.sposts.length === 0 && zaglushka}
+        { this.sposts.length === 0 && zaglushka }
         <div className="posts">{posts}</div>
       </Panel>
     );

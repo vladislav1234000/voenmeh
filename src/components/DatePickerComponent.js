@@ -25,6 +25,11 @@ class DatePickerComponent extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({
+      week: this.props.state.startWeek
+    });
+    this.props.setParentState({ week: this.state.week });
+    this.props.variable.pickDate(this.state.selectedDay);
     const { firstDate, selectedDate } = this.state;
     const { variable } = this.props;
     const first = firstDate ? moment(firstDate) : moment(new Date());
@@ -178,14 +183,6 @@ class DatePickerComponent extends React.Component {
         fontSize: '14px'
       }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
       <div
-        onClick={() => {
-          return;
-          this.setState({
-            week: this.state.week === 'odd' ? 'even' : 'odd'
-          });
-          this.props.setParentState({ week: this.state.week });
-          this.props.variable.pickDate(this.state.selectedDay)
-        }}
         style={{
         fontWeight: 400,
         marginTop: 10,

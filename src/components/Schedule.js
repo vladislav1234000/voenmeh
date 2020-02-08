@@ -19,6 +19,11 @@ class Schedule extends Component {
     };
     this.pickDate = this.pickDate.bind(this);
   }
+  componentDidMount() {
+      this.props.setParentState({
+        week: this.props.state.startWeek
+      })
+  }
 
   pickDate = async (d, ned = this.props.state.week) =>  {
     let { odd, even  } = this.state.schedule;
