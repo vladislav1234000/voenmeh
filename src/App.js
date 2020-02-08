@@ -230,6 +230,7 @@ class App extends Component {
   }
 
    getGroups = async (fac, load) => {
+    this.setState({ groupsLoading: true });
     if(load) this.setState({ isLoaded: load });
     let w = await this.api.GetWeek();
     this.setState({
@@ -238,7 +239,6 @@ class App extends Component {
     });
     this.getBanners(fac);
     this.getNews(fac);
-    this.setState({ groupsLoading: true });
     let result = await this.api.GetGroups(fac);
     if(!result) result = [];
     const gr = result.map((r) => (
