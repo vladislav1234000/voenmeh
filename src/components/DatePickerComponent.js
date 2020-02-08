@@ -76,7 +76,7 @@ class DatePickerComponent extends React.Component {
         week: week
       });
 
-    } else if(props.id <= 7 && this.state.selectedDayIndex >= 7 &&
+    } else if(props.id < 7 && this.state.selectedDayIndex >= 7 &&
       props.id !== this.state.selectedDayIndex) {
       console.log(99999)
 
