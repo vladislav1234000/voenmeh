@@ -89,6 +89,7 @@ class Profile extends Component {
              <option value="И">И</option>
              <option value="О">О</option>
              <option value="Р">Р</option>
+             <option value="В">ВУЦ</option>
            </Select>
 
            {

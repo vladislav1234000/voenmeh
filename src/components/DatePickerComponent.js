@@ -28,8 +28,8 @@ class DatePickerComponent extends React.Component {
     this.setState({
       week: this.props.state.startWeek
     });
-    this.props.setParentState({ week: this.state.week });
-    this.props.variable.pickDate(this.state.selectedDay);
+    this.props.setParentState({ week: this.props.state.startWeek });
+    this.props.variable.pickDate(moment(new Date()));
     const { firstDate, selectedDate } = this.state;
     const { variable } = this.props;
     const first = firstDate ? moment(firstDate) : moment(new Date());

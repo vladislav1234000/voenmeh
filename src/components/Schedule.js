@@ -8,6 +8,8 @@ import DatePickerComponent from './DatePickerComponent.js';
 import Icon20LikeOutline from '@vkontakte/icons/dist/20/like_outline';
 import Icon28InfoOutline from '@vkontakte/icons/dist/28/info_outline';
 
+import { FaCircle } from 'react-icons/fa';
+import moment from 'moment';
 
 class Schedule extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ class Schedule extends Component {
     this.pickDate = this.pickDate.bind(this);
   }
   componentDidMount() {
+    this.pickDate(moment(new Date()));
       this.props.setParentState({
         week: this.props.state.startWeek
       })
@@ -29,6 +32,8 @@ class Schedule extends Component {
     let { odd, even  } = this.state.schedule;
 
     const weekDay = d.weekday();
+
+    this.setState({ lessons: [null] })
 
     this.setState({ ned: ned });
     if(!odd || !even) return;
@@ -111,12 +116,7 @@ class Schedule extends Component {
                 }}>{Time[0]}</div>
                 <div style={{ color: '#ccc' }}>{Time[1]}</div>
               </div>
-              {/*
-              already ?
-                <img src={require('../images/green.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
-              :
-                <img src={require('../images/red.png')} style={{ width: '3%', marginBottom: '10%', marginRight: 10   }} />
-                */}
+              <FaCircle id={TypeLesson} className='FaCircle' />
               <div className={this.props.state.scheme === 'bright_light'
                 ? 'lesson_content' : 'lesson_contentD' }>
                 <div className={

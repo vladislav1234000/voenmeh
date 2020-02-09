@@ -83,6 +83,23 @@
 .test:active { background: #ebebeb}
 .dark:active { background: #19191a}
 
+.FaCircle {
+  margin-top: 3px;
+  margin-right: 10px;
+  min-width: 8px;
+  width: 8px;
+}
+
+#Практика {
+  color: #ff3347;
+}
+#Лекция {
+  color: #4db34d;
+}
+#Лабораторная {
+  color: #73aaef;
+}
+
 
 #info  {
   max-width: 8em; /* блок занимает ширину родителя, max-width её ограничивает */
