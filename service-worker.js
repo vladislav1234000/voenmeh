@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/voenmeh/precache-manifest.c5f0a0524490fdaccf7f3e0e95eb3f71.js"
+  "/voenmeh/precache-manifest.4e50e1a71f11819ec3096568a02e976c.js"
 );
 
 workbox.clientsClaim();
