@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import connect from '@vkontakte/vk-connect';
 import {
-  Epic, Tabbar, TabbarItem, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner,
-  ModalRoot, ModalPage, HeaderButton, ModalPageHeader, Group, List, Cell, InfoRow, Button
+  Epic, Tabbar, TabbarItem, Snackbar, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner,
+  ModalRoot, ModalPage, HeaderButton, Avatar, ModalPageHeader, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
 import '@vkontakte/vkui/dist/vkui.css';
@@ -11,6 +11,7 @@ import './css/first.css';
 
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
+import Icon16Like from '@vkontakte/icons/dist/16/like';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
 //import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
@@ -25,7 +26,6 @@ import Profile from './components/Profile.js';
 import FirstScr from './components/FirstScr.js';
 import NewsFeed from './components/NewsFeed.js';
 import Deadlines from './components/Deadlines.js';
-import Page from './components/Page.js';
 
 import API from './helpers/API.js';
 
@@ -69,12 +69,9 @@ class App extends Component {
     this.state = {
       activePage: 'first', // onbording
       activePanel: 'feed',
-      adminPagePanel: 'admin',
       history: ['feed'],
       fetchedUser: null,
-      data: '',
       classTab: '',
-      height: 0,
       group: false,
       isLoaded: false,
       news: [],
@@ -83,16 +80,16 @@ class App extends Component {
       groups: [],
       scheme: false ? 'space_gray' : 'bright_light',
       modal: null,
-      lessons: [],
+      lessons: [null],
       noty: false,
       week: false,
       startWeek: false,
       groupsLoading: false,
+      snackbar: null,
       selectedDayIndex: 0,
       selectedDay: moment(new Date())
     };
     this.api = new API();
-    this.updateDimensions = this.updateDimensions.bind(this);
   }
 
   componentDidMount() {
@@ -102,21 +99,17 @@ class App extends Component {
         week: w,
         startWeek: w
       });
-    }
+      if(!w) this.errorHappend();
+    };
+
     getWeek();
     this.setState({ noty: ordered.vk_are_notifications_enabled === 1 ? true : false });
-    window.addEventListener('resize', this.updateDimensions);
     window.addEventListener('popstate', (e) => {
       e.preventDefault();
-      const his = [...this.state.history];
-      his.pop();
-      const active = his[his.length - 1];
-      this.setState({ modal: null });
-      if(active === 'feed') connect.send('VKWebAppDisableSwipeBack');
-      this.setState({ history: his, activePanel: active });
+      this.goBack();
     }, false);
 
-    if(window.location.port === '8080') this.setState({ isLoaded: true });
+    if (window.location.port === '8080') this.setState({ isLoaded: true });
 
     connect.subscribe((e) => {
       switch (e.detail.type) {
@@ -166,9 +159,6 @@ class App extends Component {
           this.setState({ noty: e.detail.data.result });
           break;
 
-        case 'VKWebAppSetViewSettingsFailed' :
-          console.log('error', e.detail.data)
-          break;
         case 'VKWebAppStorageGetResult':
 
           const get = async () => {
@@ -180,14 +170,12 @@ class App extends Component {
               week: w,
               startWeek: w
             });
+            if(!w) this.errorHappend();
             let banners = await this.api.GetBanners(fac ? fac : '');
             this.setState({ banners: banners });
 
             let news = await this.api.GetNews(fac ? fac : '');
             this.setState({ news: news });
-            console.log(1)
-            console.log(2)
-            console.table(e.detail.data.keys);
 
             if(fac !== '' && !fac.startsWith('?')){
               this.setState({ faculty: fac });
@@ -218,39 +206,36 @@ class App extends Component {
 
 
   changePage(name) {
-    this.setState({ height: window.innerHeight });
-    this.updateDimensions();
-    this.setState({ activePage: name });
+    this.setState({
+      activePage: name,
+      week: this.state.startWeek
+    });
   }
 
-  changePanel(name) {
-    this.setState({ activePanel: name });
-  }
+  errorHappend(bruh) {
+    if(this.state.snackbar) return;
+    this.setState({ snackbar:
+        <Snackbar
+          layout="vertical"
+          duration={20000}
+          onClose={() => this.setState({ snackbar: null })}
+          before={<Avatar size={24} style={{ backgroundColor: '#fff'}} ><Icon16Like fill="#FF3347 " width={24} height={24} /></Avatar>}
+        >
+        <div style={{ fontWeight: 400 }}>  Мы устали и лежим. И вы пока отдохните!</div>
+        </Snackbar>
+    });
 
-  updateData(value) {
-    this.setState({ data: value });
   }
-
-  updateDimensions() {
-    const { height } = this.state;
-    this.setState({ classTab: (IS_PLATFORM_ANDROID && (window.innerHeight < height)) ? 'tabbarDisable' : '' });
-  }
-
   goBack() {
     window.history.back();
-    this.setState({ modal: null });
-  }
-
-  goForward(activePanel) {
-    const history = [...this.state.history];
-    history.push(activePanel);
-
-    if (this.state.activePanel === 'feed') {
-      connect.send('VKWebAppEnableSwipeBack');
+    if(this.state.modal){
+      this.setState({ modal: null });
+    } else {
+      connect.send("VKWebAppClose", {
+        "status": "success",
+        "text": "Будем рады видеть вас вновь!"
+      });
     }
-    window.history.pushState({}, '', activePanel);
-
-    this.setState({ history, activePanel });
   }
 
    getGroups = async (fac, load) => {
@@ -258,7 +243,11 @@ class App extends Component {
     if(load) this.setState({ isLoaded: load });
 
     let result = await this.api.GetGroups(fac);
-    if(!result) result = [];
+    console.log(99, result)
+    if(result.length === 0){
+      this.errorHappend();
+      return;
+    };
     const gr = result.map((r) => (
       <option value={r.group} key={r.group}>{r.group}</option>
     ));
@@ -271,8 +260,15 @@ class App extends Component {
 
   setScheduleNEW = async (group, go = true, openSchedule = false) => {
 
-    if(!group) return;
+    if(!group){
+      this.errorHappend();
+      return;
+    };
     let schedule = await this.api.GetSchedule(group);
+    if(schedule.length === 0){
+      this.errorHappend();
+      return;
+    };
     if(!schedule && go) {
       if(this.state.activePage !== 'onbording'){
         this.setState({ isLoaded: true });
@@ -322,7 +318,7 @@ class App extends Component {
   render() {
     const {
       isLoaded, fetchedUser, banners, news, scheme, schedule, activePage,
-       activePanel, history, data, classTab
+       activePanel, classTab
     } = this.state;
 
     const onCloseModal = () => {
@@ -418,11 +414,11 @@ class App extends Component {
     };
 
     const { getGroups, setScheduleNEW } = this;
+
     const state = this.state;
 
-    const variable =  this;
     const props = { setParentState: this.setState.bind(this), news,
-      getGroups, variable, data, banners, setScheduleNEW,  fetchedUser, openModal, state }
+      getGroups, banners, setScheduleNEW,  fetchedUser, openModal, state }
 
     const tabbar = (
       <Tabbar className={classTab}>
@@ -471,15 +467,8 @@ class App extends Component {
     return (
       <ConfigProvider scheme={scheme}>
       <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? [] : tabbar}>
-        <View
-          modal={this.state.modal}
-          id="feed"
-          activePanel={activePanel}
-          history={history}
-          onSwipeBack={this.goBack}
-        >
+        <View modal={this.state.modal} id="feed"  activePanel='feed' >
           <NewsFeed id="feed" {...props}/>
-          <Page id="page" {...props}  />
         </View>
 
         <View id="time" activePanel="time">
@@ -495,7 +484,7 @@ class App extends Component {
         </View>
 
         <View className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" activePanel="profile">
-          <Profile className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" {...props} variable={this} />
+          <Profile className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" {...props}  />
         </View>
 
         <View id="first" activePanel="first">

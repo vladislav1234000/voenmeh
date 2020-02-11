@@ -44,10 +44,6 @@ class NewsFeed extends Component {
             expandable
             multiline
             asideContent={IS_PLATFORM_ANDROID ? <Icon24Chevron className="Cell__chevron" /> : ''}
-            onClick={() => {
-            /*  this.props.variable.goForward('page');
-              this.props.variable.updateData(post);*/
-            }}
             bottomContent={(
               <div>
                 <div className="post_td">

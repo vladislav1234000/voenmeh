@@ -83,7 +83,14 @@ class Onboarding extends Component {
                 <div className="button_next">
                   <Button
                     onClick={() => {
-                      slideIndex === pages.length - 1 ? this.props.variable.changePage('first') & connect.send("VKWebAppAddToFavorites", {}): this.next();
+                      if(slideIndex === pages.length - 1){
+                        this.props.setParentState({
+                          activePage: 'first'
+                        });
+                        connect.send("VKWebAppAddToFavorites", {});
+                      } else {
+                        this.next();
+                      }
                     }}
                     size="l"
                     stretched

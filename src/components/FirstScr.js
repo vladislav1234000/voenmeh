@@ -84,7 +84,9 @@ class FirstScr extends Component {
           <div className="button_next_first">
             <Button
               onClick={() => {
-                this.props.variable.changePage('schedule');
+                this.props.setParentState({
+                  activePage: 'schedule'
+                });
               }}
               size="l"
               stretched
@@ -107,6 +109,7 @@ class FirstScr extends Component {
             </Button>
           </div>
         </div>
+        {this.props.state.snackbar}
       </Panel>
     );
   }

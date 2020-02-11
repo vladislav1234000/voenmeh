@@ -33,17 +33,14 @@ class Schedule extends Component {
 
     const weekDay = d.weekday();
 
-    this.setState({ lessons: [null] })
-
     this.setState({ ned: ned });
     if(!odd || !even) return;
     if (
       weekDay === -1 ||
-      !odd[weekDay] ||
-      !even[weekDay] ||
-      odd[weekDay].length === 0 ||
-      even[weekDay].length === 0
-    ) return this.setState({ lessons: [null] });
+      (ned === 'odd' && (!odd[weekDay] || odd[weekDay].length === 0)) ||
+      (ned === 'even' && (!even[weekDay] || even[weekDay].length === 0))
+
+    ) return this.props.setParentState({ lessons: [null] });
 
     const les = [];
 
@@ -54,11 +51,11 @@ class Schedule extends Component {
         console.log('нечет')
         odd[weekDay].map((l) => les[l.numb - 1] = l );
       }
-    this.setState({ lessons: les });
+    this.props.setParentState({ lessons: les });
   }
 
   render() {
-    const lessons = this.state.lessons.map((les, id) => {
+    const lessons = this.props.state.lessons.map((les, id) => {
       if (!les) {
         return (
           <div
@@ -158,11 +155,12 @@ class Schedule extends Component {
       <Panel id="schedule">
         <PanelHeader noShadow>Расписание</PanelHeader>
         <div className="lessons_date">
-          <DatePickerComponent {...this.props} week={this.props.state.week} variable={this} />
+          <DatePickerComponent {...this.props} week={this.props.state.week} pickDate={this.pickDate} />
         </div>
         <div style={{ marginTop: 8 }} className="lessons">
           {lessons}
         </div>
+        {this.props.state.snackbar}
       </Panel>
     );
   }

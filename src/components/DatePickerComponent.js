@@ -25,13 +25,13 @@ class DatePickerComponent extends React.Component {
   }
 
   componentDidMount() {
+    console.log(1)
     this.setState({
       week: this.props.state.startWeek
     });
     this.props.setParentState({ week: this.props.state.startWeek });
-    this.props.variable.pickDate(moment(new Date()));
+    this.props.pickDate(moment(new Date()));
     const { firstDate, selectedDate } = this.state;
-    const { variable } = this.props;
     const first = firstDate ? moment(firstDate) : moment(new Date());
     const selected = selectedDate ? moment(selectedDate) : first;
     const selectedDayIndex = getSelectedDay();
@@ -52,7 +52,7 @@ class DatePickerComponent extends React.Component {
     }
 
     this.setState({ selectedDayIndex });
-    variable.pickDate(selected);
+    this.props.pickDate(selected);
   }
 
   firstLetterUP(str) {
@@ -95,7 +95,7 @@ class DatePickerComponent extends React.Component {
     }
 
 
-    this.props.variable.pickDate(props.date, week);
+    this.props.pickDate(props.date, week);
     this.setState({
       selectedDayIndex: props.key,
       selectedDay: props.date
@@ -140,7 +140,7 @@ class DatePickerComponent extends React.Component {
     if (availableDates) {
       days = availableDates.map((val, key) => {
         let selectedStyle = selectedDayIndex === key ? "dateTextDark selectedDateText" : "dateTextDark";
-        if(this.props.variable.props.scheme === 'bright_light'){
+        if(this.props.state.scheme === 'bright_light'){
           selectedStyle = selectedDayIndex === key ? "dateTextLight selectedDateText" : "dateTextLight";
         }
         return (
