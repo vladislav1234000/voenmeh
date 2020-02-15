@@ -43,6 +43,7 @@ class NewsFeed extends Component {
             size="l"
             expandable
             multiline
+            onClick={() => {}}
             asideContent={IS_PLATFORM_ANDROID ? <Icon24Chevron className="Cell__chevron" /> : ''}
             bottomContent={(
               <div>

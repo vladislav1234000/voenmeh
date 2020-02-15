@@ -128,22 +128,18 @@ class App extends Component {
           switch (schemeK) {
             case 'client_light':
               schemeK = 'bright_light';
-              console.log('поставили светлую тему(у вас старый дизайн в вк)');
               connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#4680C2"});
               break;
             case 'client_dark':
-              console.log('поставили темную тему(у вас старый дизайн в вк)');
               schemeK = 'space_gray';
               connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#19191a"});
               break;
             case 'space_gray':
-              console.log('space_gray');
               schemeK = 'space_gray';
               connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#19191a"});
               break;
             case 'bright_light':
               schemeK = 'bright_light';
-              console.log('поставили светлую тему');
               connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#4680C2"});
               break;
             default:
@@ -243,7 +239,6 @@ class App extends Component {
     if(load) this.setState({ isLoaded: load });
 
     let result = await this.api.GetGroups(fac);
-    console.log(99, result)
     if(result.length === 0){
       this.errorHappend();
       return;

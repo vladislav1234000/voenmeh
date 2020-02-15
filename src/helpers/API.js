@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL 	= 'https://krethub.design:8000/';
+const API_URL 	= 'https://vkgo.voenmeh.ru/';
 
 axios.defaults.headers.common = {
     Accept: "application/json, text/plain, */*"
