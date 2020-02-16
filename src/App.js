@@ -14,9 +14,9 @@ import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
 import Icon16Like from '@vkontakte/icons/dist/16/like';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
-//import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
+import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
-//import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
+import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
 import Icon28Profile from '@vkontakte/icons/dist/28/profile';
 
 import Schedule from './components/Schedule.js';
@@ -67,7 +67,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'first', // onbording
+      activePage: 'archive', // first !!
       activePanel: 'feed',
       history: ['feed'],
       fetchedUser: null,
@@ -223,7 +223,6 @@ class App extends Component {
 
   }
   goBack() {
-    window.history.back();
     if(this.state.modal){
       this.setState({ modal: null });
     } else {
@@ -233,6 +232,17 @@ class App extends Component {
       });
     }
   }
+
+    getOffices = async (fac) => {
+      let result = await this.api.GetOffices(fac ? fac : '');
+      if(result.length === 0){
+        this.errorHappend();
+        return;
+      };
+      this.setState({
+        offices: result
+      });
+   };
 
    getGroups = async (fac, load) => {
     this.setState({ groupsLoading: true });
@@ -408,12 +418,12 @@ class App extends Component {
         })
     };
 
-    const { getGroups, setScheduleNEW } = this;
+    const { getGroups, setScheduleNEW, getOffices } = this;
 
     const state = this.state;
 
     const props = { setParentState: this.setState.bind(this), news,
-      getGroups, banners, setScheduleNEW,  fetchedUser, openModal, state }
+      getGroups, banners, setScheduleNEW, getOffices, fetchedUser, openModal, state };
 
     const tabbar = (
       <Tabbar className={classTab}>
@@ -426,13 +436,13 @@ class App extends Component {
         >
           <Icon28ArticleOutline />
         </TabbarItem>
-        {/*
+
                 <TabbarItem
                   onClick={() => this.changePage('time')}
                   selected={activePage === 'time'}
                 >
                   <Icon28FireOutline />
-                </TabbarItem>*/}
+                </TabbarItem>
 
         <TabbarItem
           onClick={() => this.changePage('schedule')}
@@ -441,12 +451,12 @@ class App extends Component {
           <Icon20CalendarOutline width={28} height={28} />
         </TabbarItem>
 
-      {/*  <TabbarItem
+        <TabbarItem
           onClick={() => this.changePage('archive')}
           selected={activePage === 'archive'}
         >
           <Icon28ArchiveOutline />
-        </TabbarItem>*/}
+        </TabbarItem>
 
         <TabbarItem
           onClick={() => this.changePage('profile') }

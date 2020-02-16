@@ -28,6 +28,13 @@ export default class API {
 
         return response;
     }
+    async GetOffices(faculty) {
+        let response = await this.send('GET',  `GetOffices?faculty=${faculty}`, null);
+
+        console.log('API: ', 'GetOffices', response);
+
+        return response;
+    }
     async GetBanners(faculty) {
         let response = await this.send('GET',  `GetBanners?faculty=${faculty}`, null);
 
