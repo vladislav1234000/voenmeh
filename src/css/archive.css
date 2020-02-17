@@ -1,6 +1,5 @@
 
 .vendor-item__delivery-time {
-
     padding: 2px 4px;
     font-size: 12px;
     line-height: 16px;
@@ -12,7 +11,6 @@
 }
 
 .vendor-item__delivery-time.is-express {
-
     background-color: #ссс
 }
 
@@ -52,7 +50,7 @@
 
 
 .vendor-item__delivery-info {
-    margin-top: 5px;
+    margin-top: 2.5%;
     display: inline-block;
     vertical-align: top;
     width: 88px;
@@ -99,5 +97,5 @@ ol,ul {
 }
 
 .Div--ios {
-    padding: 10px
+    padding: 2px 12px 0px 12px
 }
