@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Panel, PanelHeader, Div, Spinner } from '@vkontakte/vkui';
 import '../css/archive.css';
 
-//import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
+import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
 
 class Archive extends Component {
 /*  constructor(props) {
@@ -79,35 +79,36 @@ class Archive extends Component {
                 </span>
                   </span>
                    <span className="vendor-item__wrap">
-                  <span className="vendor-item__headrow">
+
                     <span className="vendor-item__title">
                       <span className="vendor-item__title-text">
                         {e.name}
                       </span>
                     </span>
-                  </span>
-                    {/*
+
                      <span className="vendor-item__delivery-info">
-                      <span  className="vendor-item__delivery-time is-express">
-                        25-35 мин
+                      <span className="vendor-item__delivery-time is-express">
+                        {e.corpus || 'Старый корпус'}
                       </span>
                     </span>
-                  */}
-                  <span  className="vendor-item__row">
-                    <span className="vendor-item__stars rating rating--medium">
-                      <div className="rating__row rating__row--medium">
-                        <span className="rating__star rating__star--medium">
 
-                        </span>
-                        <span className="rating__value rating__value--medium">
-                          4.7
-                        </span>
-                      </div>
-                    </span>
-                    <div className="vendor-item__info-specialisations">
-                      От 1 ₽ • Бургеры,  Фастфуд<
-                      /div>
-                    </span>
+                        <div className="vendor-item__row" style={{
+                          display: 'flex',
+                          marginTop: 5,
+                          alignItems: 'center',
+                          fontSize: 15
+                        }}
+                        > <Icon28RecentOutline
+                          width={16}
+                          heigth={16}
+                          style={{ marginRight: 5 }}
+                          fill='#ff0000'
+                        />
+               <div className='roboto' style={{ display: 'inline-flex', marginTop: -4 }}>
+                 <div style={{ color: '#ff0000' }}>{`закрыто `}</div>
+                 {` • сегодня работает с 10:00 до 19:30`}
+                 </div>
+               </div>
                     </span>
                  </div>
                </li>

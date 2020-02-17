@@ -67,7 +67,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'first', // first !!
+      activePage: 'archive', // first !!
       activePanel: 'feed',
       history: ['feed'],
       fetchedUser: null,
@@ -84,6 +84,7 @@ class App extends Component {
       noty: false,
       week: false,
       startWeek: false,
+      offices: false,
       groupsLoading: false,
       snackbar: null,
       selectedDayIndex: 0,
@@ -452,12 +453,12 @@ class App extends Component {
           <Icon20CalendarOutline width={28} height={28} />
         </TabbarItem>
 
-          {/* <TabbarItem
+          { true && <TabbarItem
           onClick={() => this.changePage('archive')}
           selected={activePage === 'archive'}
         >
           <Icon28ArchiveOutline />
-        </TabbarItem> */}
+        </TabbarItem> }
 
         <TabbarItem
           onClick={() => this.changePage('profile') }
