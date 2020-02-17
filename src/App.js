@@ -67,7 +67,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'archive', // first !!
+      activePage: 'first', // first !!
       activePanel: 'feed',
       history: ['feed'],
       fetchedUser: null,
@@ -367,7 +367,7 @@ class App extends Component {
                     </InfoRow>
                   </Cell>
                 }
-                  <Cell>
+                  <Cell multiline>
                   {
                       data.teacher ?
                       <InfoRow /*style={{ marginBottom: -8 }}*/ title="Преподаватель">
@@ -435,14 +435,15 @@ class App extends Component {
           selected={activePage === 'feed'}
         >
           <Icon28ArticleOutline />
-        </TabbarItem>
-
+           </TabbarItem>
+        {/*
                 <TabbarItem
                   onClick={() => this.changePage('time')}
                   selected={activePage === 'time'}
                 >
                   <Icon28FireOutline />
                 </TabbarItem>
+                */}
 
         <TabbarItem
           onClick={() => this.changePage('schedule')}
@@ -451,12 +452,12 @@ class App extends Component {
           <Icon20CalendarOutline width={28} height={28} />
         </TabbarItem>
 
-        <TabbarItem
+          {/* <TabbarItem
           onClick={() => this.changePage('archive')}
           selected={activePage === 'archive'}
         >
           <Icon28ArchiveOutline />
-        </TabbarItem>
+        </TabbarItem> */}
 
         <TabbarItem
           onClick={() => this.changePage('profile') }
