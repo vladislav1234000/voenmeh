@@ -1,0 +1,30 @@
+.vendor-item__title2 {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 88px);
+  padding-right: 4px;
+  font-size: 17px;
+  margin-top: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  box-sizing: border-box
+}
+.vendor-item__cover2 {
+  height: 140px;
+  display: block;
+  font-size: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+ /* padding-top: 20px;*/
+}
+
+bodуаy * {
+  --background_page: rgb(237,238,240);
+}
+
+#clickable1 {
+  transition: All 0.3s ease;
+}
+
+#clickable1:active { background: #ebebeb}

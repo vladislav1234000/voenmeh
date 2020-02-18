@@ -3,7 +3,7 @@
     padding: 2px 4px;
     font-size: 12px;
     line-height: 16px;
-    font-weight: 700;
+    font-weight: 400;
     color: #fff;
     background-color: #919399;
     border-radius: 4px;
@@ -80,7 +80,7 @@
     vertical-align: top;
     width: calc(100% - 88px);
     padding-right: 4px;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 28px;
     font-weight: 550;
     box-sizing: border-box

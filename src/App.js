@@ -14,13 +14,16 @@ import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
 import Icon16Like from '@vkontakte/icons/dist/16/like';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
-import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
+//import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
 import Icon28Profile from '@vkontakte/icons/dist/28/profile';
 
 import Schedule from './components/Schedule.js';
+
 import Archive from './components/Archive.js';
+import Office from './components/Office.js';
+
 import Profile from './components/Profile.js';
 
 import FirstScr from './components/FirstScr.js';
@@ -68,10 +71,12 @@ class App extends Component {
 
     this.state = {
       activePage: 'archive', // first !!
-      activePanel: 'feed',
+      activePanel: 'archive',
       history: ['feed'],
       fetchedUser: null,
       classTab: '',
+      office: [],
+      isOfficeOpened: false,
       group: false,
       isLoaded: false,
       news: [],
@@ -239,7 +244,7 @@ class App extends Component {
       if(result.length === 0){
         this.errorHappend();
         return;
-      };
+      }
       this.setState({
         offices: result
       });
@@ -416,14 +421,46 @@ class App extends Component {
             </ModalPage>
             </ModalRoot>
           )
-        })
+        });
     };
 
     const { getGroups, setScheduleNEW, getOffices } = this;
 
     const state = this.state;
 
-    const props = { setParentState: this.setState.bind(this), news,
+    const openGeo = e => {
+      this.setState({
+        modal: (
+          <ModalRoot activeModal='lesson'>
+            <ModalPage
+              id='lesson'
+              onClose={onCloseModal}
+              header={
+                <ModalPageHeader
+                  left={
+                    IS_PLATFORM_ANDROID &&
+                    <HeaderButton onClick={onCloseModal}><Icon24Cancel /></HeaderButton>
+                  }
+                  right={(
+                    <>
+                      {!IS_PLATFORM_ANDROID && <HeaderButton onClick={onCloseModal}><Icon24Dismiss /></HeaderButton > }
+                    </>
+                  )}
+                >
+                  Местоположение
+                </ModalPageHeader>
+              }
+            >
+              <Div style={{ padding: 20 }}>
+                  {e}
+              </Div>
+            </ModalPage>
+          </ModalRoot>
+        )
+      });
+    };
+
+    const props = { setParentState: this.setState.bind(this), news, openGeo,
       getGroups, banners, setScheduleNEW, getOffices, fetchedUser, openModal, state };
 
     const tabbar = (
@@ -453,12 +490,17 @@ class App extends Component {
           <Icon20CalendarOutline width={28} height={28} />
         </TabbarItem>
 
-          { true && <TabbarItem
-          onClick={() => this.changePage('archive')}
+          <TabbarItem
+          onClick={() => {
+            this.setState({
+              activePanel: 'archive',
+              activePage: 'archive'
+            });
+          }}
           selected={activePage === 'archive'}
         >
           <Icon28ArchiveOutline />
-        </TabbarItem> }
+        </TabbarItem>
 
         <TabbarItem
           onClick={() => this.changePage('profile') }
@@ -486,8 +528,15 @@ class App extends Component {
           <Schedule id="schedule" {...props} scheme={this.state.scheme} schedule={schedule} />
         </View>
 
-        <View id="archive" activePanel="archive">
+        <View
+          modal={this.state.modal}
+          history={this.state.activePanel === 'office' ? ['archive', 'office'] :  ['archive']}
+          id="archive"
+          activePanel={this.state.activePanel}
+          onSwipeBack={() => this.setState({ activePanel: 'archive' })}
+        >
           <Archive id="archive" {...props}  />
+          <Office id="office" {...props}  />
         </View>
 
         <View className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" activePanel="profile">

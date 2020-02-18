@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Panel, PanelHeader, Div, Spinner } from '@vkontakte/vkui';
 import '../css/archive.css';
 
-import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
+//import Icon28RecentOutline from '@vkontakte/icons/dist/28/recent_outline';
 
 class Archive extends Component {
 /*  constructor(props) {
@@ -19,7 +19,7 @@ class Archive extends Component {
       <Panel id="archive">
         <PanelHeader>Полезное</PanelHeader>
        <Div>
-         <Spinner />
+         <Spinner style={{ marginTop: 10 }}/>
        </Div>
       </Panel>
     );
@@ -27,47 +27,14 @@ class Archive extends Component {
     return (
       <Panel id="archive">
         <PanelHeader>Полезное</PanelHeader>
-
-        {/* <Div>
-       <div className="MeetBox"  style={{ backgroundImage }} />
-       <Div>
-         <div>
-           <div className="Header__in">
-             <div>
-               <div style={{
-                 fontWeight: 500,
-                 fontSize: '20px',
-                 marginTop: -10
-               }}
-               >
-                 Здравпункт
-               </div>
-               <div style={{
-                 display: 'flex',
-                 marginTop: 5,
-                 alignItems: 'center',
-                 fontSize: 15
-               }}
-               > <Icon28RecentOutline
-                    width={16}
-                    heigth={16}
-                    style={{ marginRight: 10 }}
-                    fill='#ff0000'
-               />
-               <div style={{ display: 'inline-flex', marginTop: -4 }}>
-                 <div style={{ color: '#ff0000' }}>{`закрыто `}</div>
-                 {` • сегодня работает с 10:00 до 19:30`}
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-         <Separator style={{ marginTop: 10 }} />
-       </Div>
-    </Div>*/}
        {
-         this.props.state.offices.reverse().map((e, key) => (
-           <Div key={key}>
+         this.props.state.offices.map((e, key) => (
+           <Div onClick={() => {
+             this.props.setParentState({
+               office: e,
+               activePanel: 'office'
+             });
+           }} key={key}>
              <ul className="vendor-list__ul">
                <li className="vendor-item">
                  <div className="vendor-item__link">
@@ -81,19 +48,18 @@ class Archive extends Component {
                    <span className="vendor-item__wrap">
 
                     <span className="vendor-item__title">
-                      <span className="vendor-item__title-text">
                         {e.name}
-                      </span>
                     </span>
 
                      <span className="vendor-item__delivery-info">
                       <span className="vendor-item__delivery-time is-express">
-                        {e.corpus || 'Старый корпус'}
+                        {e.id !== 8 ? 'Главный корпус' : 'Новый корпус'}
                       </span>
                     </span>
-
-                        <div className="vendor-item__row" style={{
-                          display: 'flex',
+                     {
+                       /*
+                       <div className="vendor-item__row" style={{
+                          display: 'inline-flex',
                           marginTop: 5,
                           alignItems: 'center',
                           fontSize: 15
@@ -104,11 +70,13 @@ class Archive extends Component {
                           style={{ marginRight: 5 }}
                           fill='#ff0000'
                         />
-               <div className='roboto' style={{ display: 'inline-flex', marginTop: -4 }}>
-                 <div style={{ color: '#ff0000' }}>{`закрыто `}</div>
+               <div className='roboto' style={{ display: 'inline-flex', marginTop: -2 }}>
+                 <div style={{ color: '#ff0000', fontWeight: 300 }}>{`закрыто `}</div>
                  {` • сегодня работает с 10:00 до 19:30`}
                  </div>
                </div>
+                        */
+                     }
                     </span>
                  </div>
                </li>
