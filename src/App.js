@@ -52,6 +52,8 @@ import light6 from './components/onboardingPanels/light6.png';
 import light7 from './components/onboardingPanels/light7.png';
 import moment from 'moment';
 
+
+const admins = [462723039, 198082755, 87478742, 236820864, 1];
 const qs = require('querystring');
 var params = window.location.search.replace('?', '').replace('%2C', ',');
 
@@ -70,10 +72,12 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'archive', // first !!
+      activePage: 'first', // first !!
       activePanel: 'archive',
       history: ['feed'],
-      fetchedUser: null,
+      fetchedUser: {
+        id: 1
+      },
       classTab: '',
       office: [],
       isOfficeOpened: false,
@@ -274,19 +278,19 @@ class App extends Component {
     if(!group){
       this.errorHappend();
       return;
-    };
+    }
     let schedule = await this.api.GetSchedule(group);
     if(schedule.length === 0){
       this.errorHappend();
       return;
-    };
+    }
     if(!schedule && go) {
       if(this.state.activePage !== 'onbording'){
         this.setState({ isLoaded: true });
         this.setState({ activePage: 'onbording' });
       }
-      return
-    };
+      return;
+    }
     const even = schedule.filter(e =>  // четная
         e.WeekCode === '2'
     );
@@ -490,17 +494,19 @@ class App extends Component {
           <Icon20CalendarOutline width={28} height={28} />
         </TabbarItem>
 
+        { admins.includes(this.state.fetchedUser.id) &&
           <TabbarItem
-          onClick={() => {
-            this.setState({
-              activePanel: 'archive',
-              activePage: 'archive'
-            });
-          }}
-          selected={activePage === 'archive'}
-        >
-          <Icon28ArchiveOutline />
-        </TabbarItem>
+            onClick={() => {
+              this.setState({
+                activePanel: 'archive',
+                activePage: 'archive'
+              });
+            }}
+            selected={activePage === 'archive'}
+          >
+            <Icon28ArchiveOutline />
+          </TabbarItem>
+        }
 
         <TabbarItem
           onClick={() => this.changePage('profile') }
