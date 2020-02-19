@@ -36,7 +36,7 @@ class Archive extends Component {
              });
            }} key={key}>
              <ul className="vendor-list__ul">
-               <li className="vendor-item">
+               <li className={this.props.state.scheme === 'bright_light' ? 'vendor-itemL' : 'vendor-itemD'}>
                  <div className="vendor-item__link">
                 <span className="vendor-item__images"><span
                   className="vendor-item__cover"

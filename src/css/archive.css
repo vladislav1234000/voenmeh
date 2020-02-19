@@ -14,11 +14,17 @@
     background-color: #ссс
 }
 
-.vendor-item {
-    margin-bottom: 16px;
+.vendor-itemL {
+    margin-bottom: -20px;
     border-radius: 8px;
+    font-size: 0;
     box-shadow: 0 8px 8px 0 rgba(0,0,0,.04),0 -2px 8px 0 rgba(0,0,0,.04);
-    font-size: 0
+}
+.vendor-itemD {
+    margin-bottom: -20px;
+    border-radius: 8px;
+    font-size: 0;
+    box-shadow: 0 5px 8px 0 #1d1d1d ,0 -2px 8px 0 #1d1d1d;
 }
 
 .vendor-item__images {

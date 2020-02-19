@@ -61,10 +61,9 @@ class Profile extends Component {
     return (
       <Panel id="profile">
         <PanelHeader>Профиль</PanelHeader>
-        <Group>
-
+        <Group style={{ marginTop: -5 }}>
           <Div className="name">
-            <img alt="" style={{ borderRadius: 50 }} src={photo_100} />
+            <Div style={{ borderRadius: 100 }}>  <img alt="" style={{ borderRadius: 100 }} src={photo_100} /> </Div>
             <div className='name2'> {`${first_name} ${last_name}`}</div>
           </Div>
           <Div/>
@@ -94,7 +93,7 @@ class Profile extends Component {
 
            {
              this.props.state.groupsLoading ?
-               <Div style={{ marginTop: 24 }}><Spinner/></Div>
+               <Div style={{ marginTop: '10%' }}><Spinner/></Div>
                :
                <Select
                  top="Группа"

@@ -19,12 +19,14 @@
  /* padding-top: 20px;*/
 }
 
-bodуаy * {
-  --background_page: rgb(237,238,240);
-}
-
 #clickable1 {
   transition: All 0.3s ease;
 }
 
 #clickable1:active { background: #ebebeb}
+
+.vendor-item__delivery-info2 {
+  margin-top: 2.5%;
+  display: inline-block;
+  width: 88px;
+}

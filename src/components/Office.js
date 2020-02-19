@@ -41,7 +41,7 @@ const Office = props => {
                     <span className="vendor-item__title">
                         {office.name}
                     </span>
-                     <span className="vendor-item__delivery-info">
+                     <span className="vendor-item__delivery-info2">
                       <span className="vendor-item__delivery-time is-express">
                         {office.id !== 8 ? 'Главный корпус' : 'Новый корпус'}
                       </span>
@@ -74,32 +74,32 @@ const Office = props => {
                    <div style={{ marginTop: 10 }} className='roboto'>
                      <div style={{ display: 'flex' }}>пн
                        <div style={{ marginLeft: '20%' }}>
-                         {`${pn[0] ? `${pn[0].start} - ${pn[0].finish}${pn[1] && `, ${pn[1].start} - ${pn[1].finish}`  }` : 'выходной'}`}
+                         {`${pn[0] ? `${pn[0].start} - ${pn[0].finish}${pn[1] ? `, ${pn[1].start} - ${pn[1].finish}` : '' }` : 'выходной'}`}
                        </div>
                      </div>
                     <div style={{ display: 'flex' }}>вт
                         <div style={{ marginLeft: '20%' }}>
-                          {`${vt[0] ? `${vt[0].start}-${vt[0].finish}${vt[1] && `, ${vt[1].start}-${vt[1].finish}`  }` : 'выходной'}`}
+                          {`${vt[0] ? `${vt[0].start} - ${vt[0].finish}${vt[1] ? `, ${vt[1].start} - ${vt[1].finish}`  : '' }` : 'выходной'}`}
                        </div>
                   </div>
                      <div style={{ display: 'flex' }}>ср
                        <div style={{ marginLeft: '20%' }}>
-                          {`${sr[0] ? `${sr[0].start} - ${sr[0].finish}${sr[1] && `, ${sr[1].start} - ${sr[1].finish}`  }` : 'выходной'}`}
+                          {`${sr[0] ? `${sr[0].start} - ${sr[0].finish}${sr[1] ? `, ${sr[1].start} - ${sr[1].finish}` : ''  }` : 'выходной'}`}
                        </div>
                     </div>
                      <div style={{ display: 'flex' }}>чт
                        <div style={{ marginLeft: '20%' }}>
-                         {`${ct[0] ? `${ct[0].start} - ${ct[0].finish}${ct[1] && `, ${ct[1].start} - ${ct[1].finish}`  }` : 'выходной'}`}
+                         {`${ct[0] ? `${ct[0].start} - ${ct[0].finish}${ct[1] ? `, ${ct[1].start} - ${ct[1].finish}` : ''  }` : 'выходной'}`}
                        </div>
                     </div>
                       <div style={{ display: 'flex' }}>пт
                        <div style={{ marginLeft: '20%' }}>
-                          {`${pt[0] ? `${pt[0].start} - ${pt[0].finish}${pt[1] && `, ${pt[1].start} - ${pt[1].finish}`  }` : 'выходной'}`}
+                          {`${pt[0] ? `${pt[0].start} - ${pt[0].finish}${pt[1] ? `, ${pt[1].start} - ${pt[1].finish}` : ''  }` : 'выходной'}`}
                        </div>
                     </div>
                      <div style={{ display: 'flex' }}>сб
                        <div style={{ marginLeft: '20%' }}>
-                          {`${sb[0] ? `${sb[0].start} - ${sb[0].finish} ${sb[1] && `, ${sb[1].start} - ${sb[1].finish}`  }` : 'выходной'}`}
+                          {`${sb[0] ? `${sb[0].start} - ${sb[0].finish} ${sb[1] ? `, ${sb[1].start} - ${sb[1].finish}` : ''  }` : 'выходной'}`}
                        </div>
                     </div>
                    </div>
@@ -108,7 +108,7 @@ const Office = props => {
                 <div className="vendor-item__title2">
                  Дополнительная информация
 
-                 <div id='clickable' style={{ display: 'flex', marginTop: 10, width: '200%', heigth: '120%' }}>
+                 <div id='clickable' style={{ display: 'flex', marginTop: 10 }}>
                    <div>
                      <Icon56PhoneOutline fill={props.state.scheme === 'bright_light' ? '#9ca2ad' : '#767778'} width={28} height={28} />
                    </div>

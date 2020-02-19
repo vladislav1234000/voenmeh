@@ -87,7 +87,7 @@ class App extends Component {
       banners: [],
       schedule: {},
       groups: [],
-      scheme: false ? 'space_gray' : 'bright_light',
+      scheme: true ? 'space_gray' : 'bright_light',
       modal: null,
       lessons: [null],
       noty: false,
@@ -233,6 +233,10 @@ class App extends Component {
 
   }
   goBack() {
+    if(this.state.activePanel === 'office') {
+      this.setState({ activePanel: 'archive' });
+      return;
+    }
     if(this.state.modal){
       this.setState({ modal: null });
     } else {
@@ -410,7 +414,7 @@ class App extends Component {
                 }
                 </Cell>
               </List>
-                <Div style={{ marginBottom: -10, marginTop: -5 }}>
+                <Div style={{ marginTop: -5, padding: 20 }}>
                   <Button
                     size='xl'
                     component='a'
@@ -420,7 +424,6 @@ class App extends Component {
                   >Сообщить об ошибке
                   </Button>
                 </Div>
-                <Div/>
           </Group>
             </ModalPage>
             </ModalRoot>
@@ -542,7 +545,7 @@ class App extends Component {
           onSwipeBack={() => this.setState({ activePanel: 'archive' })}
         >
           <Archive id="archive" {...props}  />
-          <Office id="office" {...props}  />
+          <Office className={state.scheme === 'bright_light' ? 'office' : 'officeD'} id="office" {...props}  />
         </View>
 
         <View className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" activePanel="profile">

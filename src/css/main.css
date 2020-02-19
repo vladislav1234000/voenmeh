@@ -54,8 +54,11 @@ body {
 .profileL * {
     --background_page: rgb(237,238,240);
 }
-#office * {
+.office * {
   --background_page: #EDEEF0;
+}
+.officeD * {
+  --background_page: #19191A;
 }
 .profileD * {
     --background_page: var(--background_page);
