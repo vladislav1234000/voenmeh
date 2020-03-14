@@ -170,7 +170,7 @@ class App extends Component {
           const get = async () => {
             let fac = e.detail.data.keys[0].value;
             let gr = e.detail.data.keys[1].value;
-
+            console.table('VKWebAppStorageGetResult',  e.detail.data);
             let w = await this.api.GetWeek();
             this.setState({
               week: w,
@@ -186,11 +186,11 @@ class App extends Component {
             if(fac !== '' && !fac.startsWith('?')){
               this.setState({ faculty: fac });
               this.getGroups(fac, true);
-              console.log('факультет обнаружен');
+              console.log('факультет обнаружен', fac);
             }
             if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
               this.setState({ group: gr });
-              console.log('группа обнаружена');
+              console.log('группа обнаружена', gr);
               this.setScheduleNEW(gr, true, true);
             } else {
               console.log('группа не найдена, держи онбординг');
@@ -497,8 +497,8 @@ class App extends Component {
           <Icon20CalendarOutline width={28} height={28} />
         </TabbarItem>
 
-        { admins.includes(this.state.fetchedUser.id) &&
-          <TabbarItem
+
+         <TabbarItem
             onClick={() => {
               this.setState({
                 activePanel: 'archive',
@@ -509,7 +509,7 @@ class App extends Component {
           >
             <Icon28ArchiveOutline />
           </TabbarItem>
-        }
+
 
         <TabbarItem
           onClick={() => this.changePage('profile') }
@@ -522,6 +522,10 @@ class App extends Component {
 
     if (!isLoaded) return <Spinner size="large" />;
 
+
+    if(admins.includes(fetchedUser.id)) {
+      window.eruda.init();
+    }
     return (
       <ConfigProvider scheme={scheme}>
       <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? [] : tabbar}>

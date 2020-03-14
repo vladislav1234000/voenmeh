@@ -32,7 +32,7 @@ const Office = props => {
 
             <div style={{ marginTop: -10 }} className="vendor-item__link">
               <div
-                  className="vendor-item__cover2убратьэто"
+                  className="vendor-item__cover2"
                   style={{
                     backgroundImage: `url(${office.photo || 'https://sun9-69.userapi.com/c855720/v855720034/160918/11gmBBLhMOk.jpg'})`
                   }}>
