@@ -8,10 +8,10 @@ axios.defaults.headers.common = {
 
 export default class API {
 
-    async send(method = 'GET', action, data = {}) {
+    async send(method = 'GET', action, data = {}, url = API_URL) {
         const response = await axios({
             method,
-            url: `${API_URL}${action}`,
+            url: `${url}${action}`,
             data
         }).catch(error => {
             console.error('Error API:', error);
@@ -19,6 +19,15 @@ export default class API {
           //  return { "status": false, "failed": error.response.data.message }
         });
         return response ? response.data : [];
+    }
+
+
+    async GetStatus(id) {
+        let response = await this.send('GET',  `getUserStatus?id=${id}`, null, 'https://manaenckov.design/api/voenmeh/');
+
+        console.log('API: ', 'GetStatus', response);
+
+        return response;
     }
 
     async POSTGeoPosition(meet) {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import connect from '@vkontakte/vk-connect';
+import connect from '@vkontakte/vk-bridge';
 import {
   Epic, Tabbar, TabbarItem, Snackbar, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner,
-  ModalRoot, ModalPage, HeaderButton, Avatar, ModalPageHeader, Group, List, Cell, InfoRow, Button
+  ModalRoot, ModalPage, PanelHeaderButton, Avatar, ModalPageHeader, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
 import '@vkontakte/vkui/dist/vkui.css';
@@ -72,7 +72,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'first', // first !!
+      activePage: 'profile', // first !!
       activePanel: 'archive',
       history: ['feed'],
       fetchedUser: {
@@ -87,7 +87,7 @@ class App extends Component {
       banners: [],
       schedule: {},
       groups: [],
-      scheme: true ? 'space_gray' : 'bright_light',
+      scheme: false ? 'space_gray' : 'bright_light',
       modal: null,
       lessons: [null],
       noty: false,
@@ -97,7 +97,8 @@ class App extends Component {
       groupsLoading: false,
       snackbar: null,
       selectedDayIndex: 0,
-      selectedDay: moment(new Date())
+      selectedDay: moment(new Date()),
+      headman: false
     };
     this.api = new API();
   }
@@ -163,6 +164,11 @@ class App extends Component {
 
           case 'VKWebAppAllowNotificationsResult':
           this.setState({ noty: e.detail.data.result });
+          const qwe = async () => {
+            let res = await this.api.GetStatus(e.detail.data.result.id);
+            this.setState({ headman: res });
+          };
+          qwe();
           break;
 
         case 'VKWebAppStorageGetResult':
@@ -359,11 +365,11 @@ class App extends Component {
                 <ModalPageHeader
                   left={
                     IS_PLATFORM_ANDROID &&
-                    <HeaderButton onClick={onCloseModal}><Icon24Cancel /></HeaderButton>
+                    <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
                    }
                   right={(
                     <>
-                      {!IS_PLATFORM_ANDROID && <HeaderButton onClick={onCloseModal}><Icon24Dismiss /></HeaderButton > }
+                      {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton > }
                     </>
                   )}
                 >
@@ -446,11 +452,11 @@ class App extends Component {
                 <ModalPageHeader
                   left={
                     IS_PLATFORM_ANDROID &&
-                    <HeaderButton onClick={onCloseModal}><Icon24Cancel /></HeaderButton>
+                    <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
                   }
                   right={(
                     <>
-                      {!IS_PLATFORM_ANDROID && <HeaderButton onClick={onCloseModal}><Icon24Dismiss /></HeaderButton > }
+                      {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton> }
                     </>
                   )}
                 >

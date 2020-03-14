@@ -1,4 +1,4 @@
-body[scheme="space_gray"] * {
+/**body[scheme="space_gray"] * {
   --activity_indicator_tint: #5d5f61;
   --accent: #5d5f61;
   --text_primary: #e1e3e6;
@@ -38,12 +38,12 @@ body[scheme="space_gray"] * {
   --header_background: #19191a;
   --header_background_before_blur: #141414;
   --header_background_before_blur_alternate: #141414;
-/*    font-family: TT Norms;*/
-}
+//   font-family: TT Norms;
+}*/
 
 body * {
-  --header_background: #4680C2;
-  --background_page: #fff;
+  /*  --header_background: #4680C2;
+  --background_page: #fff;*/
 }
 * {
   user-select: none;
@@ -52,44 +52,44 @@ body {
   font-family: TT Norms;
 }
 .profileL * {
-    --background_page: rgb(237,238,240);
+  --background_page: rgb(237,238,240);
 }
-.office * {
+/*.office * {
   --background_page: #EDEEF0;
 }
 .officeD * {
   --background_page: #19191A;
-}
-.profileD * {
+}*/
+/*.profileD * {
     --background_page: var(--background_page);
-}
+}*/
 .Header--level-secondary .Header__content {
-    text-transform: none;
-    font-size: 17px;
+  text-transform: none;
+  font-size: 17px;
 }
 #groupl * {
   color: #000;
 }
-.FormField FormField--ios  * {
+/*.FormField FormField--ios  * {
   color: #ccc;
-}
+}*/
 /*div.InfoRow * {
  font-weight: 500;
 }*/
-.View__header * {
+/*.View__header * {
   box-shadow: none !important;
   font-weight: Medium !important;
   border: none !important;
-}
-.PanelHeader-content * {
+}*/
+/*.PanelHeader-content * {
   color: #fff !important;
-}
+}*/
 .Header__content {
-white-space: normal;
+  white-space: normal;
 }
-.PanelHeader-left-in--brand, .PanelHeader-addon--brand, .PanelHeader-right--brand{
+/*.PanelHeader-left-in--brand, .PanelHeader-addon--brand, .PanelHeader-right--brand{
   color: #fff;
-}
+}*/
 #roboto * {
   font-family: Roboto;
 }

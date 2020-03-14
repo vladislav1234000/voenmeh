@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Panel, PanelHeader, Link, List, Div, Cell, Spinner, FormLayout, Select,
-  Group, Switch
+  Group, Switch, Avatar, Header
 } from '@vkontakte/vkui';
 import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
@@ -56,22 +56,24 @@ class Profile extends Component {
 
     const { last_name, first_name, photo_100 } = this.props.fetchedUser;
 
-    const { scheme } = this.props.state;
+    const { scheme, headman } = this.props.state;
 
     return (
       <Panel id="profile">
         <PanelHeader>Профиль</PanelHeader>
         <Group style={{ marginTop: -5 }}>
-          <Div className="name">
-            <Div style={{ borderRadius: 100 }}>  <img alt="" style={{ borderRadius: 100 }} src={photo_100} /> </Div>
-            <div className='name2'> {`${first_name} ${last_name}`}</div>
+
+          <Div style={{ padding: '15px', display: 'flex' }} >
+          <Avatar size={80} src={photo_100} />
+            <div className='name'> {`${first_name} ${last_name}`}</div>
+            <div className='headman'>{ headman ? 'староста' : 'студент' }</div>
           </Div>
-          <Div/>
+
         </Group>
         <Group
           style={{ marginTop: -10 }}
           id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
-          title="Данные студента"
+          header={<Header>Данные студента</Header>}
           /*style={{ borderRadius: '20px 20px 0px 0px', marginTop: 20 }}*/
        />
        <Group style={{ marginTop: -10 }}>
@@ -109,7 +111,10 @@ class Profile extends Component {
          </FormLayout>
          </Group>
 
-        <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} style={{ marginTop: -10 }} title="Уведомления">
+        <Group
+          id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
+          style={{ marginTop: -10 }}
+          header={<Header>Уведомления</Header>}>
           <Cell
             className="cell"
             multiline

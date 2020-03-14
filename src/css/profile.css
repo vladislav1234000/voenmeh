@@ -1,17 +1,9 @@
+
 .name {
- /* color: #4680C2;*/
-  font-size: 20px;
-  font-weight: 450;
-    display: flex;
- /* text-align: center;*/
-}
-.name2 {
-    /* color: #4680C2;*/
     font-size: 20px;
     font-weight: 450;
-    margin-top: 35px;
-    margin-left: 20px;
-    /* text-align: center;*/
+    margin-top: 3.5vh;
+    margin-left: 10vw;
 }
 .cell * {
  line-height: 20px;
@@ -19,4 +11,10 @@
 }
 .grr {
     margin-top: -10px;
+}
+
+.headman {
+    color: #ccc;
+    margin-top: 13vw;
+    margin-left: -20vw;
 }
