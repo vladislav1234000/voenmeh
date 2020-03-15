@@ -10,40 +10,40 @@
 
 .daydateTextLight {
   font-size: 20px;
-  font-weight: 500;
-  color: #36c;
+  font-weight: 600;
+  color: #c4c7cc;
 }
 .daydateTextDark {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #ccc;
 }
 
 
 .weekDaydateTextLight {
   font-size: 17px;
-  font-weight: 500;
-  color: #36c;
+  font-weight: 600;
+  color: #c4c7cc;
 }
 .weekDaydateTextDark {
   font-size: 17px;
-  font-weight: 500;
+  font-weight: 600;
   color: #ccc;
 }
 
 
 
 .selectedDateText/*[scheme="client_light"]*/ {
-  color: #fff;
+  color: #1f77db;
 }
 
 .dayText {
   text-align: center;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
 }
 .dayText/*[scheme="client_light"]*/ {
-  color: #9cf;
+  color: #1f77db;
 }
 
 .singleContainer {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import connect from '@vkontakte/vk-bridge';
 import {
-  Epic, Tabbar, TabbarItem, Snackbar, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner,
+  Epic, Tabbar, TabbarItem, Snackbar, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner, Header,
   ModalRoot, ModalPage, PanelHeaderButton, Avatar, ModalPageHeader, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
@@ -87,7 +87,7 @@ class App extends Component {
       banners: [],
       schedule: {},
       groups: [],
-      scheme: false ? 'space_gray' : 'bright_light',
+      scheme: true ? 'space_gray' : 'bright_light',
       modal: null,
       lessons: [null],
       noty: false,
@@ -377,12 +377,12 @@ class App extends Component {
                 </ModalPageHeader>
               }
             >
-            <Group title={data.title && data.title}>
+            <Group header={<Header>{data.title && data.title}</Header>}>
               <List>
                 {
                   data.form &&
                   <Cell>
-                    <InfoRow /*style={{ lineHeight: 1 }}*/ title="Форма занятия">
+                    <InfoRow /*style={{ lineHeight: 1 }}*/ header="Форма занятия">
                       {data.form}
                     </InfoRow>
                   </Cell>
@@ -390,11 +390,11 @@ class App extends Component {
                   <Cell multiline>
                   {
                       data.teacher ?
-                      <InfoRow /*style={{ marginBottom: -8 }}*/ title="Преподаватель">
+                      <InfoRow /*style={{ marginBottom: -8 }}*/ header="Преподаватель">
                        {data.teacher}
                       </InfoRow>
                       :
-                      <InfoRow /*style={{ marginBottom: -8 }}*/ title="Преподаватель">
+                      <InfoRow /*style={{ marginBottom: -8 }}*/ header="Преподаватель">
                        Не указан
                       </InfoRow>
                   }
@@ -402,7 +402,7 @@ class App extends Component {
                 {
                   data.time &&
                   <Cell>
-                    <InfoRow /*style={{ marginBottom: -8 }}*/ title="Начало и конец занятия">
+                    <InfoRow /*style={{ marginBottom: -8 }}*/ header="Начало и конец занятия">
                       {data.time}
                     </InfoRow>
                   </Cell>
@@ -410,11 +410,11 @@ class App extends Component {
                 <Cell>
                 {
                     data.aud ?
-                    <InfoRow /*style={{ marginBottom: -8 }}*/ title="Аудитория">
+                    <InfoRow /*style={{ marginBottom: -8 }}*/ header="Аудитория">
                      {data.aud.includes('*') ? 'Новый корпус,' : 'Главный корпус,'} {ucFirst(data.aud)}
                     </InfoRow>
                     :
-                    <InfoRow title="Аудитория">
+                    <InfoRow header="Аудитория">
                        Не указана
                     </InfoRow>
                 }
@@ -552,7 +552,10 @@ class App extends Component {
           history={this.state.activePanel === 'office' ? ['archive', 'office'] :  ['archive']}
           id="archive"
           activePanel={this.state.activePanel}
-          onSwipeBack={() => this.setState({ activePanel: 'archive' })}
+          onSwipeBack={() => this.setState({
+            activePanel: 'archive',
+            modal: null
+          })}
         >
           <Archive id="archive" {...props}  />
           <Office className={state.scheme === 'bright_light' ? 'office' : 'officeD'} id="office" {...props}  />

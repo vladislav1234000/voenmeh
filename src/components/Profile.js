@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {
-  Panel, PanelHeader, Link, List, Div, Cell, Spinner, FormLayout, Select,
-  Group, Switch, Avatar, Header
+  Panel, PanelHeader, List, Div, Cell, Spinner, FormLayout, Select,
+  Group, Switch, Avatar, Header, Separator
 } from '@vkontakte/vkui';
 import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
 
-import Icon24LinkCircle from '@vkontakte/icons/dist/24/link_circle';
-import Icon28LogoVk from '@vkontakte/icons/dist/28/logo_vk';
-
+import Icon28ChatsOutline from '@vkontakte/icons/dist/28/chats_outline';
+import Icon28LogoVkOutline from '@vkontakte/icons/dist/28/logo_vk_outline';
+import Icon28LogoInstagram from '@vkontakte/icons/dist/28/logo_instagram';
 
 const debug = window.location.port === '8080';
 
@@ -61,22 +61,17 @@ class Profile extends Component {
     return (
       <Panel id="profile">
         <PanelHeader>Профиль</PanelHeader>
-        <Group style={{ marginTop: -5 }}>
-
+        <Group>
           <Div style={{ padding: '15px', display: 'flex' }} >
           <Avatar size={80} src={photo_100} />
             <div className='name'> {`${first_name} ${last_name}`}</div>
             <div className='headman'>{ headman ? 'староста' : 'студент' }</div>
           </Div>
-
         </Group>
-        <Group
-          style={{ marginTop: -10 }}
-          id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
-          header={<Header>Данные студента</Header>}
-          /*style={{ borderRadius: '20px 20px 0px 0px', marginTop: 20 }}*/
-       />
-       <Group style={{ marginTop: -10 }}>
+       <Group
+         /* id={scheme === 'bright_light' ? 'groupl' : 'groupD'}*/
+         header={<Header>Данные студента</Header>}
+       >
          <FormLayout>
            <Select
              top="Факультет"
@@ -113,8 +108,8 @@ class Profile extends Component {
 
         <Group
           id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
-          style={{ marginTop: -10 }}
-          header={<Header>Уведомления</Header>}>
+          header={<Header>Уведомления</Header>}
+        >
           <Cell
             className="cell"
             multiline
@@ -133,64 +128,34 @@ class Profile extends Component {
             )}
           >
 
-              Вы разрешаете сервису присылать уведомления. <br/>Например, об отмене занятий
-          </Cell>
-        </Group>
-        <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} style={{ marginTop: -10 }} title="Настройки">
-          <Cell
-            className="cell"
-            multiline
-            asideContent={(
-              <Switch
-                disabled
-                checked={true}
-                onChange={(e) => {
-                  if (e.currentTarget.checked) {
-
-                  } else {
-
-                   // this.props.setParentState({ noty: false });
-                  }
-                }}
-              />
-            )}
-          >
-
-            Сортировать новостную ленту. <br/>Показывать новости своего факультета и общие.
+             Сервис сможет присылать тебе уведомления. Например, об отмене занятий
           </Cell>
         </Group>
 
-        <Group id={scheme === 'bright_light' ? 'groupl' : 'groupD'} style={{ marginTop: -10 }} title="Обратная связь">
-          <List>
-            <Link href="https://vk.com/voenmehgo" target="_blank">
-              <Cell
-                before={
-                  <Icon28LogoVk  fill='#ccc' />
-                }
-              >
-                  Сообщество сервиса
-              </Cell>
-            </Link>
-
-            <Link href="https://vk.com/krethub" target="_blank">
-              <Cell
-                before={
-                  <Icon28LogoVk fill='#ccc' />
-                }
-              >
-                Владислав Кретов
-              </Cell>
-            </Link>
-            <Link href="https://vk.me/join/AJQ1dyvbCxZfidHoAmAJE5Bh" target="_blank">
-              <Cell
-                before={
-                  <Icon24LinkCircle width={28} heigth={28} fill={'#ccc'}/>
-                }
-              >
-                  <div >Присоединиться к чату</div>
-              </Cell>
-            </Link>
-          </List>
+        <Group
+          id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
+          header={<Header>Обратная связь</Header>}
+        >
+      <List>
+            <Cell
+              href="https://vk.me/join/AJQ1dyvbCxZfidHoAmAJE5Bh"
+              target="_blank"
+              before={<Icon28ChatsOutline fill='#ccc' />}
+            >Присоединиться к чату</Cell>
+            <Separator/>
+            <Cell
+              href="https://vk.com/club187168548"
+              target="_blank"
+              before={<Icon28LogoVkOutline fill='#ccc' />}
+            >Мы ВКонтакте</Cell>
+            <Separator/>
+            <Cell
+              href="https://www.instagram.com/voenmehgo/"
+              target="_blank"
+              before={<Icon28LogoInstagram fill='#ccc' />}
+            >Мы в Instargam</Cell>
+            <Separator/>
+      </List>
         </Group>
       </Panel>
     );

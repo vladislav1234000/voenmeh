@@ -51,9 +51,9 @@ body * {
 body {
   font-family: TT Norms;
 }
-.profileL * {
+/*.profileL * {
   --background_page: rgb(237,238,240);
-}
+}*/
 /*.office * {
   --background_page: #EDEEF0;
 }
@@ -94,7 +94,7 @@ body {
   font-family: Roboto;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap&subset=cyrillic');*/
+/*@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap&subset=cyrillic');*/
 
 @font-face {
   font-family: 'TT Norms';

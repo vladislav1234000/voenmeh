@@ -1,8 +1,8 @@
 
 .name {
     font-size: 20px;
-    font-weight: 450;
-    margin-top: 3.5vh;
+    font-weight: 500;
+    margin-top: 3vh;
     margin-left: 10vw;
 }
 .cell * {
@@ -15,6 +15,6 @@
 
 .headman {
     color: #ccc;
-    margin-top: 13vw;
-    margin-left: -20vw;
+    margin-top: 12vw;
+    margin-left: -22vw;
 }

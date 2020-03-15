@@ -18,9 +18,8 @@ class NewsFeed extends Component {
   }
 
   /* поиск */
-  onChange(search) {
-    console.log(5, search)
-    this.setState({ search: search.replace(/\s+/g, ' ') });
+  onChange(e) {
+    this.setState({ search: e.currentTarget.value.replace(/\s+/g, ' ') });
   }
 
   get sposts() {
