@@ -6,7 +6,7 @@ import moment from 'moment';
 
 //import Icon24Chevron from '@vkontakte/icons/dist/24/chevron';
 //import Icon16Dropdown from '@vkontakte/icons/dist/16/dropdown';
-import { Link, HorizontalScroll } from '@vkontakte/vkui';
+import { Link, HorizontalScroll, Separator } from '@vkontakte/vkui';
 
 require('moment/locale/ru');
 
@@ -168,12 +168,14 @@ class DatePickerComponent extends React.Component {
 
     //  let k = moment(selectedDay).week() / 2;
 
-    return (<div>
+    return (
+      <div>
       <HorizontalScroll className={this.props.scheme === 'bright_light' ? 'scrollLight' : 'scrollDark'}>
         <div style={{ display: 'flex', padding: '25px 0px', /*justifyContent:'center'*/ }}>
           {days || null}
         </div>
       </HorizontalScroll>
+        <Separator wide />
       <div style={{ display: 'flex' }}>
       <div style={{
         fontWeight: 400,

@@ -58,6 +58,8 @@ class Schedule extends Component {
     const lessons = this.props.state.lessons.map((les, id) => {
       if (!les) {
         return (
+          <>
+            <Separator/>
           <div
             key={id}
             style={{
@@ -67,14 +69,21 @@ class Schedule extends Component {
               flexDirection: 'column'
             }}
           >
-            <img alt='' src={'https://vk.com/images/blog/about/img_about_4.png'} style={{ width: '80%', marginTop: '10vh' }} />
+            <img alt='' src={'https://vk.com/images/blog/about/img_about_4.png'} style={{ width: '90%', marginTop: '10vh' }} />
             <span style={{
-              marginTop: '40px', fontWeight: 'bold', color: '#7f8285', width: '80%', textAlign: 'center'
+              marginTop: '40px',
+              fontWeight: 'bold',
+              color: '#191919',
+              width: '80%',
+              textAlign: 'center',
+              fontSize: '5vw'
             }}
             >
-             В этот день занятий нет
+             В этот день занятий нет  <br/>
+            Отдыхаем! :)
             </span>
           </div>
+            </>
         );
       }
 
@@ -99,7 +108,7 @@ class Schedule extends Component {
       return (
 
         <div className={this.props.state.scheme === 'bright_light' ? 'test' : 'dark'} key={id}>
-        { Discipline && <Separator wide /> }
+        {Discipline && <Separator wide /> }
 
           {
             Discipline ?
@@ -155,6 +164,7 @@ class Schedule extends Component {
         <div className="lessons_date">
           <DatePickerComponent {...this.props} week={this.props.state.week} pickDate={this.pickDate} />
         </div>
+
         <div style={{ marginTop: 8 }} className="lessons">
           {lessons}
         </div>
