@@ -1,13 +1,11 @@
 .vendor-item__title2 {
-  display: inline-block;
+
   vertical-align: top;
-  width: calc(100% - 88px);
-  padding-right: 4px;
-  font-size: 17px;
+  width: calc(100% - 90px);
+  font-size: 4.5vw;
   margin-top: 20px;
   line-height: 28px;
   font-weight: 500;
-  box-sizing: border-box
 }
 .vendor-item__cover2 {
   height: 140px;
@@ -29,4 +27,11 @@
   margin-top: 2.5%;
   display: inline-block;
   width: 88px;
+}
+
+.vendor-item__delivery-time.is-express2 {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background-color: #ссс
 }

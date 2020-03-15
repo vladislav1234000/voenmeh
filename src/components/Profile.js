@@ -18,14 +18,14 @@ class Profile extends Component {
     if (debug) {
       this.props.setParentState({
         fetchedUser: {
-          first_name: 'Test', last_name: 'User', id: 1, photo_100: 'https://sun9-48.userapi.com/c855720/v855720034/160922/eGFyRrMUaY8.jpg?ava=1'
+          first_name: 'Владислав', last_name: 'Кретов', id: 1, photo_100: 'https://sun9-48.userapi.com/c855720/v855720034/160922/eGFyRrMUaY8.jpg?ava=1'
         }
       });
     }
   }
 
   render() {
-    if (!this.props.fetchedUser) {
+    if (!this.props.fetchedUser.first_name) {
       return (
         <Panel id="profile">
           <PanelHeader>Профиль</PanelHeader>

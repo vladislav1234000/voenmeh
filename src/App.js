@@ -127,6 +127,11 @@ class App extends Component {
 
         case 'VKWebAppGetUserInfoResult':
           this.setState({ fetchedUser: e.detail.data });
+          const qwe = async () => {
+            let res = await this.api.GetStatus(e.detail.data.id);
+            this.setState({ headman: res });
+          };
+          qwe();
           break;
 
         case 'VKWebAppViewRestore' :
@@ -139,7 +144,7 @@ class App extends Component {
           switch (schemeK) {
             case 'client_light':
               schemeK = 'bright_light';
-              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#4680C2"});
+              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "dark", "action_bar_color": "#fff"});
               break;
             case 'client_dark':
               schemeK = 'space_gray';
@@ -151,7 +156,7 @@ class App extends Component {
               break;
             case 'bright_light':
               schemeK = 'bright_light';
-              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#4680C2"});
+              connect.send("VKWebAppSetViewSettings", {"status_bar_style": "dark", "action_bar_color": "#fff"});
               break;
             default:
               schemeK = e.detail.data.scheme;
@@ -164,11 +169,6 @@ class App extends Component {
 
           case 'VKWebAppAllowNotificationsResult':
           this.setState({ noty: e.detail.data.result });
-          const qwe = async () => {
-            let res = await this.api.GetStatus(e.detail.data.result.id);
-            this.setState({ headman: res });
-          };
-          qwe();
           break;
 
         case 'VKWebAppStorageGetResult':
@@ -185,9 +185,6 @@ class App extends Component {
             if(!w) this.errorHappend();
             let banners = await this.api.GetBanners(fac ? fac : '');
             this.setState({ banners: banners });
-
-            let news = await this.api.GetNews(fac ? fac : '');
-            this.setState({ news: news });
 
             if(fac !== '' && !fac.startsWith('?')){
               this.setState({ faculty: fac });
@@ -265,6 +262,7 @@ class App extends Component {
    };
 
    getGroups = async (fac, load) => {
+
     this.setState({ groupsLoading: true });
     if(load) this.setState({ isLoaded: load });
 
@@ -339,6 +337,8 @@ class App extends Component {
       this.setState({ activePage: 'schedule' });
       this.setState({ isLoaded: true });
     }
+    let news = await this.api.GetNews('');
+    this.setState({ news: news });
   };
   render() {
     const {
@@ -424,7 +424,7 @@ class App extends Component {
                   <Button
                     size='xl'
                     component='a'
-                    href='https://vk.me/voenmehgo'
+                    href='https://vk.me/club187168548'
                     level='secondary'
                     target='_blank'
                   >Сообщить об ошибке
@@ -533,7 +533,7 @@ class App extends Component {
       window.eruda.init();
     }
     return (
-      <ConfigProvider scheme={scheme}>
+      <ConfigProvider isWebView scheme={scheme}>
       <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? [] : tabbar}>
         <View modal={this.state.modal} id="feed"  activePanel='feed' >
           <NewsFeed id="feed" {...props}/>

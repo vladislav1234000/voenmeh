@@ -67,14 +67,12 @@ class Schedule extends Component {
               flexDirection: 'column'
             }}
           >
-            <img alt='' src={require('../images/schedule.png')} style={{ width: '20%', marginTop: '30%' }} />
+            <img alt='' src={'https://vk.com/images/blog/about/img_about_4.png'} style={{ width: '80%', marginTop: '10vh' }} />
             <span style={{
-              marginTop: '40px', fontWeight: '550', color: '#7f8285', width: '80%', textAlign: 'center'
+              marginTop: '40px', fontWeight: 'bold', color: '#7f8285', width: '80%', textAlign: 'center'
             }}
             >
-              Кажется, сегодня пар нет
-              <br />
-              Можно отдохнуть!
+             В этот день занятий нет
             </span>
           </div>
         );

@@ -139,7 +139,7 @@ class DatePickerComponent extends React.Component {
 
     if (availableDates) {
       days = availableDates.map((val, key) => {
-        let selectedStyle = selectedDayIndex === key ? "dateTextDark selectedDateText" : "dateTextDark";
+        let selectedStyle = selectedDayIndex === key ? "dateTextDark selectedDateTextDark" : "dateTextDark";
         if(this.props.state.scheme === 'bright_light'){
           selectedStyle = selectedDayIndex === key ? "dateTextLight selectedDateText" : "dateTextLight";
         }

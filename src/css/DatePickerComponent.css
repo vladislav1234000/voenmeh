@@ -16,7 +16,7 @@
 .daydateTextDark {
   font-size: 20px;
   font-weight: 600;
-  color: #ccc;
+  color: #77787a;
 }
 
 
@@ -28,13 +28,16 @@
 .weekDaydateTextDark {
   font-size: 17px;
   font-weight: 600;
-  color: #ccc;
+  color: #77787a;
 }
 
 
 
-.selectedDateText/*[scheme="client_light"]*/ {
+.selectedDateText {
   color: #1f77db;
+}
+.selectedDateTextDark {
+  color: #70aaea;
 }
 
 .dayText {

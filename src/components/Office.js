@@ -10,6 +10,7 @@ import '../css/office.css';
 import Icon28PlaceOutline from '@vkontakte/icons/dist/28/place_outline';
 import Icon56MailOutline from '@vkontakte/icons/dist/56/mail_outline';
 import Icon56PhoneOutline from '@vkontakte/icons/dist/56/phone_outline';
+import Header from '@vkontakte/vkui/dist/components/Header/Header';
 
 const Office = props => {
 
@@ -26,7 +27,7 @@ const Office = props => {
         <PanelHeader left={<PanelHeaderBack onClick={() =>
           props.setParentState({
           activePanel: 'archive'
-        })} />}>{office.name}</PanelHeader>
+        })} />}>{office.name.replace('(новый корпус)', '').replace('(старый корпус)', '')}</PanelHeader>
 
 
 
@@ -38,11 +39,11 @@ const Office = props => {
                   }}>
                   </div>
               <Group className="vendor-item__wrap">
-                    <span className="vendor-item__title">
-                        {office.name}
+                    <span className="vendor-item__title2">
+                        {office.name.replace('(новый корпус)', '').replace('(старый корпус)', '')}
                     </span>
                      <span className="vendor-item__delivery-info2">
-                      <span className="vendor-item__delivery-time is-express">
+                      <span className="vendor-item__delivery-time is-express2">
                         {office.id !== 8 ? 'Главный корпус' : 'Новый корпус'}
                       </span>
                     </span>
@@ -69,11 +70,11 @@ const Office = props => {
                 */
                 }
                 <Separator style={{ marginTop: 10, marginBottom: -10 }} />
-                 <div className="vendor-item__title2">
-                       График работы отдела
+                 <div header={<Header>График работы отдела</Header>} className="vendor-item__title2">
+                   График работы отдела
                    <div style={{ marginTop: 10 }} className='roboto'>
                      <div style={{ display: 'flex' }}>пн
-                       <div style={{ marginLeft: '20%' }}>
+                       <div style={{ marginLeft: '20%'}}>
                          {`${pn[0] ? `${pn[0].start} - ${pn[0].finish}${pn[1] ? `, ${pn[1].start} - ${pn[1].finish}` : '' }` : 'выходной'}`}
                        </div>
                      </div>

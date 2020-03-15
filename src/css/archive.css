@@ -84,11 +84,11 @@
 .vendor-item__title {
     display: inline-block;
     vertical-align: top;
-    width: calc(100% - 88px);
+    width: calc(100% - 90px);
     padding-right: 4px;
     font-size: 20px;
     line-height: 28px;
-    font-weight: 550;
+    font-weight: 600;
     box-sizing: border-box
 }
 .roboto {

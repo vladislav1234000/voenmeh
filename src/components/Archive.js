@@ -48,7 +48,7 @@ class Archive extends Component {
                    <span className="vendor-item__wrap">
 
                     <span className="vendor-item__title">
-                        {e.name}
+                        {e.name.replace('(новый корпус)', '').replace('(старый корпус)', '')}
                     </span>
 
                      <span className="vendor-item__delivery-info">
