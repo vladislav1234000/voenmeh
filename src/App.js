@@ -87,7 +87,7 @@ class App extends Component {
       banners: [],
       schedule: {},
       groups: [],
-      scheme: true ? 'space_gray' : 'bright_light',
+      scheme: false ? 'space_gray' : 'bright_light',
       modal: null,
       lessons: [null],
       noty: false,

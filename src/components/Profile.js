@@ -61,13 +61,15 @@ class Profile extends Component {
     return (
       <Panel id="profile">
         <PanelHeader>Профиль</PanelHeader>
-        <Group>
-          <Div style={{ padding: '15px', display: 'flex' }} >
-          <Avatar size={80} src={photo_100} />
-            <div className='name'> {`${first_name} ${last_name}`}</div>
-            <div className='headman'>{ headman ? 'староста' : 'студент' }</div>
-          </Div>
-        </Group>
+
+          <div className="wrap">
+            <Avatar size={80} src={photo_100} />
+            <div className="wrapper">
+              <div className='name'> {`${first_name} ${last_name}`}</div>
+              <div className='headman'>{ headman ? 'староста' : 'студент' }</div>
+            </div>
+          </div>
+
        <Group
          /* id={scheme === 'bright_light' ? 'groupl' : 'groupD'}*/
          header={<Header>Данные студента</Header>}
