@@ -91,12 +91,14 @@
 }
 
 .NewsFeedSearch {
-  user-select: auto;
+  user-select: all;
 }
 
 .FaCircle {
   min-width: 8px;
   width: 8px;
+  position: absolute;
+  left: 4vw;
 }
 
 .type {
@@ -105,7 +107,7 @@
 }
 
 .event {
-  margin-left: 0px;
+  margin-left: 5vw;
   margin-top: 5px;
   font-size: 10px;
   font-weight: 500;
@@ -125,9 +127,10 @@
 
 .brdr {
   width: 1px;
+  margin-left: 0.5vw;
   margin-top: 5px;
   margin-right: 10px;
-  height: 60px;
+  height: 8vh;
 }
 
 .Мероприятие {

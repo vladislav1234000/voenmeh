@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Panel, PanelHeader, Search, Cell, Separator
+  Panel, PanelHeader, Search, Cell, Separator, Div,
 } from '@vkontakte/vkui';
 import '../css/newsfeed.css';
 
@@ -87,7 +87,7 @@ class NewsFeed extends Component {
         <span style={{
           marginTop: '40px',
           fontWeight: 'bold',
-          color: '#191919',
+          color: this.props.state.scheme === 'bright_light' ? '#000' : '#6d7885',
           width: '80%',
           textAlign: 'center',
           fontSize: '5vw'
@@ -113,6 +113,7 @@ class NewsFeed extends Component {
         }
         { this.sposts.length === 0 && zaglushka }
         <div className="posts">{posts}</div>
+        <Div/>
       </Panel>
     );
   }

@@ -183,7 +183,7 @@ class Schedule extends Component {
           color: this.props.state.scheme === 'bright_light' ? '#3f8ae0' : '#71aaeb'
        }}
                mode='tertiary'
-               onClick={() => bridge.send("VKWebAppOpenApp", {"app_id": 1, "location": "test"})}
+               onClick={() => bridge.send("VKWebAppOpenApp", {"app_id": 7362610 })}
        >Подробнее о COVID-19</Button>
       </div>
         </FormStatus>

@@ -74,6 +74,16 @@ body {
 .PanelHeader *{
   font-family: "San Francisco(SF UI)", sans-serif;
 }
+
+.tbdark {
+  transition: All 0.3s ease;
+}
+.tblight {
+  transition: All 0.3s ease;
+}
+.tblight:active { background: #e3e3e3}
+.tbdark:active { background: #2b2b2b}
+
 /*.FormField FormField--ios  * {
   color: #ccc;
 }*/
@@ -98,6 +108,9 @@ body {
   font-family: Roboto;
 }
 
+Search * {
+  user-select: all;
+}
 /*@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap&subset=cyrillic');*/
 
 @font-face {

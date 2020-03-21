@@ -479,6 +479,7 @@ class App extends Component {
     const tabbar = (
       <Tabbar className={classTab}>
         <TabbarItem
+          className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
           onClick={() => {
             this.changePage('feed');
             if(activePanel !== 'feed') this.setState({ activePanel: 'feed' });
