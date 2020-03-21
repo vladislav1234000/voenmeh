@@ -5,11 +5,12 @@
   background-position: center;
 }
 
-.post_title *{
-  font-size: 23px;
-  font-weight: 300;
+.post_title  {
+  font-size: 16px;
+  font-weight: 500;
   line-height: 1.2;
-  padding: 0px 10px 0px 0;
+  margin-left: 15px;
+
 }
 .post_title[scheme='space_gray'] {
   color: #fff;
@@ -57,7 +58,7 @@
 
 .post_bot {
   display: flex;
- /* margin-top: 5px;*/
+  margin-left: 15px;
   font-weight: 500;
   color: #9ca2ad;
 }
@@ -67,24 +68,7 @@
   padding-left: 4px;
 }
 
-.Panel__title {
-  font-family: 'TT Commons';
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 32px;
-  padding: 4px 16px 10px;
-  color: #222;
-}
 
-.Panel__subheader {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-}
-.Panel__subheader[scheme='client_dark'] {
-  background-color: #fff;
-}
 
 .Cell__main {
   padding: 10px 8px 10px 0 !important;
@@ -94,7 +78,7 @@
   user-select: all;
 }
 
-.FaCircle {
+.f {
   min-width: 8px;
   width: 8px;
   position: absolute;
@@ -126,11 +110,11 @@
 }
 
 .brdr {
-  width: 1px;
-  margin-left: 0.5vw;
+  width: 2px;
+  position: absolute;
+  left: 1vw;
   margin-top: 5px;
-  margin-right: 10px;
-  height: 8vh;
+  height: calc(100% - 10px)
 }
 
 .Мероприятие {

@@ -79,6 +79,7 @@ body {
   transition: All 0.3s ease;
 }
 .tblight {
+  border-radius: 100px;
   transition: All 0.3s ease;
 }
 .tblight:active { background: #e3e3e3}

@@ -43,7 +43,7 @@ class NewsFeed extends Component {
           textDecoration: 'none'
         }} href={post.link || ''} rel="noopener noreferrer" target='_blank' key={key}>
         <div className='type' id={post.type === 'Мероприятие' ? 'mp' : 'other'} style={{ display: 'flex' }}>
-          <FaCircle className='FaCircle' />
+          <FaCircle className='f' />
           <div className='event'>
             {post.type.toUpperCase()}
           </div>
@@ -52,11 +52,11 @@ class NewsFeed extends Component {
           <Cell
             size="l"
             multiline
+
             before={ <div className={`brdr ${post.type}`}/>}
             onClick={() => {}}
             asideContent={ <Icon24Chevron className="str Cell__chevron" /> }
             bottomContent={(
-              <div>
                 <div className="post_bot">
                   <div className="post_date">
                     {`${post.date} · `}
@@ -65,12 +65,11 @@ class NewsFeed extends Component {
                     {post.author && `${post.author}`}
                   </div>
                 </div>
-              </div>
             )}
           >
             <div className="post_title">{post.title}</div>
           </Cell>
-          <Separator />
+          {this.sposts.length !== key && <Separator />}
         </a>
       ));
 

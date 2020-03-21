@@ -490,6 +490,7 @@ class App extends Component {
            </TabbarItem>
         {/*
                 <TabbarItem
+                  className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
                   onClick={() => this.changePage('time')}
                   selected={activePage === 'time'}
                 >
@@ -498,6 +499,7 @@ class App extends Component {
                 */}
 
         <TabbarItem
+          className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
           onClick={() => this.changePage('schedule')}
           selected={activePage === 'schedule'}
         >
@@ -506,6 +508,7 @@ class App extends Component {
 
 
          <TabbarItem
+           className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
             onClick={() => {
               this.setState({
                 activePanel: 'archive',
@@ -519,6 +522,7 @@ class App extends Component {
 
 
         <TabbarItem
+          className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
           onClick={() => this.changePage('profile') }
           selected={activePage === 'profile'}
         >
