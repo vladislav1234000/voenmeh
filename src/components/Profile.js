@@ -7,7 +7,7 @@ import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
 
 import Icon28ChatsOutline from '@vkontakte/icons/dist/28/chats_outline';
-import Icon28LogoVkOutline from '@vkontakte/icons/dist/28/logo_vk_outline';
+import Icon28LogoVk from '@vkontakte/icons/dist/28/logo_vk';
 import Icon28LogoInstagram from '@vkontakte/icons/dist/28/logo_instagram';
 
 const debug = window.location.port === '8080';
@@ -69,13 +69,14 @@ class Profile extends Component {
               <div className='headman'>{ headman ? 'староста' : 'студент' }</div>
             </div>
           </div>
-
+    <Separator />
        <Group
          /* id={scheme === 'bright_light' ? 'groupl' : 'groupD'}*/
-         header={<Header>Данные студента</Header>}
+         header={<Header style={{ marginBottom: -10 }}>Данные студента</Header>}
        >
          <FormLayout>
            <Select
+             style={{ marginBottom: -15 }}
              top="Факультет"
              placeholder="Не выбран"
              onChange={onChange}
@@ -101,6 +102,7 @@ class Profile extends Component {
                  value={ this.props.state.group }
                  disabled={!this.props.state.faculty}
                  name="group"
+                 style={{ marginBottom: -10 }}
                >
                  {this.props.state.groups}
                </Select>
@@ -110,7 +112,7 @@ class Profile extends Component {
 
         <Group
           id={scheme === 'bright_light' ? 'groupl' : 'groupD'}
-          header={<Header>Уведомления</Header>}
+          header={<Header style={{ marginBottom: -10 }}>Уведомления</Header>}
         >
           <Cell
             className="cell"
@@ -130,7 +132,9 @@ class Profile extends Component {
             )}
           >
 
+           <div style={{ color: scheme === 'bright_light' ? '#6d7885' : '#909499', fontWeight: 400 }}>
              Сервис сможет присылать тебе уведомления. Например, об отмене занятий
+           </div>
           </Cell>
         </Group>
 
@@ -142,21 +146,18 @@ class Profile extends Component {
             <Cell
               href="https://vk.me/join/AJQ1dyvbCxZfidHoAmAJE5Bh"
               target="_blank"
-              before={<Icon28ChatsOutline fill='#ccc' />}
-            >Присоединиться к чату</Cell>
-            <Separator/>
+              before={<Icon28ChatsOutline fill={scheme === 'bright_light' ? '#6d7885' : '#909499'} />}
+            >Задать вопрос в чате</Cell>
             <Cell
               href="https://vk.com/club187168548"
               target="_blank"
-              before={<Icon28LogoVkOutline fill='#ccc' />}
-            >Мы ВКонтакте</Cell>
-            <Separator/>
+              before={<Icon28LogoVk fill={scheme === 'bright_light' ? '#6d7885' : '#909499'} />}
+            >teamgo</Cell>
             <Cell
               href="https://www.instagram.com/voenmehgo/"
               target="_blank"
-              before={<Icon28LogoInstagram fill='#ccc' />}
-            >Мы в Instargam</Cell>
-            <Separator/>
+              before={<Icon28LogoInstagram fill={scheme === 'bright_light' ? '#6d7885' : '#909499'} />}
+            >voenmehgo</Cell>
       </List>
         </Group>
       </Panel>

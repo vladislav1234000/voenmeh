@@ -29,6 +29,13 @@ export default class API {
 
         return response;
     }
+    async GetNews(fac) {
+        let response = await this.send('GET',  `getNews?fac=${fac}`, null, 'https://manaenckov.design/api/voenmeh/');
+
+        console.log('API: ', 'GetNews', response);
+
+        return response;
+    }
 
     async POSTGeoPosition(meet) {
         let response = await this.send('POST', 'GeoPosition', meet);
@@ -51,7 +58,7 @@ export default class API {
 
         return response;
     }
-    async GetNews(faculty) {
+    async GetNews2(faculty) {
         let response = await this.send('GET',  `GetNews?faculty=${faculty}`, null);
 
         console.log('API: ', 'GetNews', response);

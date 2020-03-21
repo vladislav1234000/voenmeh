@@ -70,6 +70,10 @@ body {
 #groupl * {
   color: #000;
 }
+
+.PanelHeader *{
+  font-family: "San Francisco(SF UI)", sans-serif;
+}
 /*.FormField FormField--ios  * {
   color: #ccc;
 }*/
@@ -132,6 +136,17 @@ body {
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'San Francisco(SF UI)';
+  src: local('San Francisco(SF UI) Text Semibold'), local('San-Francisco(SF-UI)-Text-Semibold'),
+  url('../fonts/SFUIText-Semibold.woff2') format('woff2'),
+  url('../fonts/SFUIText-Semibold.woff') format('woff'),
+  url('../fonts/SFUIText-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
 
 @font-face {
   font-family: 'TT Norms';

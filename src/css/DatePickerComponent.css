@@ -11,33 +11,33 @@
 .daydateTextLight {
   font-size: 20px;
   font-weight: 600;
-  color: #c4c7cc;
+  color: #8b94a3;
 }
 .daydateTextDark {
   font-size: 20px;
   font-weight: 600;
-  color: #77787a;
+  color: #909499;
 }
 
 
 .weekDaydateTextLight {
   font-size: 17px;
   font-weight: 600;
-  color: #c4c7cc;
+  color: #8b94a3;
 }
 .weekDaydateTextDark {
   font-size: 17px;
   font-weight: 600;
-  color: #77787a;
+  color: #909499;
 }
 
 
 
 .selectedDateText {
-  color: #1f77db;
+  color: #3f8ae0;
 }
 .selectedDateTextDark {
-  color: #70aaea;
+  color: #fff;
 }
 
 .dayText {
@@ -50,6 +50,7 @@
 }
 
 .singleContainer {
+  font-family: 'San Francisco(SF UI)', serif;
   margin: 0px 3px;
   height: 25px;
   min-width: 12.7%; /*55px*/
@@ -74,4 +75,30 @@
 .lesson_numb{
   text-align: center;
   font-size: 20px;
+}
+
+.SFProDisplay {
+font-family: 'SF Pro Display';
+}
+
+@font-face {
+  font-family: 'San Francisco(SF UI)';
+  src: local('San Francisco(SF UI) Text Semibold'), local('San-Francisco(SF-UI)-Text-Semibold'),
+  url('../fonts/SFUIText-Semibold.woff2') format('woff2'),
+  url('../fonts/SFUIText-Semibold.woff') format('woff'),
+  url('../fonts/SFUIText-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('../fonts/SFProDisplay-Regular.eot');
+  src: local('SF Pro Display Regular'), local('SFProDisplay-Regular'),
+  url('../fonts/SFProDisplay-Regular.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/SFProDisplay-Regular.woff2') format('woff2'),
+  url('../fonts/SFProDisplay-Regular.woff') format('woff'),
+  url('../fonts/SFProDisplay-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }

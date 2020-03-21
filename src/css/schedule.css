@@ -80,8 +80,8 @@
 .test {
   transition: All 0.3s ease;
 }
-.test:active { background: #ebebeb}
-.dark:active { background: #19191a}
+.test:active { background: #e3e3e3}
+.dark:active { background: #2b2b2b}
 
 .FaCircle {
   margin-top: 3px;
@@ -91,10 +91,10 @@
 }
 
 #Практика {
-  color: #ff3347;
+  color: #6d1bbd;
 }
 #Лекция {
-  color: #4db34d;
+  color: #ff9900;
 }
 #Лабораторная {
   color: #73aaef;

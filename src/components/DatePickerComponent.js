@@ -6,7 +6,7 @@ import moment from 'moment';
 
 //import Icon24Chevron from '@vkontakte/icons/dist/24/chevron';
 //import Icon16Dropdown from '@vkontakte/icons/dist/16/dropdown';
-import { Link, HorizontalScroll, Separator } from '@vkontakte/vkui';
+import { HorizontalScroll, Separator } from '@vkontakte/vkui';
 
 require('moment/locale/ru');
 
@@ -176,12 +176,12 @@ class DatePickerComponent extends React.Component {
         </div>
       </HorizontalScroll>
         <Separator wide />
-      <div style={{ display: 'flex' }}>
+      <div className={'SFProDisplay'} style={{ display: 'flex' }}>
       <div style={{
         fontWeight: 400,
         marginTop: 10,
         marginLeft: 10,
-        color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff',
+        color: this.props.state.scheme === 'bright_light' ? '#6d7885' : '#76787a',
         fontSize: '14px'
       }}>{this.firstLetterUP(moment(selectedDay).format('dddd, D MMMM'))}</div>
       <div
@@ -189,19 +189,14 @@ class DatePickerComponent extends React.Component {
         fontWeight: 400,
         marginTop: 10,
         marginRight: 10,
-          color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff',
+          color: this.props.state.scheme === 'bright_light' ? '#6d7885' : '#76787a',
         position: 'absolute',
         right: 0,
           display: 'flex',
           alignItems: 'center',
         fontSize: '14px'
       }}>
-        <Link
-        style={{ color: this.props.state.scheme === 'bright_light' ? '#000' : '#fff'}}
-        >{`${this.state.week === 'even' ? 'Чётная' : 'Нечётная'} неделя`}</Link>
-        {/* <Icon24Chevron width={20} height={20} />
-        <Icon16Dropdown style={{ marginTop: 5, marginLeft: 2 }} />*/}
-
+       {`${this.state.week === 'even' ? 'Чётная' : 'Нечётная'} неделя`}
       </div>
       </div>
     </div>

@@ -12,8 +12,9 @@
 }
 
 .headman {
-    color: #ccc;
+    color: #1f77db;
     padding-left: 1px;
+    font-weight: 400;
 }
 
 .wrap {

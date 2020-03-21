@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import {
-  Panel, PanelHeader, Search, Cell, Separator, IS_PLATFORM_ANDROID
+  Panel, PanelHeader, Search, Cell, Separator
 } from '@vkontakte/vkui';
 import '../css/newsfeed.css';
+
 import Icon24Chevron from '@vkontakte/icons/dist/24/chevron';
+
+import { FaCircle } from 'react-icons/fa';
+
 import Carousel from './Carousel.js';
 
 class NewsFeed extends Component {
@@ -34,31 +38,28 @@ class NewsFeed extends Component {
 
   render() {
     const posts = this.sposts.length > 0
-      && this.sposts.map((post) => (
+      && this.sposts.map((post, key) => (
         <a style={{
           textDecoration: 'none'
-        }} href={post.link || ''} rel="noopener noreferrer" target='_blank' key={post.id}>
+        }} href={post.link || ''} rel="noopener noreferrer" target='_blank' key={key}>
+        <div className='type' id={post.type === 'Мероприятие' ? 'mp' : 'other'} style={{ display: 'flex' }}>
+          <FaCircle className='FaCircle' />
+          <div className='event'>
+            {post.type.toUpperCase()}
+          </div>
+        </div>
+
           <Cell
             size="l"
-            expandable
             multiline
+            before={ <div className={`brdr ${post.type}`}/>}
             onClick={() => {}}
-            asideContent={IS_PLATFORM_ANDROID ? <Icon24Chevron className="Cell__chevron" /> : ''}
+            asideContent={ <Icon24Chevron className="str Cell__chevron" /> }
             bottomContent={(
               <div>
-                <div className="post_td">
-                  <div className="post_tags">
-                    {post.tags.map((tag, id) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div className={ this.props.state.scheme === 'space_gray' ?
-                      'post_tagDark' : 'post_tag'
-                    } key={id}>{`#${tag/*.toLowerCase()*/}`}</div>
-                    ))}
-                  </div>
-                </div>
                 <div className="post_bot">
                   <div className="post_date">
-                    {post.date && post.time && `${post.date} в ${post.time} · `}
+                    {`${post.date} · `}
                   </div>
                   <div className="post_author">
                     {post.author && `${post.author}`}
@@ -69,26 +70,35 @@ class NewsFeed extends Component {
           >
             <div className="post_title">{post.title}</div>
           </Cell>
-          <Separator wide/>
+          <Separator />
         </a>
       ));
 
     const zaglushka = (
-      <div style={{
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column'
-      }}
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column'
+        }}
       >
+        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '10vh' }} />
         <span style={{
-          marginTop: '45px', fontWeight: '450', color: '#7f8285', width: '80%', textAlign: 'center'
+          marginTop: '40px',
+          fontWeight: 'bold',
+          color: '#191919',
+          width: '80%',
+          textAlign: 'center',
+          fontSize: '5vw'
         }}
         >
-Новостей по запросу
-          <br />
-не найдено!
-        </span>
+         Наша команда искала, но
+          <br/>
+          так и не смогла найти новостей
+          <br/>
+          по твоему запросу
+            </span>
       </div>
     );
 

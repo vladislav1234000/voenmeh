@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { Panel, PanelHeader, Separator, Cell } from '@vkontakte/vkui';
+
+import bridge from '@vkontakte/vk-bridge';
+
+import {
+  Panel, PanelHeader, Separator, Cell, FormStatus, Div, Button,
+} from '@vkontakte/vkui';
 
 import '../css/schedule.css';
 
@@ -58,10 +63,9 @@ class Schedule extends Component {
     const lessons = this.props.state.lessons.map((les, id) => {
       if (!les) {
         return (
-          <>
+          <div key={id}>
             <Separator/>
           <div
-            key={id}
             style={{
               width: '100%',
               display: 'flex',
@@ -69,21 +73,20 @@ class Schedule extends Component {
               flexDirection: 'column'
             }}
           >
-            <img alt='' src={'https://vk.com/images/blog/about/img_about_4.png'} style={{ width: '90%', marginTop: '10vh' }} />
-            <span style={{
-              marginTop: '40px',
+            <img alt='' src={'https://vk.com/images/blog/about/img_about_4.png'} style={{ width: '90%', marginTop: '5vh' }} />
+            <Div style={{
+              marginTop: '5%',
               fontWeight: 'bold',
-              color: '#191919',
+              color: this.props.state.scheme === 'bright_light' ? '#000' : '#6d7885',
               width: '80%',
               textAlign: 'center',
               fontSize: '5vw'
             }}
             >
-             В этот день занятий нет  <br/>
-            Отдыхаем! :)
-            </span>
+             В этот день занятий нет
+            </Div>
           </div>
-            </>
+            </div>
         );
       }
 
@@ -164,7 +167,27 @@ class Schedule extends Component {
         <div className="lessons_date">
           <DatePickerComponent {...this.props} week={this.props.state.week} pickDate={this.pickDate} />
         </div>
-
+        <Separator wide style={{ marginTop: 9 }}/>
+      <Div style={{ padding: 10 }}>
+        <FormStatus style={{
+          fontWeight: 400,
+          marginBottom: -5,
+          color: this.props.state.scheme === 'bright_light' ? '#6d7885' : '#909499'
+        }}>
+          В связи с пандемией коронавируса университет с 17 марта перешёл на дистанционное обучение. Все занятия в ВУЗе отменены. Студенты обязаны сдавать домашние задания на корпоративную почту своим преподавателям.
+      <div>
+        <Button style={{
+          left: -1,
+          padding: 0,
+          marginBottom: -5,
+          color: this.props.state.scheme === 'bright_light' ? '#3f8ae0' : '#71aaeb'
+       }}
+               mode='tertiary'
+               onClick={() => bridge.send("VKWebAppOpenApp", {"app_id": 1, "location": "test"})}
+       >Подробнее о COVID-19</Button>
+      </div>
+        </FormStatus>
+      </Div>
         <div style={{ marginTop: 8 }} className="lessons">
           {lessons}
         </div>
