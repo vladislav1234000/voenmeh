@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import connect from '@vkontakte/vk-bridge';
 import {
   Epic, Tabbar, TabbarItem, Snackbar, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner, Header,
+  ScreenSpinner, Alert,
   ModalRoot, ModalPage, PanelHeaderButton, Avatar, ModalPageHeader, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
@@ -11,10 +12,15 @@ import './css/first.css';
 
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import Icon24Dismiss from '@vkontakte/icons/dist/24/dismiss';
+import Icon24Delete from '@vkontakte/icons/dist/24/delete';
+import Icon24Write from '@vkontakte/icons/dist/24/write';
+
 import Icon16Like from '@vkontakte/icons/dist/16/like';
+import Icon16Clear from '@vkontakte/icons/dist/16/clear';
+import Icon16Done from '@vkontakte/icons/dist/16/done';
 
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
-//import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
+import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import Icon28ArchiveOutline from '@vkontakte/icons/dist/28/archive_outline';
 import Icon28Profile from '@vkontakte/icons/dist/28/profile';
@@ -79,6 +85,8 @@ class App extends Component {
         id: 1
       },
       classTab: '',
+      curTask: [],
+      deadtab: 'active',
       office: [],
       isOfficeOpened: false,
       group: false,
@@ -86,6 +94,15 @@ class App extends Component {
       news: [],
       banners: [],
       schedule: {},
+      deadlines: [
+        {
+          id: 1,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2010-02-02'
+        }
+      ],
+      expDeadlines: [],
       groups: [],
       scheme: false ? 'space_gray' : 'bright_light',
       modal: null,
@@ -213,6 +230,172 @@ class App extends Component {
       connect.send("VKWebAppStorageGet", {"keys": ["faculty", "group"]});
   }
 
+  getDeadlines = () => {
+    this.setState({
+      deadlines: false,
+      expDeadlines: false,
+      deadtab: 'active'
+    });
+    this.api.GetUserDeadlines(this.state.fetchedUser.id).then(deadlines => {
+      this.setState({ deadlines });
+    }).catch(() => {
+      this.openErrorSnackbar('Произошла ошибка загрузки. #4');
+      this.setState({ deadlines: [] });
+    });
+  };
+  getExpDeadlines = () => {
+    this.setState({
+      expDeadlines: false,
+      deadlines: false,
+      deadtab: 'expires'
+    });
+    this.api.GetUserExpDeadlines(this.state.fetchedUser.id).then(expDeadlines => {
+      this.setState({ expDeadlines });
+    }).catch(() => {
+      this.openErrorSnackbar('Произошла ошибка загрузки. #5');
+      this.setState({ expTasks: [] });
+    });
+  };
+
+  openAlert = (key, e) => {
+    this.setState({ popout:
+        <Alert
+          actionsLayout="vertical"
+          actions={[{
+            title: 'Удалить',
+            autoclose: true,
+            mode: 'destructive',
+            action: () => this.delTask(key, e),
+          }, {
+            title: 'Отмена',
+            autoclose: true,
+            mode: 'cancel'
+          }]}
+          onClose={() => this.setState({
+            popout: null
+          })}
+        >
+          <h2>Подтвердите действие</h2>
+          <p>Вы уверены, что хотите удалить задачу? <br/> Действие нельзя отменить.</p>
+        </Alert>
+    });
+  };
+  delTask = (key,e) => {
+    let deadlines = this.state.deadlines || this.state.expDeadlines;
+    this.setState({ popout: <ScreenSpinner/> });
+    this.api.Delete({ note: e }).then(res => {
+      this.setState({
+        popout: null,
+        modal: null
+      });
+      if(res !== 'success'){
+        this.openErrorSnackbar('Произошла ошибка. #7');
+        return;
+      }
+      deadlines[key].done = deadlines[key].done === 1 ? 0 : 1;
+
+      deadlines = deadlines.filter(el => el.id !== e);
+
+      if(this.state.tab === 'active') {
+        this.setState({ deadlines });
+      } else {
+        this.setState({ expDeadlines: deadlines });
+      }
+      /*
+      if(this.state.tab === 'active') {
+        this.getTasks();
+      } else {
+        this.getExpTasks();
+      }*/
+    })
+
+  };
+
+  check = (key, id) => {
+    let deadlines = this.state.deadlines || this.state.expDeadlines;
+    this.api.Done({
+      done: deadlines[key].done === 1 ? 0 : 1,
+      note: deadlines[key].id
+    }).then((res) => {
+
+      if(res !== 'success'){
+        this.openErrorSnackbar('Произошла ошибка. #6');
+        return;
+      }
+      deadlines[key].done = deadlines[key].done === 1 ? 0 : 1;
+
+      deadlines = deadlines.filter(e => e.id !== id);
+
+      if(this.state.tab === 'active') {
+        this.setState({ deadlines });
+      } else {
+        this.setState({ expDeadlines: deadlines });
+      }
+      /*
+      if(this.state.tab === 'active') {
+        this.getTasks();
+      } else {
+        this.getExpTasks();
+      }
+    */});
+
+  };
+
+  changeTask = e => {
+
+    console.log({
+      id: e.id,
+      title: e.title,
+      desk: e.desk || '',
+      time: e.time
+    });
+
+    this.api.Change({
+      id: e.id,
+      title: e.title,
+      desk: e.desk || '',
+      time: e.time
+    }).then((res) => {
+
+      if(res !== 'success'){
+        this.openErrorSnackbar('Произошла ошибка. #10');
+        return;
+      }
+
+      if(this.state.tab === 'active') {
+        this.getDeadlines();
+      } else {
+        this.getExpDeadlines();
+      }
+    });
+
+  };
+
+  openDoneSnackbar = e => {
+    this.setState({ snackbar:
+        <Snackbar
+          duration={2000}
+          layout="vertical"
+          onClose={() => this.setState({ snackbar: null })}
+          before={<Avatar size={24} style={{ backgroundColor: '#4bb34b' }}><Icon16Done fill="#fff" width={14} height={14} /></Avatar>}
+        >
+          {e}
+        </Snackbar>
+    });
+  };
+
+  openErrorSnackbar = e => {
+    this.setState({ snackbar:
+        <Snackbar
+          duration={2000}
+          layout="vertical"
+          onClose={() => this.setState({ snackbar: null })}
+          before={<Avatar size={24} style={{ backgroundColor: '#FF0000' }}><Icon16Clear fill="#fff" width={14} height={14} /></Avatar>}
+        >
+          {e}
+        </Snackbar>
+    });
+  };
 
   changePage(name) {
     this.setState({
@@ -353,7 +536,101 @@ class App extends Component {
       if (!str) return str;
       return str[0].toUpperCase() + str.slice(1);
     };
+    const openDeadlineModal = key => {
+      const deadline = this.state.deadlines[key] || this.state.expDeadlines[key];
 
+      this.setState({
+        modal: (
+          <ModalRoot activeModal='task'>
+            <ModalPage
+              id='task'
+              onClose={onCloseModal}
+              header={
+                <ModalPageHeader
+                  left={
+                    IS_PLATFORM_ANDROID ?
+                      <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
+                      :
+                      (
+                        <div style={{ display: 'flex'}}>
+                          <PanelHeaderButton onClick={() => this.openAlert(key, deadline.id)}>
+                            <Icon24Delete fill='#ccc'/>
+                          </PanelHeaderButton >
+                          <PanelHeaderButton
+                            onClick={() => this.setState({
+                              activeView: 'change',
+                              modal: null
+                            })}>
+                            <Icon24Write fill='#ccc'/>
+                          </PanelHeaderButton >
+                        </div>
+                      )
+                  }
+                  right={(
+                    <>
+                      {IS_PLATFORM_ANDROID ?
+                        (
+                          (
+                            <div style={{ display: 'flex'}}>
+                              <PanelHeaderButton onClick={() => this.openAlert(key, deadline.id)}>
+                                <Icon24Delete fill='#ccc'/>
+                              </PanelHeaderButton >
+                              <PanelHeaderButton
+                                onClick={() => this.setState({
+                                  activeView: 'change',
+                                  modal: null
+                                })}>
+                                <Icon24Write fill='#ccc'/>
+                              </PanelHeaderButton >
+                            </div>
+                          )
+                        )
+                        : <PanelHeaderButton onClick={onCloseModal}> <Icon24Dismiss /> </PanelHeaderButton> }
+                    </>
+                  )}
+                >
+                  Информация
+                </ModalPageHeader>
+              }
+            >
+              <Group header={<Header mode="primary">{deadline && deadline.title}</Header>}>
+                <List>
+                  {
+                    deadline.desk &&
+                    <Cell multiline>
+                      <InfoRow header="Описание">
+                        {deadline.desk}
+                      </InfoRow>
+                    </Cell>
+                  }
+                  <Cell multiline>
+                    {
+                      deadline.time &&
+                      <InfoRow header="Крайний срок выполнения">
+                        {moment(deadline.time, 'YYYY-MM-DD-hh-mm').fromNow()}
+                      </InfoRow>
+                    }
+                  </Cell>
+                </List>
+                <Div style={{ marginTop: -5, padding: 20 }}>
+                  <Button
+                    size='xl'
+                    onClick={() => {
+                      onCloseModal(key);
+                      this.check(key, deadline.id);
+                    }}
+                    mode={deadline.done === 1? 'commerce' : 'primary'}
+                  >{deadline.done === 1 ? 'Дедлайн выполнен' : 'Выполнить'}
+                  </Button>
+                </Div>
+                <Div/>
+              </Group>
+            </ModalPage>
+          </ModalRoot>
+        ),
+        curTask: deadline
+      });
+    };
     const openModal = data => {
         this.setState({
           modal: (
@@ -437,7 +714,9 @@ class App extends Component {
         });
     };
 
-    const { getGroups, setScheduleNEW, getOffices } = this;
+    const {
+      getGroups, setScheduleNEW, getOffices, getDeadlines, getExpDeadlines, changeTask, check
+    } = this;
 
     const state = this.state;
 
@@ -474,7 +753,9 @@ class App extends Component {
     };
 
     const props = { setParentState: this.setState.bind(this), news, openGeo,
-      getGroups, banners, setScheduleNEW, getOffices, fetchedUser, openModal, state };
+      getDeadlines, getExpDeadlines, check, changeTask, openDeadlineModal,
+      getGroups, banners, setScheduleNEW, getOffices, fetchedUser, openModal, state
+    };
 
     const tabbar = (
       <Tabbar className={classTab}>
@@ -488,7 +769,7 @@ class App extends Component {
         >
           <Icon28ArticleOutline />
            </TabbarItem>
-        {/*
+        { admins.includes(fetchedUser.id) &&
                 <TabbarItem
                   className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
                   onClick={() => this.changePage('time')}
@@ -496,7 +777,7 @@ class App extends Component {
                 >
                   <Icon28FireOutline />
                 </TabbarItem>
-                */}
+          }
 
         <TabbarItem
           className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
@@ -540,11 +821,11 @@ class App extends Component {
     return (
       <ConfigProvider isWebView scheme={scheme}>
       <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? [] : tabbar}>
-        <View modal={this.state.modal} id="feed"  activePanel='feed' >
+        <View id="feed"  activePanel='feed' >
           <NewsFeed id="feed" {...props}/>
         </View>
 
-        <View id="time" activePanel="time">
+        <View modal={this.state.modal} id="time" activePanel="time">
           <Deadlines id="time" {...props} />
         </View>
 

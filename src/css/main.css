@@ -71,19 +71,27 @@ body {
   color: #000;
 }
 
-.PanelHeader *{
-  font-family: "San Francisco(SF UI)", sans-serif;
+.PanelHeader * {
+  font-family: "TT Norms", bold;
 }
 
-.tbdark {
-  transition: All 0.3s ease;
+.TabsItem__in {
+  font-family: 'SF Pro Display', medium;
 }
-.tblight {
+
+
+.tblight, .tbdark {
   border-radius: 100px;
   transition: All 0.3s ease;
 }
-.tblight:active { background: #e3e3e3}
-.tbdark:active { background: #2b2b2b}
+.tbdark, .tblight {
+  transition: All 0.3s ease;
+}
+
+.tblight:active { background: #e3e3e3 }
+.tbdark:active { background: #2b2b2b }
+.tablight:active { background: #e3e3e3 }
+.tabdark:active { background: #2b2b2b }
 
 /*.FormField FormField--ios  * {
   color: #ccc;

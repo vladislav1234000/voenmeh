@@ -21,7 +21,41 @@ export default class API {
         return response ? response.data : [];
     }
 
+    async AddDeadline(data) {
+        let response = await this.send('POST', 'add', data, 'https://manaenckov.design/api/notes/');
 
+        console.log('API: ', 'AddNote', response);
+
+        return response;
+    }
+    async Done(data) {
+        let response = await this.send('PUT', `done`, data, 'https://manaenckov.design/api/notes/');
+
+        console.log('API: ', 'Done', response);
+
+        return response;
+    }
+    async Delete(data) {
+        let response = await this.send('DELETE', `delete`, data, 'https://manaenckov.design/api/notes/');
+
+        console.log('API: ', 'Delete', response);
+
+        return response;
+    }
+    async GetUserDeadlines(id) {
+        let response = await this.send('GET',  `get`, null, 'https://manaenckov.design/api/notes/');
+
+        console.log('API: ', 'GetUserNotes', response);
+
+        return response;
+    }
+    async GetUserExpDeadlines(id) {
+        let response = await this.send('GET',  `getExp`, null, 'https://manaenckov.design/api/notes/');
+
+        console.log('API: ', 'GetUserExpDeadlines', response);
+
+        return response;
+    }
     async GetStatus(id) {
         let response = await this.send('GET',  `getUserStatus?id=${id}`, null, 'https://manaenckov.design/api/voenmeh/');
 

@@ -1,49 +1,21 @@
-.activetasks_title {
-  font-size: 20px;
-  color: rgb(255, 255, 255);
-  line-height: 1.2;
-  text-align: left;
-  padding: 20px 10px;
+
+.test {
+  width: 90vw;
+  height: 5vh;
+  transition: All 0.2s ease;
+}
+.light:active { background: #ebebeb}
+.dark:active { background: #363738}
+
+.test2 {
+  margin-left: 5px;
+  margin-top: 4%;
 }
 
-.active_img {
-  float: left;
-  top: 100px;
-  height: 70px;
-  width: 14%;
-  background-size: 45%;
-  background-position-y: center;
-  background-position-x: left;
-  background-repeat: no-repeat;
-}
+/* {
+    user-select: none;
+}*/
 
-.task {
-  width: 86%;
-  height: 100%;
-  float: right;
-}
-
-.task_title {
-  font-size: 15px;
-  color: rgb(66, 134, 244);
-  line-height: 1.2;
-  text-align: left;
-}
-
-.img_obman_scam {
-  height: 110vh;
-  width: 100%;
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-
-.img_obman_scamplus {
-  margin: 0 0;
-  height: 40vh;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 0;
-  right: 0px;
-  width: 70px;
+.Header__content {
+  white-space: normal;
 }

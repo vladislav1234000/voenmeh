@@ -1,45 +1,173 @@
-
 import React, { Component } from 'react';
+
 import {
-  Panel, PanelHeader
+  Panel, PanelHeader, Div, Tabs, TabsItem, Button, Spinner, Separator, FixedLayout, Radio
 } from '@vkontakte/vkui';
+
+import Icon24Add from '@vkontakte/icons/dist/24/add';
+
 import '../css/deadlines.css';
 
 class Deadlines extends Component {
 
   render() {
-    return (
-      <Panel id="time">
-        <PanelHeader>Дедлайны</PanelHeader>
-        <div style={{
+
+    const props = this.props;
+    const state = props.state;
+    const deadlines = state.deadlines;
+    const expDeadlines = state.expDeadlines;
+    const tab = state.deadtab;
+    const setPState = props.setParentState;
+    const getDeadlines = props.getDeadlines;
+    const getExpDeadlines = props.getExpDeadlines;
+
+    const zaglushka = (
+      <div
+        style={{
           width: '100%',
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'column'
         }}
+      >
+        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '20vh' }} />
+        <span style={{
+          marginTop: '40px',
+          fontWeight: 'bold',
+          color: this.props.state.scheme === 'bright_light' ? '#000' : '#6d7885',
+          width: '80%',
+          textAlign: 'center',
+          fontSize: '5vw'
+        }}
         >
-          <div style={{width: '150px', height: '150px', marginTop: '25vw' }}>
+       Дедлайнов нет
+          <br/>
+        <div style={{
+          marginTop: '10px',
+          fontWeight: 500,
+          color: this.props.state.scheme === 'bright_light' ? '#99a2ad' : '#6d7885',
+          fontSize: '4vw'
+        }}>Кажется, у тебя всё под контролем!</div>
+            </span>
+      </div>
+    );
 
-          </div>
-          <span style={{
-            marginTop: '40px', fontWeight: '550', color: '#7f8285', width: '80%', textAlign: 'center'
-          }}
+    return (
+      <Panel id="time">
+        <PanelHeader>Дедлайны</PanelHeader>
+        <Tabs>
+          <TabsItem
+            className={this.props.state.scheme === 'bright_light' ? 'tablight' : 'tabdark'}
+            onClick={ getDeadlines }
+            selected={ tab === 'active' }
           >
-            Мы активно работаем над развитием этого раздела
-            <br />
-            <br />
-            Загляните сюда попозже!
-          </span>
-        </div>
-        {/* <Div>
-          <div className="activetasks">
-            <div className="activetasks_title">
-              Активные ({this.state.active.length})
-            </div>
-            <Div>{active} </Div>
+            Активные
+          </TabsItem>
+          <TabsItem
+            className={this.props.state.scheme === 'bright_light' ? 'tablight' : 'tabdark'}
+            onClick={ getExpDeadlines }
+            selected={ tab === 'expires' }
+          >
+            Завершенные
+          </TabsItem>
+        </Tabs>
+        <Separator />
+        <Div>
 
-    </div>
-        </Div> */}
+          <Div>
+            {
+              deadlines.length > 0 ? deadlines.map((e, key) => (
+                <div key={key} >
+
+                  { key !== 0 && <Separator/> }
+
+                  <div style={{
+                    display: 'flex',
+                    borderRadius: 10,
+                    backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
+                  }}>
+                    <div style={{ width: '12vw' }}>
+                      <Radio
+                        checked={deadlines[key].done}
+                        onChange={() => props.check(key, deadlines[key].id)}
+                      />
+                    </div>
+                    <div
+                      className={`test ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
+                      onClick={() => props.openDeadlineModal(key)}
+                    >
+                      <div className='test2'>
+                        {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              )) : deadlines && tab === 'active' && zaglushka
+            }
+          </Div>
+
+          {
+            <Div>
+              {
+                expDeadlines.length > 0 ? expDeadlines.map((e, key) => (
+                  <div key={key} >
+
+                    { key !== 0 && <Separator/> }
+
+                    <div style={{
+                      display: 'flex',
+                      borderRadius: 10,
+                      backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
+                    }}>
+                      <div style={{ width: '12vw' }}>
+                        <Radio
+                          checked={expDeadlines[key].done}
+                          onChange={() => props.check(key, expDeadlines[key].id)}
+                        />
+                      </div>
+                      <div
+                        className={`test ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
+                        onClick={() => props.openDeadlineModal(key)}
+                      >
+                        <div className='test2'>
+                          {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                )) : expDeadlines && tab === 'expires' && zaglushka
+              }
+            </Div>
+          }
+          {
+            ((!deadlines && tab === 'active') || ( !expDeadlines && tab === 'expires' )) && <Spinner style={{ marginTop: '10%'}}/>
+          }
+          {
+            tab === 'active' &&
+            <FixedLayout vertical="bottom">
+              <Div style={{
+                textAlign: 'center'
+              }}>
+              <Button
+                style={{
+                  borderRadius: 6,
+                  weight: '20',
+                  backgroundColor: '#f25d44',
+                  marginBottom: 20
+                }}
+                before={ <Icon24Add /> }
+                size='l' onClick={() => {
+                setPState({ activeView: 'add' });
+              }}
+              >
+              Создать дедлайн
+              </Button>
+              </Div>
+            </FixedLayout>
+          }
+        </Div>
       </Panel>
     );
   }
