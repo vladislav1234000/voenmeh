@@ -26,7 +26,7 @@ class NewsFeed extends Component {
     this.setState({ search: e.currentTarget.value.replace(/\s+/g, ' ') });
   }
 
-  get sposts() {
+  get sposts()  {
     const search = this.state.search.toLowerCase();
     const { news } = this.props;
     if (search.substr(0, 1) === '#') {
