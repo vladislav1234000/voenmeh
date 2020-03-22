@@ -1,5 +1,6 @@
 
-.test {
+.test111 {
+  border-radius: 5px;
   width: 90vw;
   height: 5vh;
   transition: All 0.2s ease;
@@ -7,7 +8,7 @@
 .light:active { background: #ebebeb}
 .dark:active { background: #363738}
 
-.test2 {
+.test2111 {
   margin-left: 5px;
   margin-top: 4%;
 }

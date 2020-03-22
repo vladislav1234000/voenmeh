@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 
 import {
-  Panel, PanelHeader, Div, Tabs, TabsItem, Button, Spinner, Separator, FixedLayout, Radio
+  Panel, PanelHeader, Div, Tabs, TabsItem, Button, Spinner, Separator, FixedLayout, Radio, InfoRow,
 } from '@vkontakte/vkui';
 
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 import '../css/deadlines.css';
 
+import moment from 'moment';
+
 class Deadlines extends Component {
 
-  componentDidMount() {
-    this.props.getDeadlines()
-  }
 
   render() {
 
@@ -76,7 +75,7 @@ class Deadlines extends Component {
           </TabsItem>
         </Tabs>
         <Separator style={{
-          marginBottom: 10
+          marginBottom: 5
         }}/>
         <Div>
 
@@ -91,26 +90,38 @@ class Deadlines extends Component {
                     display: 'flex',
                     borderRadius: 10,
                     marginBottom: 10,
+                    marginTop: 5,
+                    height: '8vh',
                     backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
                   }}>
-                    <div style={{ width: '12vw' }}>
+                    <div style={{
+                      width: '12vw',
+                      marginTop: '3%'
+                    }}>
                       <Radio
                         checked={deadlines[key].done}
                         onChange={() => props.check(key, deadlines[key].id)}
                       />
                     </div>
                     <div
-                      className={`test ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
+                      className={`test111 ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
                       onClick={() => props.openDeadlineModal(key)}
                     >
-                      <div className='test2'>
+                      <div className='test2111'>
                         {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
+                      </div>
+                      <div style={{
+                        marginTop: 10,
+                        fontSize: 12,
+                        marginLeft: 5
+                      }}>
+                        {moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}
                       </div>
                     </div>
                   </div>
 
                 </div>
-              )) : deadlines && tab === 'active' && zaglushka
+              )) : deadlines !== [] && tab === 'active' && zaglushka
             }
           </Div>
 
@@ -126,6 +137,7 @@ class Deadlines extends Component {
                       display: 'flex',
                       borderRadius: 10,
                       marginBottom: 10,
+                      marginTop: 5,
                       backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
                     }}>
                       <div style={{ width: '12vw' }}>
@@ -145,7 +157,7 @@ class Deadlines extends Component {
                     </div>
 
                   </div>
-                )) : expDeadlines && tab === 'expires' && zaglushka
+                )) : expDeadlines !== [] && tab === 'expires' && zaglushka
               }
             </Div>
           }

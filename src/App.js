@@ -338,7 +338,7 @@ class App extends Component {
         this.setState({ expDeadlines: deadlines });
       }*/
 
-      if(this.state.tab === 'active') {
+      if(this.state.deadtab === 'active') {
         this.getDeadlines();
       } else {
         this.getExpDeadlines();
