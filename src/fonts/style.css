@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'San Francisco(SF UI)';
+    src: local('San Francisco(SF UI) Text Semibold'), local('San-Francisco(SF-UI)-Text-Semibold'),
+        url('SFUIText-Semibold.woff2') format('woff2'),
+        url('SFUIText-Semibold.woff') format('woff'),
+        url('SFUIText-Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+  }
