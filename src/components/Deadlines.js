@@ -10,6 +10,10 @@ import '../css/deadlines.css';
 
 class Deadlines extends Component {
 
+  componentDidMount() {
+    this.props.getDeadlines()
+  }
+
   render() {
 
     const props = this.props;
@@ -71,7 +75,9 @@ class Deadlines extends Component {
             Завершенные
           </TabsItem>
         </Tabs>
-        <Separator />
+        <Separator style={{
+          marginBottom: 10
+        }}/>
         <Div>
 
           <Div>
@@ -84,6 +90,7 @@ class Deadlines extends Component {
                   <div style={{
                     display: 'flex',
                     borderRadius: 10,
+                    marginBottom: 10,
                     backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
                   }}>
                     <div style={{ width: '12vw' }}>
@@ -118,6 +125,7 @@ class Deadlines extends Component {
                     <div style={{
                       display: 'flex',
                       borderRadius: 10,
+                      marginBottom: 10,
                       backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
                     }}>
                       <div style={{ width: '12vw' }}>
@@ -155,6 +163,7 @@ class Deadlines extends Component {
                   borderRadius: 6,
                   weight: '20',
                   backgroundColor: '#f25d44',
+                  color: '#fff',
                   marginBottom: 20
                 }}
                 before={ <Icon24Add /> }

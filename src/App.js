@@ -100,6 +100,12 @@ class App extends Component {
           title: 'Test Title',
           desk: 'Description',
           time: '2010-02-02'
+        },
+        {
+          id: 2,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2010-02-02'
         }
       ],
       expDeadlines: [],
@@ -322,7 +328,7 @@ class App extends Component {
         this.openErrorSnackbar('Произошла ошибка. #6');
         return;
       }
-      deadlines[key].done = deadlines[key].done === 1 ? 0 : 1;
+     /* deadlines[key].done = deadlines[key].done === 1 ? 0 : 1;
 
       deadlines = deadlines.filter(e => e.id !== id);
 
@@ -330,14 +336,14 @@ class App extends Component {
         this.setState({ deadlines });
       } else {
         this.setState({ expDeadlines: deadlines });
-      }
-      /*
+      }*/
+
       if(this.state.tab === 'active') {
-        this.getTasks();
+        this.getDeadlines();
       } else {
-        this.getExpTasks();
+        this.getExpDeadlines();
       }
-    */});
+    });
 
   };
 

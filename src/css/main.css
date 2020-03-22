@@ -76,7 +76,8 @@ body {
 }
 
 .TabsItem__in {
-  font-family: 'SF Pro Display', medium;
+  font-family: 'SF Pro Display';
+  font-weight: 500;
 }
 
 
