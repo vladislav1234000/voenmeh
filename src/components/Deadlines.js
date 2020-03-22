@@ -89,7 +89,7 @@ class Deadlines extends Component {
                   <div style={{
                     display: 'flex',
                     borderRadius: 10,
-                    marginBottom: 10,
+                    marginBottom: 5,
                     marginTop: 5,
                     height: '8vh',
                     backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
@@ -110,13 +110,16 @@ class Deadlines extends Component {
                       <div className='test2111'>
                         {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
                       </div>
-                      <div style={{
-                        marginTop: 10,
-                        fontSize: 12,
-                        marginLeft: 5
-                      }}>
-                        {moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}
-                      </div>
+                      {
+                        e.time &&
+                        <div style={{
+                          marginTop: 10,
+                          fontSize: 12,
+                          marginLeft: 5
+                        }}>
+                          {moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}
+                        </div>
+                      }
                     </div>
                   </div>
 
@@ -136,8 +139,9 @@ class Deadlines extends Component {
                     <div style={{
                       display: 'flex',
                       borderRadius: 10,
-                      marginBottom: 10,
+                      marginBottom: 5,
                       marginTop: 5,
+                      height: '8vh',
                       backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
                     }}>
                       <div style={{ width: '12vw' }}>
@@ -147,12 +151,22 @@ class Deadlines extends Component {
                         />
                       </div>
                       <div
-                        className={`test ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
+                        className={`test111 ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
                         onClick={() => props.openDeadlineModal(key)}
                       >
-                        <div className='test2'>
+                        <div className='test2111'>
                           {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
                         </div>
+                        {
+                          e.time &&
+                          <div style={{
+                            marginTop: 10,
+                            fontSize: 12,
+                            marginLeft: 5
+                          }}>
+                            {moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}
+                          </div>
+                        }
                       </div>
                     </div>
 
