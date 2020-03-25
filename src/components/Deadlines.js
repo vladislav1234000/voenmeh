@@ -13,7 +13,7 @@ import moment from 'moment';
 class Deadlines extends Component {
 
 componentDidMount() {
-  this.props.getDeadlines();
+  !window.location.port && this.props.getDeadlines();
 }
 
   render() {
@@ -36,7 +36,7 @@ componentDidMount() {
           flexDirection: 'column'
         }}
       >
-        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '20vh' }} />
+        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '25%' }} />
         <span style={{
           marginTop: '40px',
           fontWeight: 'bold',
@@ -89,36 +89,40 @@ componentDidMount() {
                 <Div key={key} >
 
                   { /*key !== 0 && <Separator/> */}
-
+                  <div
+                    className={props.state.scheme === 'bright_light' ? 'light' : 'dark'}
+                    onClick={() => props.openDeadlineModal(key)}
+                  >
                   <FormStatus
-                    className='deadlineItem'
+                    className={`deadlineItem ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
                     style={{ backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324' }}>
                     <div style={{ display: 'flex' }}>
                     <div style={{
                       width: '12vw'
                     }}>
                       <Checkbox
+                        className='chk'
                         checked={deadlines[key].done}
                         onChange={() => props.check(key, deadlines[key].id)}
+                        onClick={() => setTimeout(() => setPState({
+                          modal: null
+                        }), 5)}
                       />
                     </div>
-                    <div
-                      className={`test111 ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
-                      onClick={() => props.openDeadlineModal(key)}
-                    >
+                    <div>
                       <div className='test2111'>
                         {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
                       </div>
                       {
                         e.time &&
                         <div className='deaddata'>
-                          {`${moment().format('LLL').split(' ').slice(0,2).join(' ')} в ${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LT')} · ${moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}`}
+                          {`${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LLL').split(' ').slice(0,2).join(' ')} в ${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LT')} · ${moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}`}
                         </div>
                       }
                     </div>
                     </div>
                   </FormStatus>
-
+                  </div>
                 </Div>
               )) : deadlines !== false && tab === 'active' && zaglushka
             }
@@ -132,6 +136,10 @@ componentDidMount() {
 
                     {/* key !== 0 && <Separator/> */}
 
+                    <div
+                      className={props.state.scheme === 'bright_light' ? 'light' : 'dark'}
+                      onClick={() => props.openDeadlineModal(key)}
+                    >
                     <FormStatus
                       className='deadlineItem'
                       style={{ backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324' }}>
@@ -140,27 +148,28 @@ componentDidMount() {
                           width: '12vw'
                         }}>
                           <Checkbox
+                            className='chk'
                             checked={expDeadlines[key].done}
                             onChange={() => props.check(key, expDeadlines[key].id)}
+                            onClick={() => setTimeout(() => setPState({
+                              modal: null
+                            }), 5)}
                           />
                         </div>
-                        <div
-                          className={`test111 ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
-                          onClick={() => props.openDeadlineModal(key)}
-                        >
+                        <div>
                           <div className='test2111'>
                             {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
                           </div>
                           {
                             e.time &&
                             <div className='deaddata'>
-                              {`${moment().format('LLL').split(' ').slice(0,2).join(' ')} в ${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LT')} · ${moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}`}
+                              {`${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LLL').split(' ').slice(0,2).join(' ')} в ${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LT')} · ${moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}`}
                             </div>
                           }
                         </div>
                       </div>
                     </FormStatus>
-
+                    </div>
                   </Div>
                 )) :  expDeadlines !== false && tab === 'expires' && zaglushka
               }
@@ -189,6 +198,7 @@ componentDidMount() {
             </FixedLayout>
           }
         </Div>
+        <Div style={{ padding: 30 }}/>
         {props.state.snackbar}
       </Panel>
     );

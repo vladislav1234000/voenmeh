@@ -1,6 +1,15 @@
 
-.light:active { background: #ebebeb}
-.dark:active { background: #363738}
+
+.dark {
+  transition: All 0.2s ease !important;
+}
+
+.light:active {
+  background: #ebebeb !important;
+}
+.dark:active {
+  background: #363738 !important;
+}
 
 
 .test111 {
@@ -27,6 +36,13 @@
     user-select: none;
 }*/
 
+.Checkbox {
+  transition: none !important
+}
+.Checkbox:active {
+  transition: none !important
+}
+
 .Header__content {
   white-space: normal;
 }
@@ -34,7 +50,7 @@
 .deadlineItem {
   display: flex;
   border-radius: 10px;
-  margin-bottom: 3%;
+  margin-bottom: 7px;
   margin-top: -1%;
   width: 102%;
   margin-left: -15px;

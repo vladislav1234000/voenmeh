@@ -25,7 +25,7 @@ class FirstScr extends Component {
         this.props.setParentState({
           schedule: []
         });
-        this.props.setScheduleNEW(value);
+        this.props.setSchedule(value);
       }
       if (name === 'faculty') this.props.getGroups(value, false);
     };

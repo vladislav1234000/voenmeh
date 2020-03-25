@@ -47,10 +47,10 @@ class Profile extends Component {
 
       // посмотреть кейс, когда изменяется фак, но не изменяется группа
       if (name === 'group') {
-        this.props.setScheduleNEW(value, false);
+        this.props.setSchedule(value);
       }
       if (name === 'faculty') {
-        this.props.getGroups(value, false);
+        this.props.getGroups(value);
       }
     };
 

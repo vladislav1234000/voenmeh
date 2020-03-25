@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import connect from '@vkontakte/vk-bridge';
 import {
   Epic, Tabbar, TabbarItem, Snackbar, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner, Header,
-  ScreenSpinner, Alert,
+  ScreenSpinner, Alert, Panel,
   ModalRoot, ModalPage, PanelHeaderButton, Avatar, ModalPageHeader, Group, List, Cell, InfoRow, Button
 } from '@vkontakte/vkui';
 
@@ -81,7 +81,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activePage: 'profile', // first !!
+      activePage: 'load', // first !!
       activePanel: 'archive',
       deadPanel: 'main',
       history: ['feed'],
@@ -93,11 +93,58 @@ class App extends Component {
       office: [],
       isOfficeOpened: false,
       group: false,
-      isLoaded: false,
       news: [],
       banners: [],
       schedule: {},
       deadlines: [
+        {
+          id: 1,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2020-04-02-00:00'
+        },
+        {
+          id: 2,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2030-02-02-00:00'
+        },
+        {
+          id: 1,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2020-04-02-00:00'
+        },
+        {
+          id: 2,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2030-02-02-00:00'
+        },
+        {
+          id: 1,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2020-04-02-00:00'
+        },
+        {
+          id: 2,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2030-02-02-00:00'
+        },
+        {
+          id: 1,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2020-04-02-00:00'
+        },
+        {
+          id: 2,
+          title: 'Test Title',
+          desk: 'Description',
+          time: '2030-02-02-00:00'
+        },
         {
           id: 1,
           title: 'Test Title',
@@ -157,7 +204,7 @@ class App extends Component {
 
     this.setState({ noty: ordered.vk_are_notifications_enabled === 1 ? true : false });
 
-    if (window.location.port === '8080') this.setState({ isLoaded: true });
+    if (window.location.port === '8080') this.setState({ activePage: 'time' });
 
     connect.subscribe((e) => {
       switch (e.detail.type) {
@@ -171,9 +218,6 @@ class App extends Component {
           qwe();
           break;
 
-        case 'VKWebAppViewRestore' :
-         // window.location.reload();
-          break;
         case 'VKWebAppUpdateConfig':
           const schemeAttribute = document.createAttribute('scheme');
           let schemeK = e.detail.data.scheme;
@@ -231,12 +275,11 @@ class App extends Component {
             if(!gr.startsWith('?') && gr !== ''/* gr.split('')[0] === fac.split('')[0]*/){
               this.setState({ group: gr });
               console.log('группа обнаружена', gr);
-              this.setScheduleNEW(gr, true, true);
+              this.setSchedule(gr, true, true);
             } else {
               console.log('группа не найдена, держи онбординг');
               this.setState({
-                activePage: 'onbording',
-                isLoaded:  true
+                activePage: 'onbording'
               });
             }
           };
@@ -293,7 +336,7 @@ class App extends Component {
       id: state.fetchedUser.id,
       title: state.title,
       desk: state.desk ? state.desk : '',
-      time: state.time ? state.time : '',
+      time: state.time ? `${state.date}-${state.time}` : '',
     }).then(res => {
       if(res === 'success' ){
         this.setState({
@@ -308,6 +351,7 @@ class App extends Component {
           time: state.time ? state.time : '',
           done: false
         });
+        console.log(tasks);
         this.setState({ tasks: tasks });
         if(state.deadtab === 'active') {
           this.getDeadlines();
@@ -375,7 +419,7 @@ class App extends Component {
 
       deadlines = deadlines.filter(el => el.id !== e);
 
-      if(this.state.tab === 'active') {
+      if(this.state.deadtab === 'active') {
         this.setState({ deadlines });
       } else {
         this.setState({ expDeadlines: deadlines });
@@ -438,7 +482,11 @@ class App extends Component {
         return;
       }
 
-      if(this.state.tab === 'active') {
+      this.setState({
+        deadPanel:  'main'
+      });
+
+      if(this.state.deadtab === 'active') {
         this.getDeadlines();
       } else {
         this.getExpDeadlines();
@@ -542,7 +590,7 @@ class App extends Component {
      })
   };
 
-  setScheduleNEW = async (group, go = true, openSchedule = false) => {
+  setSchedule = async (group, go = true, openSchedule = false) => {
 
     if(!group){
       this.errorHappend();
@@ -553,12 +601,9 @@ class App extends Component {
       this.errorHappend();
       return;
     }
-    if(!schedule && go) {
-      if(this.state.activePage !== 'onbording'){
-        this.setState({ isLoaded: true });
+    if(!schedule && go && this.state.activePage !== 'onbording') {
         this.setState({ activePage: 'onbording' });
-      }
-      return;
+        return;
     }
     const even = schedule.filter(e =>  // четная
         e.WeekCode === '2'
@@ -596,7 +641,6 @@ class App extends Component {
     this.setState({ schedule: shed });
     if(openSchedule) {
       this.setState({ activePage: 'schedule' });
-      this.setState({ isLoaded: true });
     }
     let news = await this.api.GetNews('');
     this.setState({ news: news });
@@ -604,7 +648,7 @@ class App extends Component {
 
   render() {
     const {
-      isLoaded, fetchedUser, banners, news, scheme, schedule, activePage,
+      fetchedUser, banners, news, scheme, schedule, activePage,
        activePanel
     } = this.state;
 
@@ -657,7 +701,7 @@ class App extends Component {
                               </PanelHeaderButton >
                               <PanelHeaderButton
                                 onClick={() => this.setState({
-                                  activeView: 'change',
+                                  deadPanel: 'change',
                                   modal: null,
                                   snackbar: null
                                 })}>
@@ -796,7 +840,7 @@ class App extends Component {
     };
 
     const {
-      getGroups, setScheduleNEW, getOffices, getDeadlines, getExpDeadlines, changeTask, check,
+      getGroups, setSchedule, getOffices, getDeadlines, getExpDeadlines, changeTask, check,
       openErrorSnackbar, openDoneSnackbar, addTask
     } = this;
 
@@ -836,7 +880,7 @@ class App extends Component {
 
     const props = { setParentState: this.setState.bind(this), news, openGeo,
       getDeadlines, getExpDeadlines, check, changeTask, openDeadlineModal,
-      getGroups, banners, setScheduleNEW, getOffices, fetchedUser, openModal, state,
+      getGroups, banners, setSchedule, getOffices, fetchedUser, openModal, state,
       openErrorSnackbar, openDoneSnackbar, addTask
     };
 
@@ -895,31 +939,34 @@ class App extends Component {
       </Tabbar>
     );
 
-    if (!isLoaded) return <Spinner size="large" />;
-
-
     if(admins.includes(fetchedUser.id)) {
       window.eruda.init();
     }
     return (
       <ConfigProvider isWebView scheme={scheme}>
-      <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording') ? [] : tabbar}>
-        <View id="feed"  activePanel='feed' >
+      <Epic activeStory={activePage} tabbar={(activePage === 'first' || activePage === 'onbording' || activePage === 'load') ? [] : tabbar}>
+        <View id="feed" activePanel='feed' >
           <NewsFeed id="feed" {...props}/>
         </View>
 
         <View modal={this.state.modal} popout={this.state.popout} id="time" activePanel={this.state.deadPanel}>
-          <Deadlines id="main" {...props} />
+          <Deadlines className='noselect' id="main" {...props} />
           <Add id="add" {...props} />
           <Change id="change" task={state.curTask} {...props} />
         </View>
 
 
-        <View modal={this.state.modal} id="schedule" activePanel="schedule">
+        <View
+          className='noselect'
+          modal={this.state.modal}
+          id="schedule"
+          activePanel="schedule"
+        >
           <Schedule id="schedule" {...props} scheme={this.state.scheme} schedule={schedule} />
         </View>
 
         <View
+          className='noselect'
           modal={this.state.modal}
           history={this.state.activePanel === 'office' ? ['archive', 'office'] :  ['archive']}
           id="archive"
@@ -930,18 +977,24 @@ class App extends Component {
           })}
         >
           <Archive id="archive" {...props}  />
-          <Office className={state.scheme === 'bright_light' ? 'office' : 'officeD'} id="office" {...props}  />
+          <Office className={state.scheme === 'bright_light' ? 'office noselect' : 'officeD noselect'} id="office" {...props}  />
         </View>
 
-        <View className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" activePanel="profile">
+        <View className={state.scheme === 'bright_light' ? 'profileL noselect' : 'profileD noselect'} id="profile" activePanel="profile">
           <Profile className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" {...props}  />
         </View>
 
-        <View id="first" activePanel="first">
+        <View className='noselect' id="first" activePanel="first">
           <FirstScr id="first" {...props} />
         </View>
 
-        <View id="onbording" activePanel="onbording">
+        <View id="load" activePanel="load">
+          <Panel separator={false} id='load'>
+          <Spinner style={{ marginTop: '35vh' }} size="large" />
+          </Panel>
+        </View>
+
+        <View className='noselect' id="onbording" activePanel="onbording">
           <Onboarding
             {...props}
             id="onbording"

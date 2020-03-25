@@ -78,13 +78,6 @@ export default class API {
         return response;
     }
 
-    async POSTGeoPosition(meet) {
-        let response = await this.send('POST', 'GeoPosition', meet);
-
-        console.log('API: ', 'POSTGeoPosition', response);
-
-        return response;
-    }
     async GetOffices(faculty) {
         let response = await this.send('GET',  `GetOffices?faculty=${faculty}`, null);
 
@@ -124,8 +117,8 @@ export default class API {
         let response = await this.send('GET',  `GetSchedule?group=${faculty}`, null);
 
         console.log('API: ', 'GetSchedule');
-        console.table(response)
-        return response;
+        console.table(response);
+        return response || [];
     }
 
 }
