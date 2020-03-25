@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {
-  Panel, PanelHeader, Div, Tabs, TabsItem, Button, Spinner, Separator, FixedLayout, Radio, InfoRow,
+  Panel, PanelHeader, Div, Tabs, TabsItem, Button, Spinner, Separator, FixedLayout, Checkbox, FormStatus
 } from '@vkontakte/vkui';
 
 import Icon24Add from '@vkontakte/icons/dist/24/add';
@@ -12,6 +12,9 @@ import moment from 'moment';
 
 class Deadlines extends Component {
 
+componentDidMount() {
+  this.props.getDeadlines();
+}
 
   render() {
 
@@ -56,7 +59,7 @@ class Deadlines extends Component {
     );
 
     return (
-      <Panel id="time">
+      <Panel id={this.props.id}>
         <PanelHeader>Дедлайны</PanelHeader>
         <Tabs>
           <TabsItem
@@ -75,30 +78,26 @@ class Deadlines extends Component {
           </TabsItem>
         </Tabs>
         <Separator style={{
+          marginTop: 0,
           marginBottom: 5
-        }}/>
+        }} wide/>
         <Div>
 
-          <Div>
+          <>
             {
               deadlines.length > 0 ? deadlines.map((e, key) => (
-                <div key={key} >
+                <Div key={key} >
 
-                  { key !== 0 && <Separator/> }
+                  { /*key !== 0 && <Separator/> */}
 
-                  <div style={{
-                    display: 'flex',
-                    borderRadius: 10,
-                    marginBottom: 5,
-                    marginTop: 5,
-                    height: '8vh',
-                    backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
-                  }}>
+                  <FormStatus
+                    className='deadlineItem'
+                    style={{ backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324' }}>
+                    <div style={{ display: 'flex' }}>
                     <div style={{
-                      width: '12vw',
-                      marginTop: '3%'
+                      width: '12vw'
                     }}>
-                      <Radio
+                      <Checkbox
                         checked={deadlines[key].done}
                         onChange={() => props.check(key, deadlines[key].id)}
                       />
@@ -112,68 +111,60 @@ class Deadlines extends Component {
                       </div>
                       {
                         e.time &&
-                        <div style={{
-                          marginTop: 10,
-                          fontSize: 12,
-                          marginLeft: 5
-                        }}>
-                          {moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}
+                        <div className='deaddata'>
+                          {`${moment().format('LLL').split(' ').slice(0,2).join(' ')} в ${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LT')} · ${moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}`}
                         </div>
                       }
                     </div>
-                  </div>
+                    </div>
+                  </FormStatus>
 
-                </div>
-              )) : deadlines !== [] && tab === 'active' && zaglushka
+                </Div>
+              )) : deadlines !== false && tab === 'active' && zaglushka
             }
-          </Div>
+          </>
 
           {
-            <Div>
+            <>
               {
                 expDeadlines.length > 0 ? expDeadlines.map((e, key) => (
-                  <div key={key} >
+                  <Div key={key} >
 
-                    { key !== 0 && <Separator/> }
+                    {/* key !== 0 && <Separator/> */}
 
-                    <div style={{
-                      display: 'flex',
-                      borderRadius: 10,
-                      marginBottom: 5,
-                      marginTop: 5,
-                      height: '8vh',
-                      backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324'
-                    }}>
-                      <div style={{ width: '12vw' }}>
-                        <Radio
-                          checked={expDeadlines[key].done}
-                          onChange={() => props.check(key, expDeadlines[key].id)}
-                        />
-                      </div>
-                      <div
-                        className={`test111 ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
-                        onClick={() => props.openDeadlineModal(key)}
-                      >
-                        <div className='test2111'>
-                          {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
+                    <FormStatus
+                      className='deadlineItem'
+                      style={{ backgroundColor: props.state.scheme === 'bright_light' ? '#f5f5f5' : '#232324' }}>
+                      <div style={{ display: 'flex' }}>
+                        <div style={{
+                          width: '12vw'
+                        }}>
+                          <Checkbox
+                            checked={expDeadlines[key].done}
+                            onChange={() => props.check(key, expDeadlines[key].id)}
+                          />
                         </div>
-                        {
-                          e.time &&
-                          <div style={{
-                            marginTop: 10,
-                            fontSize: 12,
-                            marginLeft: 5
-                          }}>
-                            {moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}
+                        <div
+                          className={`test111 ${props.state.scheme === 'bright_light' ? 'light' : 'dark'}`}
+                          onClick={() => props.openDeadlineModal(key)}
+                        >
+                          <div className='test2111'>
+                            {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
                           </div>
-                        }
+                          {
+                            e.time &&
+                            <div className='deaddata'>
+                              {`${moment().format('LLL').split(' ').slice(0,2).join(' ')} в ${moment(e.time, 'YYYY-MM-DD-hh-mm').format('LT')} · ${moment(e.time, 'YYYY-MM-DD-hh-mm').fromNow()}`}
+                            </div>
+                          }
+                        </div>
                       </div>
-                    </div>
+                    </FormStatus>
 
-                  </div>
-                )) : expDeadlines !== [] && tab === 'expires' && zaglushka
+                  </Div>
+                )) :  expDeadlines !== false && tab === 'expires' && zaglushka
               }
-            </Div>
+            </>
           }
           {
             ((!deadlines && tab === 'active') || ( !expDeadlines && tab === 'expires' )) && <Spinner style={{ marginTop: '10%'}}/>
@@ -181,21 +172,16 @@ class Deadlines extends Component {
           {
             tab === 'active' &&
             <FixedLayout vertical="bottom">
-              <Div style={{
-                textAlign: 'center'
-              }}>
+              <Div>
               <Button
                 style={{
-                  borderRadius: 6,
-                  weight: '20',
-                  backgroundColor: '#f25d44',
-                  color: '#fff',
-                  marginBottom: 20
+                  marginBottom: 10
                 }}
+                onClick={() => setPState({
+                  deadPanel: 'add'
+                })}
                 before={ <Icon24Add /> }
-                size='l' onClick={() => {
-                setPState({ activeView: 'add' });
-              }}
+                size='xl'
               >
               Создать дедлайн
               </Button>
@@ -203,6 +189,7 @@ class Deadlines extends Component {
             </FixedLayout>
           }
         </Div>
+        {props.state.snackbar}
       </Panel>
     );
   }

@@ -28,6 +28,13 @@ export default class API {
 
         return response;
     }
+    async Change(data) {
+        let response = await this.send('PUT', `change`, data, 'https://manaenckov.design/api/notes/');
+
+        console.log('API: ', 'Change', response);
+
+        return response;
+    }
     async Done(data) {
         let response = await this.send('PUT', `done`, data, 'https://manaenckov.design/api/notes/');
 

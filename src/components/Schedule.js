@@ -102,12 +102,12 @@ class Schedule extends Component {
           aud: Classroom,
           time: `${Time[0]} - ${Time[1]}`
         });
-      }
+      };
       const lcFirst = str => {
         if (!str) return str;
         if (!str.startsWith('П')) return str;
         return str[0].toLowerCase() + str.slice(1);
-      }
+      };
       return (
 
         <div className={this.props.state.scheme === 'bright_light' ? 'test' : 'dark'} key={id}>
@@ -123,7 +123,7 @@ class Schedule extends Component {
                 }}>{Time[0]}</div>
                 <div style={{ color: '#ccc' }}>{Time[1]}</div>
               </div>
-              <FaCircle id={TypeLesson} className='FaCircle' />
+              <FaCircle id={`${TypeLesson}${this.props.state.scheme === 'bright_light' ? 'L' : 'D'}`} className='FaCircle' />
               <div className={this.props.state.scheme === 'bright_light'
                 ? 'lesson_content' : 'lesson_contentD' }>
                 <div className={

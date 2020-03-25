@@ -1,18 +1,28 @@
 
+.light:active { background: #ebebeb}
+.dark:active { background: #363738}
+
+
 .test111 {
   border-radius: 5px;
   width: 90vw;
   height: 5vh;
   transition: All 0.2s ease;
 }
-.light:active { background: #ebebeb}
-.dark:active { background: #363738}
 
 .test2111 {
+  font-size: 2.1vh;
+  font-weight: bold;
   margin-left: 5px;
-  margin-top: 4%;
+  margin-top: 1.5%;
 }
 
+.deaddata {
+  margin-top: 10px;
+  font-size: 12px;
+  margin-left: 5px;
+  font-weight: initial;
+}
 /* {
     user-select: none;
 }*/
@@ -20,3 +30,29 @@
 .Header__content {
   white-space: normal;
 }
+
+.deadlineItem {
+  display: flex;
+  border-radius: 10px;
+  margin-bottom: 3%;
+  margin-top: -1%;
+  width: 102%;
+  margin-left: -15px;
+ /* width: 95vw;
+  margin-left: -15px;
+  height: 8vh;*/
+}
+
+/*.EdeadlineItem {
+  display: flex;
+  border-radius: 10px;
+  margin-bottom: 3%;
+  position: absolute;
+  top: 150px;
+  width: 102%;
+  margin-left: -15px;
+  /* width: 95vw;
+   margin-left: -15px;
+   height: 8vh;
+}*/
+

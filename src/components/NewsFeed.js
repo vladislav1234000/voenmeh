@@ -82,7 +82,7 @@ class NewsFeed extends Component {
           flexDirection: 'column'
         }}
       >
-        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '10vh' }} />
+        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '5vh' }} />
         <span style={{
           marginTop: '40px',
           fontWeight: 'bold',

@@ -34,7 +34,10 @@ import Profile from './components/Profile.js';
 
 import FirstScr from './components/FirstScr.js';
 import NewsFeed from './components/NewsFeed.js';
+
 import Deadlines from './components/Deadlines.js';
+import Add from './components/Add.js';
+import Change from './components/Change.js';
 
 import API from './helpers/API.js';
 
@@ -80,11 +83,11 @@ class App extends Component {
     this.state = {
       activePage: 'profile', // first !!
       activePanel: 'archive',
+      deadPanel: 'main',
       history: ['feed'],
       fetchedUser: {
         id: 1
       },
-      classTab: '',
       curTask: [],
       deadtab: 'active',
       office: [],
@@ -99,18 +102,18 @@ class App extends Component {
           id: 1,
           title: 'Test Title',
           desk: 'Description',
-          time: '2010-02-02'
+          time: '2020-04-02-00:00'
         },
         {
           id: 2,
           title: 'Test Title',
           desk: 'Description',
-          time: '2010-02-02'
+          time: '2030-02-02-00:00'
         }
       ],
       expDeadlines: [],
       groups: [],
-      scheme: false ? 'space_gray' : 'bright_light',
+      scheme: true ? 'space_gray' : 'bright_light',
       modal: null,
       lessons: [null],
       noty: false,
@@ -121,12 +124,27 @@ class App extends Component {
       snackbar: null,
       selectedDayIndex: 0,
       selectedDay: moment(new Date()),
-      headman: false
+      headman: false,
+      title: '',
+      desk: '',
+      time: '00:00',
+      date: `${new Date().getFullYear()}-${(new Date().getMonth()) < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate()}`
     };
     this.api = new API();
   }
 
+
   componentDidMount() {
+    /*window.addEventListener('popstate', e => {
+      console.log('нажатие на кнопку назад')
+    });
+    window.onpopstate = function(e) {
+      console.log('жопа')
+      e.preventDefault();
+      alert('нажал')
+      console.log('нажатие на кнопку назад')
+      //   this.goBack();
+    };*/
     const getWeek = async () => {
       let w = await this.api.GetWeek();
       this.setState({
@@ -135,13 +153,9 @@ class App extends Component {
       });
       if(!w) this.errorHappend();
     };
-
     getWeek();
+
     this.setState({ noty: ordered.vk_are_notifications_enabled === 1 ? true : false });
-    window.addEventListener('popstate', (e) => {
-      e.preventDefault();
-      this.goBack();
-    }, false);
 
     if (window.location.port === '8080') this.setState({ isLoaded: true });
 
@@ -240,7 +254,8 @@ class App extends Component {
     this.setState({
       deadlines: false,
       expDeadlines: false,
-      deadtab: 'active'
+      deadtab: 'active',
+      popout: null
     });
     this.api.GetUserDeadlines(this.state.fetchedUser.id).then(deadlines => {
       this.setState({ deadlines });
@@ -249,11 +264,13 @@ class App extends Component {
       this.setState({ deadlines: [] });
     });
   };
+
   getExpDeadlines = () => {
     this.setState({
       expDeadlines: false,
       deadlines: false,
-      deadtab: 'expires'
+      deadtab: 'expires',
+      popout: null
     });
     this.api.GetUserExpDeadlines(this.state.fetchedUser.id).then(expDeadlines => {
       this.setState({ expDeadlines });
@@ -261,6 +278,61 @@ class App extends Component {
       this.openErrorSnackbar('Произошла ошибка загрузки. #5');
       this.setState({ expTasks: [] });
     });
+  };
+
+  addTask = () => {
+
+    const state = this.state;
+
+    this.setState({
+      popout:  <ScreenSpinner />
+    });
+    const tasks = this.state.deadlines;
+
+    this.api.AddDeadline({
+      id: state.fetchedUser.id,
+      title: state.title,
+      desk: state.desk ? state.desk : '',
+      time: state.time ? state.time : '',
+    }).then(res => {
+      if(res === 'success' ){
+        this.setState({
+          title: '',
+          desk: '',
+          time: '00:00',
+          deadPanel: 'main'
+        });
+        tasks.push({
+          title: state.title,
+          desk: state.desk ? state.desk : '',
+          time: state.time ? state.time : '',
+          done: false
+        });
+        this.setState({ tasks: tasks });
+        if(state.deadtab === 'active') {
+          this.getDeadlines();
+        } else {
+          this.getExpDeadlines();
+        }
+        console.log('good')
+      } else {
+        this.openErrorSnackbar('Произошла ошибка. #1');
+        this.api.AddDeadline({
+          id: state.fetchedUser.id,
+          title: state.title,
+          desk: state.desk ? state.desk : '',
+          time: state.time ? state.time : '',
+        });
+      }
+    }).catch(() => {
+      this.openErrorSnackbar('Произошла ошибка. #2');
+      this.api.AddDeadline({
+        id: this.state.fetchedUser.id,
+        title: state.title,
+        desk: state.desk ? state.desk : '',
+        time: state.time ? state.time : '',
+      });
+    })
   };
 
   openAlert = (key, e) => {
@@ -282,10 +354,11 @@ class App extends Component {
           })}
         >
           <h2>Подтвердите действие</h2>
-          <p>Вы уверены, что хотите удалить задачу? <br/> Действие нельзя отменить.</p>
+          <p>Вы уверены, что хотите удалить дедлайн? <br/> Действие нельзя отменить.</p>
         </Alert>
     });
   };
+
   delTask = (key,e) => {
     let deadlines = this.state.deadlines || this.state.expDeadlines;
     this.setState({ popout: <ScreenSpinner/> });
@@ -349,11 +422,8 @@ class App extends Component {
 
   changeTask = e => {
 
-    console.log({
-      id: e.id,
-      title: e.title,
-      desk: e.desk || '',
-      time: e.time
+    this.setState({
+      popout:  <ScreenSpinner />
     });
 
     this.api.Change({
@@ -386,7 +456,8 @@ class App extends Component {
           before={<Avatar size={24} style={{ backgroundColor: '#4bb34b' }}><Icon16Done fill="#fff" width={14} height={14} /></Avatar>}
         >
           {e}
-        </Snackbar>
+        </Snackbar>,
+      popout: null
     });
   };
 
@@ -399,7 +470,8 @@ class App extends Component {
           before={<Avatar size={24} style={{ backgroundColor: '#FF0000' }}><Icon16Clear fill="#fff" width={14} height={14} /></Avatar>}
         >
           {e}
-        </Snackbar>
+        </Snackbar>,
+      popout: null
     });
   };
 
@@ -410,7 +482,7 @@ class App extends Component {
     });
   }
 
-  errorHappend(bruh) {
+  errorHappend() {
     if(this.state.snackbar) return;
     this.setState({ snackbar:
         <Snackbar
@@ -424,6 +496,7 @@ class App extends Component {
     });
 
   }
+
   goBack() {
     if(this.state.activePanel === 'office') {
       this.setState({ activePanel: 'archive' });
@@ -439,7 +512,7 @@ class App extends Component {
     }
   }
 
-    getOffices = async (fac) => {
+  getOffices = async (fac) => {
       let result = await this.api.GetOffices(fac ? fac : '');
       if(result.length === 0){
         this.errorHappend();
@@ -450,7 +523,7 @@ class App extends Component {
       });
    };
 
-   getGroups = async (fac, load) => {
+  getGroups = async (fac, load) => {
 
     this.setState({ groupsLoading: true });
     if(load) this.setState({ isLoaded: load });
@@ -459,7 +532,7 @@ class App extends Component {
     if(result.length === 0){
       this.errorHappend();
       return;
-    };
+    }
     const gr = result.map((r) => (
       <option value={r.group} key={r.group}>{r.group}</option>
     ));
@@ -468,7 +541,6 @@ class App extends Component {
       groupsLoading: false
      })
   };
-
 
   setScheduleNEW = async (group, go = true, openSchedule = false) => {
 
@@ -529,10 +601,11 @@ class App extends Component {
     let news = await this.api.GetNews('');
     this.setState({ news: news });
   };
+
   render() {
     const {
       isLoaded, fetchedUser, banners, news, scheme, schedule, activePage,
-       activePanel, classTab
+       activePanel
     } = this.state;
 
     const onCloseModal = () => {
@@ -564,8 +637,9 @@ class App extends Component {
                           </PanelHeaderButton >
                           <PanelHeaderButton
                             onClick={() => this.setState({
-                              activeView: 'change',
-                              modal: null
+                              deadPanel: 'change',
+                              modal: null,
+                              snackbar: null
                             })}>
                             <Icon24Write fill='#ccc'/>
                           </PanelHeaderButton >
@@ -584,7 +658,8 @@ class App extends Component {
                               <PanelHeaderButton
                                 onClick={() => this.setState({
                                   activeView: 'change',
-                                  modal: null
+                                  modal: null,
+                                  snackbar: null
                                 })}>
                                 <Icon24Write fill='#ccc'/>
                               </PanelHeaderButton >
@@ -721,7 +796,8 @@ class App extends Component {
     };
 
     const {
-      getGroups, setScheduleNEW, getOffices, getDeadlines, getExpDeadlines, changeTask, check
+      getGroups, setScheduleNEW, getOffices, getDeadlines, getExpDeadlines, changeTask, check,
+      openErrorSnackbar, openDoneSnackbar, addTask
     } = this;
 
     const state = this.state;
@@ -760,13 +836,14 @@ class App extends Component {
 
     const props = { setParentState: this.setState.bind(this), news, openGeo,
       getDeadlines, getExpDeadlines, check, changeTask, openDeadlineModal,
-      getGroups, banners, setScheduleNEW, getOffices, fetchedUser, openModal, state
+      getGroups, banners, setScheduleNEW, getOffices, fetchedUser, openModal, state,
+      openErrorSnackbar, openDoneSnackbar, addTask
     };
 
     const tabbar = (
-      <Tabbar className={classTab}>
+      <Tabbar  className={state.scheme === 'bright_light' ? '' : 'tabbar'}>
         <TabbarItem
-          className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
+          className={state.scheme === 'bright_light' ? 'tblight' : 'tbdark'}
           onClick={() => {
             this.changePage('feed');
             if(activePanel !== 'feed') this.setState({ activePanel: 'feed' });
@@ -775,9 +852,9 @@ class App extends Component {
         >
           <Icon28ArticleOutline />
            </TabbarItem>
-        { admins.includes(fetchedUser.id) &&
+        {/* admins.includes(fetchedUser.id) &&*/
                 <TabbarItem
-                  className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
+                  className={state.scheme === 'bright_light' ? 'tblight' : 'tbdark'}
                   onClick={() => this.changePage('time')}
                   selected={activePage === 'time'}
                 >
@@ -786,7 +863,7 @@ class App extends Component {
           }
 
         <TabbarItem
-          className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
+          className={state.scheme === 'bright_light' ? 'tblight' : 'tbdark'}
           onClick={() => this.changePage('schedule')}
           selected={activePage === 'schedule'}
         >
@@ -795,7 +872,7 @@ class App extends Component {
 
 
          <TabbarItem
-           className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
+           className={state.scheme === 'bright_light' ? 'tblight' : 'tbdark'}
             onClick={() => {
               this.setState({
                 activePanel: 'archive',
@@ -809,7 +886,7 @@ class App extends Component {
 
 
         <TabbarItem
-          className={state.scheme === 'bright_light' ? 'tblight' : 'tdark'}
+          className={state.scheme === 'bright_light' ? 'tblight' : 'tbdark'}
           onClick={() => this.changePage('profile') }
           selected={activePage === 'profile'}
         >
@@ -831,9 +908,12 @@ class App extends Component {
           <NewsFeed id="feed" {...props}/>
         </View>
 
-        <View modal={this.state.modal} id="time" activePanel="time">
-          <Deadlines id="time" {...props} />
+        <View modal={this.state.modal} popout={this.state.popout} id="time" activePanel={this.state.deadPanel}>
+          <Deadlines id="main" {...props} />
+          <Add id="add" {...props} />
+          <Change id="change" task={state.curTask} {...props} />
         </View>
+
 
         <View modal={this.state.modal} id="schedule" activePanel="schedule">
           <Schedule id="schedule" {...props} scheme={this.state.scheme} schedule={schedule} />

@@ -90,14 +90,23 @@
   width: 8px;
 }
 
-#Практика {
-  color: #6d1bbd;
+#ПрактикаL {
+  color: #e64646;
 }
-#Лекция {
-  color: #ff9900;
+#ПрактикаD {
+  color: #ff5c5c;
 }
-#Лабораторная {
-  color: #73aaef;
+#ЛекцияL {
+  color: #4bb34b;
+}
+#ЛекцияD {
+  color: #4bb34b;
+}
+#ЛабораторнаяL {
+  color: #3f8ae0;
+}
+#ЛабораторнаяD {
+  color: #71aaeb;
 }
 
 
