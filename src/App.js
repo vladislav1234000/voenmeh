@@ -145,18 +145,6 @@ class App extends Component {
           desk: 'Description',
           time: '2030-02-02-00:00'
         },
-        {
-          id: 1,
-          title: 'Test Title',
-          desk: 'Description',
-          time: '2020-04-02-00:00'
-        },
-        {
-          id: 2,
-          title: 'Test Title',
-          desk: 'Description',
-          time: '2030-02-02-00:00'
-        }
       ],
       expDeadlines: [],
       groups: [],
@@ -172,6 +160,7 @@ class App extends Component {
       selectedDayIndex: 0,
       selectedDay: moment(new Date()),
       headman: false,
+      modalData: null,
       title: '',
       desk: '',
       time: '00:00',
@@ -572,7 +561,7 @@ class App extends Component {
    };
 
   getGroups = async (fac, load) => {
-
+    console.log(3);
     this.setState({ groupsLoading: true });
     if(load) this.setState({ isLoaded: load });
 
@@ -591,13 +580,21 @@ class App extends Component {
   };
 
   setSchedule = async (group, go = true, openSchedule = false) => {
-
+    console.log(2);
     if(!group){
       this.errorHappend();
       return;
     }
     let schedule = await this.api.GetSchedule(group);
+
     if(schedule.length === 0){
+      console.log(1, schedule, this.state.activePage);
+      if(this.state.activePage === 'load') {
+        console.log('!')
+        this.setState({
+          activePage: 'first'
+        })
+      }
       this.errorHappend();
       return;
     }
@@ -660,20 +657,50 @@ class App extends Component {
       return str[0].toUpperCase() + str.slice(1);
     };
     const openDeadlineModal = key => {
-      const deadline = this.state.deadlines[key] || this.state.expDeadlines[key];
-
       this.setState({
-        modal: (
-          <ModalRoot activeModal='task'>
-            <ModalPage
-              id='task'
-              onClose={onCloseModal}
-              header={
-                <ModalPageHeader
-                  left={
-                    IS_PLATFORM_ANDROID ?
-                      <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
-                      :
+        modal: 'task',
+        curTask: this.state.deadlines[key] || this.state.expDeadlines[key],
+        curKey: key
+      });
+    };
+
+    const MLD = this.state.modalLessonData;
+    const deadline = this.state.curTask;
+    const key = this.state.curKey;
+
+    const modal = (
+
+      <ModalRoot activeModal={this.state.modal}>
+
+        <ModalPage
+          id='task'
+          onClose={onCloseModal}
+          header={
+            <ModalPageHeader
+              left={
+                IS_PLATFORM_ANDROID ?
+                  <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
+                  :
+                  (
+                    <div style={{ display: 'flex'}}>
+                      <PanelHeaderButton onClick={() => this.openAlert(key, deadline.id)}>
+                        <Icon24Delete fill='#ccc'/>
+                      </PanelHeaderButton >
+                      <PanelHeaderButton
+                        onClick={() => this.setState({
+                          deadPanel: 'change',
+                          modal: null,
+                          snackbar: null
+                        })}>
+                        <Icon24Write fill='#ccc'/>
+                      </PanelHeaderButton >
+                    </div>
+                  )
+              }
+              right={(
+                <>
+                  {IS_PLATFORM_ANDROID ?
+                    (
                       (
                         <div style={{ display: 'flex'}}>
                           <PanelHeaderButton onClick={() => this.openAlert(key, deadline.id)}>
@@ -689,153 +716,152 @@ class App extends Component {
                           </PanelHeaderButton >
                         </div>
                       )
-                  }
-                  right={(
-                    <>
-                      {IS_PLATFORM_ANDROID ?
-                        (
-                          (
-                            <div style={{ display: 'flex'}}>
-                              <PanelHeaderButton onClick={() => this.openAlert(key, deadline.id)}>
-                                <Icon24Delete fill='#ccc'/>
-                              </PanelHeaderButton >
-                              <PanelHeaderButton
-                                onClick={() => this.setState({
-                                  deadPanel: 'change',
-                                  modal: null,
-                                  snackbar: null
-                                })}>
-                                <Icon24Write fill='#ccc'/>
-                              </PanelHeaderButton >
-                            </div>
-                          )
-                        )
-                        : <PanelHeaderButton onClick={onCloseModal}> <Icon24Dismiss /> </PanelHeaderButton> }
-                    </>
-                  )}
-                >
-                  Информация
-                </ModalPageHeader>
-              }
+                    )
+                    : <PanelHeaderButton onClick={onCloseModal}> <Icon24Dismiss /> </PanelHeaderButton> }
+                </>
+              )}
             >
-              <Group header={<Header mode="primary">{deadline && deadline.title}</Header>}>
-                <List>
-                  {
-                    deadline.desk &&
-                    <Cell multiline>
-                      <InfoRow header="Описание">
-                        {deadline.desk}
-                      </InfoRow>
-                    </Cell>
-                  }
-                  <Cell multiline>
-                    {
-                      deadline.time &&
-                      <InfoRow header="Крайний срок выполнения">
-                        {moment(deadline.time, 'YYYY-MM-DD-hh-mm').fromNow()}
-                      </InfoRow>
-                    }
-                  </Cell>
-                </List>
-                <Div style={{ marginTop: -5, padding: 20 }}>
-                  <Button
-                    size='xl'
-                    onClick={() => {
-                      onCloseModal(key);
-                      this.check(key, deadline.id);
-                    }}
-                    mode={deadline.done === 1? 'commerce' : 'primary'}
-                  >{deadline.done === 1 ? 'Дедлайн выполнен' : 'Выполнить'}
-                  </Button>
-                </Div>
-                <Div/>
-              </Group>
-            </ModalPage>
-          </ModalRoot>
-        ),
-        curTask: deadline
-      });
-    };
-    const openModal = data => {
-        this.setState({
-          modal: (
-            <ModalRoot activeModal='lesson'>
-            <ModalPage
-              id='lesson'
-              onClose={onCloseModal}
-              header={
-                <ModalPageHeader
-                  left={
-                    IS_PLATFORM_ANDROID &&
-                    <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
-                   }
-                  right={(
-                    <>
-                      {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton > }
-                    </>
-                  )}
-                >
-                  Информация о занятии
-                </ModalPageHeader>
+              Информация
+            </ModalPageHeader>
+          }
+        >
+          <Group header={<Header mode="primary">{deadline && deadline.title}</Header>}>
+            <List>
+              {
+                deadline.desk &&
+                <Cell multiline>
+                  <InfoRow header="Описание">
+                    {deadline.desk}
+                  </InfoRow>
+                </Cell>
               }
+              <Cell multiline>
+                {
+                  deadline.time &&
+                  <InfoRow header="Крайний срок выполнения">
+                    {moment(deadline.time, 'YYYY-MM-DD-hh-mm').fromNow()}
+                  </InfoRow>
+                }
+              </Cell>
+            </List>
+            <Div style={{ marginTop: -5, padding: 20 }}>
+              <Button
+                size='xl'
+                onClick={() => {
+                  onCloseModal(key);
+                  this.check(key, deadline.id);
+                }}
+                mode={deadline.done === 1? 'commerce' : 'primary'}
+              >{deadline.done === 1 ? 'Дедлайн выполнен' : 'Выполнить'}
+              </Button>
+            </Div>
+            <Div/>
+          </Group>
+        </ModalPage>
+
+        <ModalPage
+          id='lesson'
+          onClose={onCloseModal}
+          header={
+            <ModalPageHeader
+              left={
+                IS_PLATFORM_ANDROID &&
+                <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
+              }
+              right={(
+                <>
+                  {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton > }
+                </>
+              )}
             >
-            <Group header={<Header>{data.title && data.title}</Header>}>
-              <List>
-                {
-                  data.form &&
-                  <Cell>
-                    <InfoRow /*style={{ lineHeight: 1 }}*/ header="Форма занятия">
-                      {data.form}
-                    </InfoRow>
-                  </Cell>
-                }
-                  <Cell multiline>
-                  {
-                      data.teacher ?
-                      <InfoRow /*style={{ marginBottom: -8 }}*/ header="Преподаватель">
-                       {data.teacher}
-                      </InfoRow>
-                      :
-                      <InfoRow /*style={{ marginBottom: -8 }}*/ header="Преподаватель">
-                       Не указан
-                      </InfoRow>
-                  }
-                  </Cell>
-                {
-                  data.time &&
-                  <Cell>
-                    <InfoRow /*style={{ marginBottom: -8 }}*/ header="Начало и конец занятия">
-                      {data.time}
-                    </InfoRow>
-                  </Cell>
-                }
+              Информация о занятии
+            </ModalPageHeader>
+          }
+        >
+          <Group header={<Header>{MLD && MLD.title}</Header>}>
+            <List>
+              {
+                MLD && MLD.form &&
                 <Cell>
+                  <InfoRow /*style={{ lineHeight: 1 }}*/ header="Форма занятия">
+                    {MLD.form}
+                  </InfoRow>
+                </Cell>
+              }
+              <Cell multiline>
                 {
-                    data.aud ?
+                  MLD && MLD.teacher ?
+                    <InfoRow /*style={{ marginBottom: -8 }}*/ header="Преподаватель">
+                      {MLD.teacher}
+                    </InfoRow>
+                    :
+                    <InfoRow /*style={{ marginBottom: -8 }}*/ header="Преподаватель">
+                      Не указан
+                    </InfoRow>
+                }
+              </Cell>
+              {
+                MLD && MLD.time &&
+                <Cell>
+                  <InfoRow /*style={{ marginBottom: -8 }}*/ header="Начало и конец занятия">
+                    {MLD.time}
+                  </InfoRow>
+                </Cell>
+              }
+              <Cell>
+                {
+                  MLD && MLD.aud ?
                     <InfoRow /*style={{ marginBottom: -8 }}*/ header="Аудитория">
-                     {data.aud.includes('*') ? 'Новый корпус,' : 'Главный корпус,'} {ucFirst(data.aud)}
+                      {MLD.aud.includes('*') ? 'Новый корпус,' : 'Главный корпус,'} {ucFirst(MLD.aud)}
                     </InfoRow>
                     :
                     <InfoRow header="Аудитория">
-                       Не указана
+                      Не указана
                     </InfoRow>
                 }
-                </Cell>
-              </List>
-                <Div style={{ marginTop: -5, padding: 20 }}>
-                  <Button
-                    size='xl'
-                    component='a'
-                    href='https://vk.me/club187168548'
-                    level='secondary'
-                    target='_blank'
-                  >Сообщить об ошибке
-                  </Button>
-                </Div>
+              </Cell>
+            </List>
+            <Div style={{ marginTop: -5, padding: 20 }}>
+              <Button
+                size='xl'
+                component='a'
+                href='https://vk.me/club187168548'
+                level='secondary'
+                target='_blank'
+              >Сообщить об ошибке
+              </Button>
+            </Div>
           </Group>
-            </ModalPage>
-            </ModalRoot>
-          )
+        </ModalPage>
+        <ModalPage
+          id='geo'
+          onClose={onCloseModal}
+          header={
+            <ModalPageHeader
+              left={
+                IS_PLATFORM_ANDROID &&
+                <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
+              }
+              right={(
+                <>
+                  {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton> }
+                </>
+              )}
+            >
+              Местоположение
+            </ModalPageHeader>
+          }
+        >
+          <Div style={{ padding: 20 }}>
+            {this.state.geoModalData || ''}
+          </Div>
+        </ModalPage>
+      </ModalRoot>
+    );
+    const openModal = data => {
+        this.setState({
+          modal: 'lesson',
+          modalLessonData: data
         });
     };
 
@@ -848,33 +874,8 @@ class App extends Component {
 
     const openGeo = e => {
       this.setState({
-        modal: (
-          <ModalRoot activeModal='lesson'>
-            <ModalPage
-              id='lesson'
-              onClose={onCloseModal}
-              header={
-                <ModalPageHeader
-                  left={
-                    IS_PLATFORM_ANDROID &&
-                    <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
-                  }
-                  right={(
-                    <>
-                      {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton> }
-                    </>
-                  )}
-                >
-                  Местоположение
-                </ModalPageHeader>
-              }
-            >
-              <Div style={{ padding: 20 }}>
-                  {e}
-              </Div>
-            </ModalPage>
-          </ModalRoot>
-        )
+        modal: 'geo',
+        geoModalData: e
       });
     };
 
@@ -949,7 +950,7 @@ class App extends Component {
           <NewsFeed id="feed" {...props}/>
         </View>
 
-        <View modal={this.state.modal} popout={this.state.popout} id="time" activePanel={this.state.deadPanel}>
+        <View modal={modal} popout={this.state.popout} id="time" activePanel={this.state.deadPanel}>
           <Deadlines className='noselect' id="main" {...props} />
           <Add id="add" {...props} />
           <Change id="change" task={state.curTask} {...props} />
@@ -958,7 +959,7 @@ class App extends Component {
 
         <View
           className='noselect'
-          modal={this.state.modal}
+          modal={modal}
           id="schedule"
           activePanel="schedule"
         >
@@ -967,7 +968,7 @@ class App extends Component {
 
         <View
           className='noselect'
-          modal={this.state.modal}
+          modal={modal}
           history={this.state.activePanel === 'office' ? ['archive', 'office'] :  ['archive']}
           id="archive"
           activePanel={this.state.activePanel}

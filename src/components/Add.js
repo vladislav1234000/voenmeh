@@ -27,7 +27,7 @@ class Add extends Component {
   };
 
   send = () => {
-    const { addTask, setParentState, openErrorSnackbar, state } = this.props;
+    const { addTask, openErrorSnackbar, state } = this.props;
 
     if(!state.title) {
       this.setState({ error: true });
@@ -78,23 +78,23 @@ class Add extends Component {
             top='Что необходимо сделать? (кратко)'
             placeholder='Закрыть двойку по астрономии'
             maxLength='500'
-            status={state.error &&  (!state.title || state.title.length > 500)? 'error' : 'default'}
+            status={this.state.error &&  (!state.title || state.title.length > 500)? 'error' : 'default'}
             value={state.title}
           />
           <Textarea
             onChange={onChange}
             name='desk'
             top='Описание дедлайна, если необходимо'
-            status={state.error && state.desk.length > 1000 ? 'error' : 'default'}
+            status={this.state.error && state.desk.length > 1000 ? 'error' : 'default'}
             placeholder='Сдать презентацию по небесным телам'
             maxLength='1000'
             value={state.desk}
           />
-          <div className='FormLayout__row-top'>Укажите срок дедлайна</div>
+          {/*<div className='FormLayout__row-top'>Укажите срок дедлайна</div>
           <div style={{
             display: 'flex',
             marginTop: -25,
-          }}>
+          }}>*/}
           <Input
             onChange={onChange}
             name='date'
@@ -110,7 +110,7 @@ class Add extends Component {
             top='Укажите время к полю выше'
             value={state.time}
           />
-          </div>
+          {/*  </div>*/}
           <Button
             mode='primary'
             size='xl'

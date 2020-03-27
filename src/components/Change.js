@@ -97,12 +97,8 @@ class Change extends Component {
 					maxLength='1000'
                     value={this.state.desk}
 				/>
-				 <div className='FormLayout__row-top'>Укажите срок дедлайна</div>
-                          <div style={{
-                              display: 'flex',
-                              marginTop: -25,
-                          }}>
                           <Input
+                               top='Укажите крайний срок выполнения'
                                onChange={onChange}
                                name='date'
                                type='date'
@@ -110,12 +106,12 @@ class Change extends Component {
                                min={`${new Date().getFullYear()}-${(new Date().getMonth()) < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate()}`}
                           />
                           <Input
+                              top='Укажите время к полю выше'
                               onChange={onChange}
                               name='time'
                               type='time'
                               value={this.state.time}
                           />
-                          </div>
 				<Button
 					mode='primary'
 					size='xl'
