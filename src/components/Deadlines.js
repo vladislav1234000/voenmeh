@@ -36,24 +36,26 @@ componentDidMount() {
           flexDirection: 'column'
         }}
       >
-        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '25%' }} />
-        <span style={{
+        <img alt='' src={'https://vk.com/doc462723039_543562650?hash=5b7999da49eacbcf6f&dl=ca51e0c29e19cf5633'} style={{ width: '90%', marginTop: '25%' }} />
+        <span
+          className='placeholder'
+          style={{
           marginTop: '40px',
-          fontWeight: 'bold',
-          color: this.props.state.scheme === 'bright_light' ? '#000' : '#6d7885',
+          color: this.props.state.scheme === 'bright_light' ? '#000' : '#e2e3e6',
           width: '80%',
           textAlign: 'center',
           fontSize: '5vw'
         }}
         >
-       Дедлайнов нет
+       Сейчас у тебя нет
           <br/>
-        <div style={{
-          marginTop: '10px',
-          fontWeight: 500,
-          color: this.props.state.scheme === 'bright_light' ? '#99a2ad' : '#6d7885',
-          fontSize: '4vw'
-        }}>Кажется, у тебя всё под контролем!</div>
+        <div
+          className='placeholder'
+          style={{
+        /*  marginTop: '10px',*/
+          color: this.props.state.scheme === 'bright_light' ? '#000' : '#e2e3e6',
+          fontSize: '5vw'
+        }}>{`${props.state.deadtab === 'active' ? 'активных' : 'завершенных'} дедлайнов`}</div>
             </span>
       </div>
     );
@@ -61,24 +63,26 @@ componentDidMount() {
     return (
       <Panel id={this.props.id}>
         <PanelHeader>Дедлайны</PanelHeader>
-        <Tabs>
-          <TabsItem
-            className={this.props.state.scheme === 'bright_light' ? 'tablight' : 'tabdark'}
-            onClick={ getDeadlines }
-            selected={ tab === 'active' }
-          >
-            Активные
-          </TabsItem>
-          <TabsItem
-            className={this.props.state.scheme === 'bright_light' ? 'tablight' : 'tabdark'}
-            onClick={ getExpDeadlines }
-            selected={ tab === 'expires' }
-          >
-            Завершенные
-          </TabsItem>
-        </Tabs>
+        <FixedLayout vertical="top">
+          <Tabs>
+            <TabsItem
+              className={this.props.state.scheme === 'bright_light' ? 'tablight' : 'tabdark'}
+              onClick={ getDeadlines }
+              selected={ tab === 'active' }
+            >
+              Активные
+            </TabsItem>
+            <TabsItem
+              className={this.props.state.scheme === 'bright_light' ? 'tablight' : 'tabdark'}
+              onClick={ getExpDeadlines }
+              selected={ tab === 'expires' }
+            >
+              Завершенные
+            </TabsItem>
+          </Tabs>
+        </FixedLayout>
         <Separator style={{
-          marginTop: 0,
+          marginTop: '13%',
           marginBottom: 5
         }} wide/>
         <Div>
@@ -104,14 +108,20 @@ componentDidMount() {
                         className='chk'
                         checked={deadlines[key].done}
                         onChange={() => props.check(key, deadlines[key].id)}
-                        onClick={() => setTimeout(() => setPState({
-                          modal: null
-                        }), 5)}
+                        onClick={() => {
+                          setPState({
+                            display: false
+                          });
+                          setTimeout(() => setPState({
+                            display: true,
+                            modal: null
+                          }), 500)
+                        }}
                       />
                     </div>
                     <div>
                       <div className='test2111'>
-                        {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
+                        {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,25).join('')}...`}
                       </div>
                       {
                         e.time &&
@@ -151,14 +161,20 @@ componentDidMount() {
                             className='chk'
                             checked={expDeadlines[key].done}
                             onChange={() => props.check(key, expDeadlines[key].id)}
-                            onClick={() => setTimeout(() => setPState({
-                              modal: null
-                            }), 5)}
+                            onClick={() => {
+                              setPState({
+                                display: false
+                              });
+                              setTimeout(() => setPState({
+                                display: true,
+                                modal: null
+                              }), 500)
+                            }}
                           />
                         </div>
                         <div>
                           <div className='test2111'>
-                            {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,30).join('')}...`}
+                            {e.title.length < 30 ? e.title : `${e.title.split('').slice(0,25).join('')}...`}
                           </div>
                           {
                             e.time &&
@@ -187,7 +203,11 @@ componentDidMount() {
                   marginBottom: 10
                 }}
                 onClick={() => setPState({
-                  deadPanel: 'add'
+                  modal: 'add',
+                  title: '',
+                  desk: '',
+                  time: '00:00',
+                  date: `${new Date().getFullYear()}-${(new Date().getMonth()) < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate()}`
                 })}
                 before={ <Icon24Add /> }
                 size='xl'

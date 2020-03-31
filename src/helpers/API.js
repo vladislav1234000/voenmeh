@@ -56,6 +56,20 @@ export default class API {
 
         return response;
     }
+    async GetSecure() {
+        let response = await this.send('GET',  `getSecure`, null, 'https://manaenckov.design/api/voenmeh/');
+
+        console.log('API: ', 'GetSecure', response);
+
+        return response;
+    }
+    async SaveSecure(data) {
+        let response = await this.send('PUT', `saveSecure`, data, 'https://manaenckov.design/api/voenmeh/');
+
+        console.log('API: ', 'SaveSecure', response);
+
+        return response;
+    }
     async GetUserExpDeadlines(id) {
         let response = await this.send('GET',  `getExp`, null, 'https://manaenckov.design/api/notes/');
 

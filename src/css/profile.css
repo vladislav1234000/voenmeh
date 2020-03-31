@@ -19,6 +19,7 @@
 
 .wrap {
     padding: 10px;
+    margin-left: 8px;
     display: inline-flex;
     align-items: center;
 }
@@ -26,3 +27,22 @@
     padding-left: 20px;
 }
 
+.secure {
+    padding-top: 10px;
+}
+
+.groupS {
+    display: flex;
+    padding-right: 50px;
+}
+.icogroupS {
+    margin-left: 3%;
+    margin-top: 10%;
+}
+.groupSS {
+    position: absolute;
+    left: 10vw;
+    top: 35vh;
+    height: 45px;
+    width: 100vw;
+}

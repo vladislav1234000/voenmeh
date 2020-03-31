@@ -1,9 +1,30 @@
 import React, { Component } from 'react';
 import connect from '@vkontakte/vk-bridge';
 import {
-  Epic, Tabbar, TabbarItem, Snackbar, Div, ConfigProvider, View, IS_PLATFORM_ANDROID, Spinner, Header,
-  ScreenSpinner, Alert, Panel,
-  ModalRoot, ModalPage, PanelHeaderButton, Avatar, ModalPageHeader, Group, List, Cell, InfoRow, Button
+  Epic,
+  Tabbar,
+  TabbarItem,
+  Snackbar,
+  Div,
+  ConfigProvider,
+  View,
+  IS_PLATFORM_ANDROID,
+  Spinner,
+  Header,
+  ScreenSpinner,
+  Alert,
+  Panel,
+  ModalRoot,
+  ModalPage,
+  PanelHeaderButton,
+  Avatar,
+  ModalPageHeader,
+  Group,
+  List,
+  Cell,
+  InfoRow,
+  Button,
+  Input, Textarea, FormLayout,
 } from '@vkontakte/vkui';
 
 import '@vkontakte/vkui/dist/vkui.css';
@@ -19,6 +40,7 @@ import Icon16Like from '@vkontakte/icons/dist/16/like';
 import Icon16Clear from '@vkontakte/icons/dist/16/clear';
 import Icon16Done from '@vkontakte/icons/dist/16/done';
 
+import Icon28DoneOutline from '@vkontakte/icons/dist/28/done_outline';
 import Icon28ArticleOutline from '@vkontakte/icons/dist/28/article_outline';
 import Icon28FireOutline from '@vkontakte/icons/dist/28/fire_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
@@ -36,8 +58,6 @@ import FirstScr from './components/FirstScr.js';
 import NewsFeed from './components/NewsFeed.js';
 
 import Deadlines from './components/Deadlines.js';
-import Add from './components/Add.js';
-import Change from './components/Change.js';
 
 import API from './helpers/API.js';
 
@@ -88,7 +108,7 @@ class App extends Component {
       fetchedUser: {
         id: 1
       },
-      curTask: [],
+      curTask: false,
       deadtab: 'active',
       office: [],
       isOfficeOpened: false,
@@ -96,48 +116,19 @@ class App extends Component {
       news: [],
       banners: [],
       schedule: {},
+      display: true,
       deadlines: [
         {
           id: 1,
           title: 'Test Title',
           desk: 'Description',
-          time: '2020-04-02-00:00'
+          time: '2020-04-02-00:30'
         },
         {
           id: 2,
           title: 'Test Title',
           desk: 'Description',
           time: '2030-02-02-00:00'
-        },
-        {
-          id: 1,
-          title: 'Test Title',
-          desk: 'Description',
-          time: '2020-04-02-00:00'
-        },
-        {
-          id: 2,
-          title: 'Test Title',
-          desk: 'Description',
-          time: '2030-02-02-00:00'
-        },
-        {
-          id: 1,
-          title: 'Test Title',
-          desk: 'Description',
-          time: '2020-04-02-00:00'
-        },
-        {
-          id: 2,
-          title: 'Test Title',
-          desk: 'Description',
-          time: '2030-02-02-00:00'
-        },
-        {
-          id: 1,
-          title: 'Test Title',
-          desk: 'Description',
-          time: '2020-04-02-00:00'
         },
         {
           id: 2,
@@ -160,7 +151,6 @@ class App extends Component {
       selectedDayIndex: 0,
       selectedDay: moment(new Date()),
       headman: false,
-      modalData: null,
       title: '',
       desk: '',
       time: '00:00',
@@ -332,7 +322,7 @@ class App extends Component {
           title: '',
           desk: '',
           time: '00:00',
-          deadPanel: 'main'
+          modal: null
         });
         tasks.push({
           title: state.title,
@@ -472,7 +462,7 @@ class App extends Component {
       }
 
       this.setState({
-        deadPanel:  'main'
+        modal:  null
       });
 
       if(this.state.deadtab === 'active') {
@@ -515,7 +505,8 @@ class App extends Component {
   changePage(name) {
     this.setState({
       activePage: name,
-      week: this.state.startWeek
+      week: this.state.startWeek,
+      snackbar: null
     });
   }
 
@@ -646,7 +637,7 @@ class App extends Component {
   render() {
     const {
       fetchedUser, banners, news, scheme, schedule, activePage,
-       activePanel
+       activePanel, popout
     } = this.state;
 
     const onCloseModal = () => {
@@ -657,13 +648,86 @@ class App extends Component {
       return str[0].toUpperCase() + str.slice(1);
     };
     const openDeadlineModal = key => {
+      const curtask = this.state.deadlines[key] || this.state.expDeadlines[key];
       this.setState({
         modal: 'task',
-        curTask: this.state.deadlines[key] || this.state.expDeadlines[key],
-        curKey: key
+        curKey: key,
+        curTask: curtask,
+        title: curtask.title,
+        desk: curtask.desk,
+        time: curtask.time,
+        id: curtask.id
       });
     };
 
+    const send = (type) => {
+      const { addTask, changeTask, openErrorSnackbar, state } = this;
+
+      if(!state.title) {
+        this.setState({ error: true });
+        setTimeout(() => 	this.setState({ error: false }), 2000)
+        openErrorSnackbar('Заполните обязательные поля.');
+        return;
+      } else if (state.title.length > 500) {
+        this.setState({ error: true });
+        setTimeout(() => 	this.setState({ error: false }), 2000)
+        openErrorSnackbar('Заголовок слишком длинный.');
+        return;
+      } else if (state.desk.length > 1000) {
+        this.setState({ error: true });
+        setTimeout(() => 	this.setState({ error: false }), 2000)
+        openErrorSnackbar('Описание слишком длинное.');
+        return;
+      }/* else if (Date(new Date(this.state.date)).parse() < Date(new Date()).parse) {
+			this.setState({ error: true });
+			setTimeout(() => 	this.setState({ error: false }), 2000)
+			openErrorSnackbar('Дата дедлайна не может быть в прошлом.');
+			return;
+		}*/
+      if(type === 'add'){
+        addTask();
+      } else {
+        changeTask({
+          id: this.state.curTask.id,
+          title: this.state.title,
+          desk: this.state.desk,
+          time: this.state.date ? `${this.state.date}-${this.state.time}` : ''
+        }, this.state.curTask.id);
+      }
+    };
+    const onChange = e => {
+
+      const { name, value } = e.currentTarget;
+
+      this.setState({
+        [name]: value
+      });
+    };
+
+    const saveSecure = () => {
+      const { ticket, spec, mdlogin, mdpass, maillogin, mailpass } = this.state;
+      this.setState({
+        popout:  <ScreenSpinner />
+      });
+      this.api.SaveSecure({
+        ticket: ticket,
+        spec: spec,
+        mdlogin: mdlogin,
+        mdpass: mdpass,
+        maillogin: maillogin,
+        mailpass: mailpass,
+      }).then(res => {
+         if(res === 'success'){
+           this.setState({
+             modal: null,
+             popout: null
+           });
+           openDoneSnackbar('Сохранено!');
+         } else {
+           openErrorSnackbar('Ошибка сохранения #1.')
+         }
+        });
+    };
     const MLD = this.state.modalLessonData;
     const deadline = this.state.curTask;
     const key = this.state.curKey;
@@ -671,7 +735,6 @@ class App extends Component {
     const modal = (
 
       <ModalRoot activeModal={this.state.modal}>
-
         <ModalPage
           id='task'
           onClose={onCloseModal}
@@ -688,9 +751,7 @@ class App extends Component {
                       </PanelHeaderButton >
                       <PanelHeaderButton
                         onClick={() => this.setState({
-                          deadPanel: 'change',
-                          modal: null,
-                          snackbar: null
+                          modal: 'change'
                         })}>
                         <Icon24Write fill='#ccc'/>
                       </PanelHeaderButton >
@@ -708,9 +769,7 @@ class App extends Component {
                           </PanelHeaderButton >
                           <PanelHeaderButton
                             onClick={() => this.setState({
-                              deadPanel: 'change',
-                              modal: null,
-                              snackbar: null
+                              modal: 'change'
                             })}>
                             <Icon24Write fill='#ccc'/>
                           </PanelHeaderButton >
@@ -758,7 +817,6 @@ class App extends Component {
             <Div/>
           </Group>
         </ModalPage>
-
         <ModalPage
           id='lesson'
           onClose={onCloseModal}
@@ -856,6 +914,217 @@ class App extends Component {
             {this.state.geoModalData || ''}
           </Div>
         </ModalPage>
+        <ModalPage
+          id='add'
+          onClose={onCloseModal}
+          header={
+            <ModalPageHeader
+              left={
+                IS_PLATFORM_ANDROID &&
+                <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
+              }
+              right={(
+                <>
+                  {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton> }
+                </>
+              )}
+            >
+              Создать дедлайн
+            </ModalPageHeader>
+          }
+        >
+
+
+          <FormLayout>
+            <Input
+              onChange={onChange}
+              name='title'
+              top='Что необходимо сделать? (кратко)'
+              placeholder='Закрыть двойку по астрономии'
+              maxLength='500'
+              status={this.state.error &&  (!this.state.title || this.state.title.length > 500)? 'error' : 'default'}
+              value={this.state.title}
+            />
+            <Textarea
+              onChange={onChange}
+              name='desk'
+              top='Описание дедлайна, если необходимо'
+              status={this.state.error && this.state.desk.length > 1000 ? 'error' : 'default'}
+              placeholder='Сдать презентацию по небесным телам'
+              maxLength='1000'
+              value={this.state.desk}
+            />
+            {/*<div className='FormLayout__row-top'>Укажите срок дедлайна</div>
+          <div style={{
+            display: 'flex',
+            marginTop: -25,
+          }}>*/}
+            <Input
+              onChange={onChange}
+              name='date'
+              type='date'
+              value={this.state.date}
+              min={`${new Date().getFullYear()}-${(new Date().getMonth()) < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate()}`}
+              top='Укажите крайний срок выполнения'
+            />
+            <Input
+              onChange={onChange}
+              name='time'
+              type='time'
+              top='Укажите время к полю выше'
+              value={this.state.time}
+            />
+            {/*  </div>*/}
+            <Button
+              mode='primary'
+              size='xl'
+              before={<Icon28DoneOutline/>}
+              onClick={() => send('add')}
+            >Создать дедлайн</Button>
+          </FormLayout>
+        </ModalPage>
+        <ModalPage
+          id='change'
+          onClose={onCloseModal}
+          header={
+            <ModalPageHeader
+              left={
+                IS_PLATFORM_ANDROID &&
+                <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
+              }
+              right={(
+                <>
+                  {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton> }
+                </>
+              )}
+            >
+              Редактировать
+            </ModalPageHeader>
+          }
+        >
+
+          <FormLayout>
+            <Input
+              onChange={onChange}
+              name='title'
+              top='Что необходимо сделать? (кратко)'
+              placeholder='Покормить кота'
+              maxLength='500'
+              status={this.state.error &&  (!this.state.title || this.state.title.length > 500)? 'error' : 'default'}
+              value={this.state.title}
+            />
+            <Textarea
+              onChange={onChange}
+              name='desk'
+              top='Подробности задачи, если необходимо'
+              status={this.state.error && this.state.desk.length > 1000 ? 'error' : 'default'}
+              placeholder='Консервы лежат в ящике у холодильника.'
+              maxLength='1000'
+              value={this.state.desk}
+            />
+            <Input
+              top='Укажите крайний срок выполнения'
+              onChange={onChange}
+              name='date'
+              type='date'
+              value={this.state && this.state.time.split('-').slice(0,3).join('-')}
+              min={`${new Date().getFullYear()}-${(new Date().getMonth()) < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate()}`}
+            />
+            <Input
+              top='Укажите время к полю выше'
+              onChange={onChange}
+              name='time'
+              type='time'
+              value={this.state && this.state.time.split('-').slice(3,4).toString()}
+            />
+            <Button
+              mode='primary'
+              size='xl'
+              before={<Icon28DoneOutline/>}
+              onClick={() => {
+                send('change')
+              }}
+            >Сохранить</Button>
+          </FormLayout>
+        </ModalPage>
+        <ModalPage
+          id='secure'
+          onClose={onCloseModal}
+          header={
+            <ModalPageHeader
+              left={
+                IS_PLATFORM_ANDROID &&
+                <PanelHeaderButton onClick={onCloseModal}><Icon24Cancel /></PanelHeaderButton>
+              }
+              right={(
+                <>
+                  {!IS_PLATFORM_ANDROID && <PanelHeaderButton onClick={onCloseModal}><Icon24Dismiss /></PanelHeaderButton> }
+                </>
+              )}
+            >
+              Личные данные
+            </ModalPageHeader>
+          }
+        >
+          <FormLayout>
+            <Input
+              onChange={onChange}
+              name='ticket'
+              top='Номер зачётки и студенческого билета'
+              placeholder='И59905'
+              maxLength='50'
+             /* status={this.state.error &&  (!this.state.title || this.state.title.length > 500)? 'error' : 'default'}*/
+              value={this.state.ticket}
+            />
+            <Input
+              onChange={onChange}
+              name='spec'
+              top='Специальность'
+            /*  status={this.state.error && this.state.desk.length > 1000 ? 'error' : 'default'}*/
+              placeholder='хх.хх.хх'
+              maxLength='10'
+              value={this.state.spec}
+            />
+            <Input
+              top='Логин от Moodle'
+              placeholder='i59905'
+              onChange={onChange}
+              name='mdlogin'
+              type='text'
+              value={this.state.mdlogin}
+            />
+            <Input
+              top='Пароль от Moodle'
+              onChange={onChange}
+              placeholder='mDwsX8'
+              name='mdpass'
+              type='text'
+              value={this.state.mdpass}
+            />
+            <Input
+              top='Логин от корпоративной почты'
+              onChange={onChange}
+              name='maillogin'
+              placeholder='mail@voenmeh.ru'
+              type='text'
+              value={this.state.maillogin}
+            />
+            <Input
+              top='Пароль от корпоративной почты'
+              onChange={onChange}
+              name='mailpass'
+              placeholder='dUsL4d'
+              type='text'
+              value={this.state.mailpass}
+            />
+            <Button
+              mode='primary'
+              size='xl'
+              before={<Icon28DoneOutline/>}
+              onClick={ saveSecure }
+            >Сохранить</Button>
+          </FormLayout>
+        </ModalPage>
       </ModalRoot>
     );
     const openModal = data => {
@@ -879,10 +1148,28 @@ class App extends Component {
       });
     };
 
+    const openSecure = () => {
+      this.setState({
+        popout:  <ScreenSpinner />
+      });
+      this.api.GetSecure().then(res => {
+        this.setState({
+          ticket: res.ticket,
+          spec: res.spec,
+          mdlogin: res.mdlogin,
+          mdpass: res.mdpass,
+          maillogin: res.maillogin,
+          mailpass: res.mailpass,
+          modal: 'secure',
+          popout: null
+        });
+      });
+    };
+
     const props = { setParentState: this.setState.bind(this), news, openGeo,
       getDeadlines, getExpDeadlines, check, changeTask, openDeadlineModal,
       getGroups, banners, setSchedule, getOffices, fetchedUser, openModal, state,
-      openErrorSnackbar, openDoneSnackbar, addTask
+      openErrorSnackbar, openDoneSnackbar, addTask, openSecure
     };
 
     const tabbar = (
@@ -950,10 +1237,8 @@ class App extends Component {
           <NewsFeed id="feed" {...props}/>
         </View>
 
-        <View modal={modal} popout={this.state.popout} id="time" activePanel={this.state.deadPanel}>
+        <View modal={this.state.display && modal} popout={this.state.popout} id="time" activePanel='main'>
           <Deadlines className='noselect' id="main" {...props} />
-          <Add id="add" {...props} />
-          <Change id="change" task={state.curTask} {...props} />
         </View>
 
 
@@ -981,7 +1266,13 @@ class App extends Component {
           <Office className={state.scheme === 'bright_light' ? 'office noselect' : 'officeD noselect'} id="office" {...props}  />
         </View>
 
-        <View className={state.scheme === 'bright_light' ? 'profileL noselect' : 'profileD noselect'} id="profile" activePanel="profile">
+        <View
+          className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'}
+          id="profile"
+          activePanel="profile"
+          modal={modal}
+          popout={popout}
+        >
           <Profile className={state.scheme === 'bright_light' ? 'profileL' : 'profileD'} id="profile" {...props}  />
         </View>
 

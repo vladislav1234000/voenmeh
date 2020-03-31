@@ -73,7 +73,7 @@ class Schedule extends Component {
               flexDirection: 'column'
             }}
           >
-            <img alt='' src={'https://vk.com/images/blog/about/img_about_4.png'} style={{ width: '90%', marginTop: '5vh' }} />
+            <img alt='' src={'https://vk.com/doc462723039_543562655?hash=2cc01a24cdba50cac0&dl=c8a1cdf6cc5b96862a'} style={{ width: '90%', marginTop: '5vh' }} />
             <Div style={{
               marginTop: '5%',
               fontWeight: 'bold',

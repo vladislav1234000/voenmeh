@@ -59,10 +59,10 @@ class NewsFeed extends Component {
             bottomContent={(
                 <div className="post_bot">
                   <div className="post_date">
-                    {`${post.date} · `}
+                   {post.author && `${post.author} · `}
                   </div>
                   <div className="post_author">
-                    {post.author && `${post.author}`}
+                    {`${post.date} `}
                   </div>
                 </div>
             )}
@@ -82,7 +82,7 @@ class NewsFeed extends Component {
           flexDirection: 'column'
         }}
       >
-        <img alt='' src={'https://vk.com/images/blog/about/img_about_1_2x.png'} style={{ width: '90%', marginTop: '5vh' }} />
+        <img alt='' src={'https://vk.com/doc462723039_543562651?hash=f90698f907b91212b1&dl=eb795721b510001314'} style={{ width: '90%', marginTop: '5vh' }} />
         <span style={{
           marginTop: '40px',
           fontWeight: 'bold',

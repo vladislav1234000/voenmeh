@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Panel, PanelHeader, List, Div, Cell, Spinner, FormLayout, Select,
-  Group, Switch, Avatar, Header, Separator
+  Group, Switch, Avatar, Header, Separator, Button
 } from '@vkontakte/vkui';
 import '../css/profile.css';
 import connect from '@vkontakte/vk-connect';
@@ -9,6 +9,7 @@ import connect from '@vkontakte/vk-connect';
 import Icon28ChatsOutline from '@vkontakte/icons/dist/28/chats_outline';
 import Icon28LogoVk from '@vkontakte/icons/dist/28/logo_vk';
 import Icon28LogoInstagram from '@vkontakte/icons/dist/28/logo_instagram';
+import Icon28UserOutline from '@vkontakte/icons/dist/28/user_outline';
 
 const debug = window.location.port === '8080';
 
@@ -108,6 +109,18 @@ class Profile extends Component {
                </Select>
            }
          </FormLayout>
+         <div className='secure'>
+           <Button
+             style={{
+               color: this.props.state.scheme === 'space_gray' ? '#71aaeb' : '#3f8ae0'
+             }}
+             onClick={() => {
+               this.props.openSecure()
+             }}
+             before={<Icon28UserOutline/>}
+             mode="tertiary"
+           ><div style={{ marginLeft: 10 }}>Показать личные данные</div></Button>
+         </div>
          </Group>
 
         <Group
@@ -146,20 +159,21 @@ class Profile extends Component {
             <Cell
               href="https://vk.me/join/AJQ1dyvbCxZfidHoAmAJE5Bh"
               target="_blank"
-              before={<Icon28ChatsOutline fill={scheme === 'bright_light' ? '#6d7885' : '#909499'} />}
+              before={<Icon28ChatsOutline fill={scheme === 'bright_light' ? '#99a2ad' : '#909499'} />}
             >Задать вопрос в чате</Cell>
             <Cell
               href="https://vk.com/club187168548"
               target="_blank"
-              before={<Icon28LogoVk fill={scheme === 'bright_light' ? '#6d7885' : '#909499'} />}
+              before={<Icon28LogoVk fill={scheme === 'bright_light' ? '#99a2ad' : '#909499'} />}
             >teamgo</Cell>
             <Cell
               href="https://www.instagram.com/voenmehgo/"
               target="_blank"
-              before={<Icon28LogoInstagram fill={scheme === 'bright_light' ? '#6d7885' : '#909499'} />}
+              before={<Icon28LogoInstagram fill={scheme === 'bright_light' ? '#99a2ad' : '#909499'} />}
             >voenmehgo</Cell>
       </List>
         </Group>
+        {this.props.state.snackbar}
       </Panel>
     );
   }

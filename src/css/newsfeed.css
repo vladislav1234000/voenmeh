@@ -7,7 +7,7 @@
 
 .post_title  {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.2;
   margin-left: 15px;
 
@@ -83,6 +83,7 @@
   width: 8px;
   position: absolute;
   left: 4vw;
+  margin-top: 0.5vh;
 }
 
 .type {
@@ -109,13 +110,13 @@
   color: #ccc;
 }
 
-.brdr {
+/*.brdr {
   width: 2px;
   position: absolute;
   left: 1vw;
   margin-top: 5px;
   height: calc(100% - 10px)
-}
+}*/
 
 .Мероприятие {
   border-left: 2px solid #e64646;
